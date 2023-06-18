@@ -1,30 +1,36 @@
 class Config(object):
     LOGGER = True
 
-    # Get this value from my.telegram.org/apps
-    API_ID = 6
-    API_HASH = "eb06d4abfb49dc3eeb1aeb98ae0f581e"
+  # Get this value from my.telegram.org/apps
+    API_ID = 14980683
+    API_HASH = "5bc2e9cd58092119e741c1f2b545c1bf"
 
-    CASH_API_KEY = ""  # Get this value for currency converter from https://www.alphavantage.co/support/#api-key
+    CASH_API_KEY = "VQ45LFKYPMJ2LKIU"  # Get this value for currency converter from https://www.alphavantage.co/support/#api-key
 
-    DATABASE_URL = ""  # A sql database url from elephantsql.com
+    DATABASE_URL = "postgres://afgncjpn:GfV4VDYU9dNtNfZ5Pzqs_nK1QxLXC5IJ@lallah.db.elephantsql.com/afgncjpn"  # A sql database url from elephantsql.com
 
-    EVENT_LOGS = ()  # Event logs channel to note down important bot level events
+    EVENT_LOGS = (-1001739283144)  # Event logs channel to note down important bot level events
+    
+    MONGO_DB = "Shikimori"
 
-    MONGO_DB_URI = ""  # Get ths value from cloud.mongodb.com
+    ERROR_LOGS = -1001164614215
 
-    # Telegraph link of the image which will be shown at start command.
-    START_IMG = "https://te.legra.ph/file/40eb1ed850cdea274693e.jpg"
+    AI_API_KEY = "SOME1HING_privet_990022"
 
-    SUPPORT_CHAT = "DevilsHeavenMF"  # Your Telegram support group chat username where your users will go and bother you
+    MONGO_DB_URI = "mongodb+srv://yor:yor@cluster0.twftypx.mongodb.net/?retryWrites=true&w=majority"  # Get ths value from cloud.mongodb.com
 
-    TOKEN = ""  # Get bot token from @BotFather on Telegram
+  # Telegraph link of the image which will be shown at start command.
+    START_IMG = "https://graph.org/file/aa18cfd060aa74f1b7634.jpg"
 
-    TIME_API_KEY = ""  # Get this value from https://timezonedb.com/api
+    SUPPORT_CHAT = "WoFBotsSupport"  # Your Telegram support group chat username where your users will go and bother you
 
-    OWNER_ID = 1356469075  # User id of your telegram account (Must be integer)
+    TOKEN = "5714818526:AAF0Jdauk9Mrb44bEypi0LzQiNIza-ojb68"  # Get bot token from @BotFather on Telegram
 
-    # Optional fields
+    TIME_API_KEY = "65G8ZKE6050P"  # Get this value from https://timezonedb.com/api
+
+    OWNER_ID = 5667156680  # User id of your telegram account (Must be integer)
+
+  # Optional fields
     BL_CHATS = []  # List of groups that you want blacklisted.
     DRAGONS = []  # User id of sudo users
     DEV_USERS = []  # User id of dev users
@@ -40,12 +46,10 @@ class Config(object):
     NO_LOAD = []
     STRICT_GBAN = True
     TEMP_DOWNLOAD_DIRECTORY = "./"
-    WORKERS = 8
-
+    WORKERS = (8)
 
 class Production(Config):
     LOGGER = True
-
 
 class Development(Config):
     LOGGER = True
