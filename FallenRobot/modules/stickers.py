@@ -15,7 +15,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 from FallenRobot import BOT_USERNAME, pbot as app
 from FallenRobot.utils.http import http
-from FallenRobot import EVENT_LOGS as LOG_CHANNEL, FF_MPEG_NAME
+from FallenRobot import EVENT_LOGS as LOG_CHANNEL
 
 def get_emoji_regex():
     e_list = [getattr(emoji, e).encode("unicode-escape").decode("ASCII") for e in dir(emoji) if not e.startswith("_")]
@@ -321,7 +321,6 @@ async def convert_video(filename: str) -> str:
     downpath, f_name = os.path.split(filename)
     webm_video = os.path.join(downpath, f"{f_name.split('.', 1)[0]}.webm")
     cmd = [
-        FF_MPEG_NAME,
         "-loglevel",
         "quiet",
         "-i",
