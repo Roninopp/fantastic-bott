@@ -13,7 +13,7 @@ from pyrogram.raw.functions.stickers import AddStickerToSet, CreateStickerSet, R
 from pyrogram.raw.types import DocumentAttributeFilename, InputDocument, InputMediaUploadedDocument, InputStickerSetItem, InputStickerSetShortName
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
-from FallenRobot import BOT_USERNAME, pgram as app
+from FallenRobot import BOT_USERNAME, pbot as app
 from FallenRobot.utils.http import http
 from FallenRobot import ERROR_LOGS as LOG_CHANNEL, FF_MPEG_NAME
 
