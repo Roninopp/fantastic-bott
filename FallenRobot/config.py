@@ -17,7 +17,7 @@ class Config(object):
 
     AI_API_KEY = "SOME1HING_privet_990022"
 
-    MONGO_DB_URI = "mongodb+srv://yor:yor@cluster0.twftypx.mongodb.net/?retryWrites=true&w=majority"  # Get ths value from cloud.mongodb.com
+    MONGO_DB_URI = "mongodb+srv://eren:eren@cluster0.yxuwg4r.mongodb.net/?retryWrites=true&w=majority"  # Get ths value from cloud.mongodb.com
 
   # Telegraph link of the image which will be shown at start command.
     START_IMG = "https://graph.org/file/aa18cfd060aa74f1b7634.jpg"
