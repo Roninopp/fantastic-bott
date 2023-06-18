@@ -47,8 +47,6 @@ RUN apt update && apt upgrade -y && \
     libreadline-dev \
     libyaml-dev \
     gcc \
-    sqlite3 \
-    libsqlite3-dev \
     sudo \
     zlib1g \
     ffmpeg \
