@@ -15,7 +15,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 from FallenRobot import BOT_USERNAME, pbot as app
 from FallenRobot.utils.http import http
-from FallenRobot import ERROR_LOGS as LOG_CHANNEL, FF_MPEG_NAME
+from FallenRobot import EVENT_LOGS as LOG_CHANNEL, FF_MPEG_NAME
 
 def get_emoji_regex():
     e_list = [getattr(emoji, e).encode("unicode-escape").decode("ASCII") for e in dir(emoji) if not e.startswith("_")]
