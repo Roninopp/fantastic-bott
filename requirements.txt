@@ -1,5 +1,7 @@
 aiofiles==23.1.0
 aiohttp==3.8.4
+httpx
+httpx[http2]
 apscheduler==3.6.3
 asyncio==3.4.3
 beautifulsoup4==4.12.2
