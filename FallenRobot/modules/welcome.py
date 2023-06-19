@@ -58,7 +58,7 @@ def welcomepic(pic, user, chat, count, id):
     background.save(welcome_filename)  # Saves the finished Image in the folder with the filename
     return welcome_filename
 
-@app.on_chat_member_updated(filters.group)
+@app.on_message(filters.new_chat_members & filters.group)
 @capture_err
 async def member_has_joined(_, member: ChatMemberUpdated):
     if (
@@ -94,7 +94,7 @@ async def member_has_joined(_, member: ChatMemberUpdated):
     temp.MELCOW[f"welcome-{member.chat.id}"] = await app.send_photo(
         member.chat.id,
         photo=welcomeimg,
-        caption=f"Hai {mention}, Welcome to the Group {member.chat.title}! Please read the rules in the pinned message first.\n\n<b>Name:</b> <code>{first_name}</code>\n<b>ID:</b> <code>{id}</code>\n<b>DC ID:</b> <code>{dc}</code>\n<b>Join Date:</b> <code>{joined_date}</code>",
+        caption=f"Hai {mention}, <b>Welcome to the Group {member.chat.title}!</b>\n\n<b>Name:</b> <code>{first_name}</code>\n<b>ID:</b> <code>{id}</code>\n<b>DC ID:</b> <code>{dc}</code>\n<b>Join Date:</b> <code>{joined_date}</code>",
     )
     
     try:
