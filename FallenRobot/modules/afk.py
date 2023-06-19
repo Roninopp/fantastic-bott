@@ -1,17 +1,15 @@
 import time
-
-from pyrogram import filters
-from pyrogram.types import Message
-
-from FallenRobot import pbot as Abishnoi
+from FallenRobot import pbot as pgram ,BOT_USERNAME
+from pyrogram import filters 
 from FallenRobot.modules.helper_funcs.readable_time import get_readable_time
-from FallenRobot.modules.mongo.afk_db import add_afk, is_afk, remove_afk
+from pyrogram.types import Message
+from FallenRobot.modules.mongo.afk_db import is_afk,add_afk, remove_afk
 
 
-@Abishnoi.on_message(filters.command(["afk", "brb"]))
+@pgram.on_message(filters.command("afk") | filters.command("Brb", ""))
 async def active_afk(_, message: Message):
     if message.sender_chat:
-        return
+        return     
     user_id = message.from_user.id
     verifier, reasondb = await is_afk(user_id)
     if verifier:
@@ -93,9 +91,7 @@ async def active_afk(_, message: Message):
             "reason": _reason,
         }
     elif len(message.command) == 1 and message.reply_to_message.photo:
-        await Abishnoi.download_media(
-            message.reply_to_message, file_name=f"{user_id}.jpg"
-        )
+        await pgram.download_media(message.reply_to_message, file_name=f"{user_id}.jpg")
         details = {
             "type": "photo",
             "time": time.time(),
@@ -103,9 +99,7 @@ async def active_afk(_, message: Message):
             "reason": None,
         }
     elif len(message.command) > 1 and message.reply_to_message.photo:
-        await Abishnoi.download_media(
-            message.reply_to_message, file_name=f"{user_id}.jpg"
-        )
+        await pgram.download_media(message.reply_to_message, file_name=f"{user_id}.jpg")
         _reason = message.text.split(None, 1)[1].strip()
         details = {
             "type": "photo",
@@ -122,7 +116,7 @@ async def active_afk(_, message: Message):
                 "reason": None,
             }
         else:
-            await Abishnoi.download_media(
+            await pgram.download_media(
                 message.reply_to_message, file_name=f"{user_id}.jpg"
             )
             details = {
@@ -141,7 +135,7 @@ async def active_afk(_, message: Message):
                 "reason": _reason,
             }
         else:
-            await Abishnoi.download_media(
+            await pgram.download_media(
                 message.reply_to_message, file_name=f"{user_id}.jpg"
             )
             details = {
@@ -158,11 +152,24 @@ async def active_afk(_, message: Message):
             "reason": None,
         }
 
-    await add_afk(user_id, details)
-    await message.reply_sticker(
-        "CAACAgUAAx0CUgguZAABAdegY2N5paaiPapUxRm0RYy9Xf6dPEYAAisIAAJ2PRlXxkn7UgOIdewqBA"
-    )
+    await add_afk(user_id, details)    
     await message.reply_text(f"{message.from_user.first_name} ɪs ɴᴏᴡ ᴀғᴋ!")
 
 
-__mod_name__ = "𝐀ғᴋ"
+
+
+__help__ = """
+**⸢ᴡʜᴇɴ sᴏᴍᴇᴏɴᴇ ᴍᴇɴᴛɪᴏɴs ʏᴏᴜ ɪɴ ᴀ ᴄʜᴀᴛ, ᴛʜᴇ ᴜsᴇʀ ᴡɪʟʟ ʙᴇ ɴᴏᴛɪғɪᴇᴅ ʏᴏᴜ ᴀʀᴇ AFK. ʏᴏᴜ ᴄᴀɴ ᴇᴠᴇɴ ᴘʀᴏᴠɪᴅᴇ ᴀ ʀᴇᴀsᴏɴ ғᴏʀ ɢᴏɪɴɢ AFK, ᴡʜɪᴄʜ ᴡɪʟʟ ʙᴇ ᴘʀᴏᴠɪᴅᴇᴅ ᴛᴏ ᴛʜᴇ ᴜsᴇʀ ᴀs ᴡᴇʟʟ.⸥**
+
+「𝗖𝗢𝗠𝗠𝗔𝗡𝗗𝗦」 :
+═───────◇───────═
+๏ /afk - ᴛʜɪs ᴡɪʟʟ sᴇᴛ ʏᴏᴜ ᴏғғʟɪɴᴇ.
+
+๏ /afk [ʀᴇᴀsᴏɴ] - ᴛʜɪs ᴡɪʟʟ sᴇᴛ ʏᴏᴜ ᴏғғʟɪɴᴇ ᴡɪᴛʜ ᴀ ʀᴇᴀsᴏɴ.
+
+๏ /afk [ʀᴇᴘʟɪᴇᴅ ᴛᴏ ᴀ sᴛɪᴄᴋᴇʀ/ᴘʜᴏᴛᴏ] - ᴛʜɪs ᴡɪʟʟ sᴇᴛ ʏᴏᴜ ᴏғғʟɪɴᴇ ᴡɪᴛʜ ᴀɴ ɪᴍᴀɢᴇ ᴏʀ sᴛɪᴄᴋᴇʀ.
+
+๏ /afk [ʀᴇᴘʟɪᴇᴅ ᴛᴏ ᴀ sᴛɪᴄᴋᴇʀ/ᴘʜᴏᴛᴏ] [ʀᴇᴀsᴏɴ] - ᴛʜɪs ᴡɪʟʟ sᴇᴛ ʏᴏᴜ ᴀғᴋ ᴡɪᴛʜ ᴀɴ ɪᴍᴀɢᴇ ᴀɴᴅ ʀᴇᴀsᴏɴ ʙᴏᴛʜ.
+═───────◇───────═
+"""
+__mod_name__ = "𝙰ғᴋ"
