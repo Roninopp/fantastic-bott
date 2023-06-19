@@ -139,7 +139,6 @@ async def active_afk(self: Client, ctx: Message, strings):
                 strings("is_online").format(usr=ctx.from_user.first_name, id=ctx.from_user.id),
                 disable_web_page_preview=True,
             )
-        await put_cleanmode(ctx.chat.id, send.id)
         return
     if len(ctx.command) == 1 and not ctx.reply_to_message:
         details = {
@@ -159,7 +158,7 @@ async def active_afk(self: Client, ctx: Message, strings):
     elif len(ctx.command) == 1 and ctx.reply_to_message.animation:
         _data = ctx.reply_to_message.animation.file_id
         details = {
-            "type": "animatie(),
+            "type": "animatie()",
             "data": _data,
             "reason": None,
         }
