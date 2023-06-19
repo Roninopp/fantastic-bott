@@ -73,12 +73,6 @@ async def member_has_joined(_, member: ChatMemberUpdated):
     if user.is_bot:
         return  # Ignore bots
     
-    if temp.MELCOW.get(f"welcome-{member.chat.id}") is not None:
-        try:
-            await temp.MELCOW[f"welcome-{member.chat.id}"].delete()
-        except:
-            pass
-    
     mention = f"<a href='tg://user?id={user.id}'>{user.first_name}</a>"
     timezone = pytz.timezone("Asia/Kolkata")
     joined_date = datetime.fromtimestamp(time.time(), tz=timezone).strftime("%d %B %Y %I:%M:%S %p")
@@ -93,7 +87,7 @@ async def member_has_joined(_, member: ChatMemberUpdated):
         pic = "img/profilepic.png"
     
     welcomeimg = await welcomepic(pic, user.first_name, member.chat.title, count, user.id)
-    temp.MELCOW[f"welcome-{member.chat.id}"] = await app.send_photo(
+    await app.send_photo(
         member.chat.id,
         photo=welcomeimg,
         caption=f"<b>Hey</b> <b>{mention}</b>, <b>Welcome to the Group {member.chat.title}!</b>\n\n<b>Name:</b> <code>{first_name}</code>\n<b>ID:</b> <code>{id}</code>\n<b>Join Date:</b> <code>{joined_date}</code>",
@@ -104,3 +98,4 @@ async def member_has_joined(_, member: ChatMemberUpdated):
         os.remove(f"downloads/pp{user.id}.png")
     except Exception:
         pass
+        
