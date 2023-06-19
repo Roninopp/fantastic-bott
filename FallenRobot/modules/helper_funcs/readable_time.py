@@ -1,23 +1,18 @@
 def get_readable_time(seconds: int) -> str:
-    count = 0
-    readable_time = ""
-    time_list = []
-    time_suffix_list = ["s", "ᴍ", "ʜ", "ᴅᴀʏs"]
+    time_string = ""
+    if seconds < 0:
+        raise ValueError("Input value must be non-negative")
 
-    while count < 4:
-        count += 1
-        remainder, result = divmod(seconds, 60) if count < 3 else divmod(seconds, 24)
-        if seconds == 0 and remainder == 0:
-            break
-        time_list.append(int(result))
-        seconds = int(remainder)
+    if seconds < 60:
+        time_string = f"{round(seconds)}s"
+    else:
+        minutes, seconds = divmod(seconds, 60)
+        hours, minutes = divmod(minutes, 60)
+        days, hours = divmod(hours, 24)
+        if days > 0:
+            time_string += f"{round(days)}days, "
+        if hours > 0:
+            time_string += f"{round(hours)}h:"
+        time_string += f"{round(minutes)}m:{round(seconds):02d}s"
 
-    for x in range(len(time_list)):
-        time_list[x] = str(time_list[x]) + time_suffix_list[x]
-    if len(time_list) == 4:
-        readable_time += time_list.pop() + ", "
-
-    time_list.reverse()
-    readable_time += ":".join(time_list)
-
-    return readable_time
+    return time_string
