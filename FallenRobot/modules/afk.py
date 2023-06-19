@@ -1,7 +1,7 @@
 import time
 from FallenRobot import pbot as pgram ,BOT_USERNAME
 from pyrogram import filters 
-from FallenRobot.modules.helper_funcs.readable_time import get_readable_time
+from FallenRobot.modules.helper_funcs.readable_time import get_readable_time2 as get_readable_time
 from pyrogram.types import Message
 from FallenRobot.modules.mongo.afk_db import is_afk,add_afk, remove_afk
 
