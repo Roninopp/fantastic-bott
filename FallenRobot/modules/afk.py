@@ -58,12 +58,6 @@ async def active_afk(self: Client, ctx: Message):
             "data": None,
             "reason": None,
         }
-        afk_messages = [
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] has activated AFK mode.",
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is now AFK. Please expect a delayed response.",
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is currently away. They will get back to you soon.",
-        ]
-        send = await ctx.reply_text(random.choice(afk_messages))
     elif len(ctx.command) > 1 and not ctx.reply_to_message:
         _reason = (ctx.text.split(None, 1)[1].strip())[:100]
         details = {
@@ -72,12 +66,6 @@ async def active_afk(self: Client, ctx: Message):
             "data": None,
             "reason": _reason,
         }
-        afk_messages = [
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] has activated AFK mode with the reason: {_reason}",
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is now AFK. Reason: {_reason}.",
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is currently away with the reason: {_reason}. They will get back to you soon.",
-        ]
-        send = await ctx.reply_text(random.choice(afk_messages))
     elif len(ctx.command) == 1 and ctx.reply_to_message.animation:
         _data = ctx.reply_to_message.animation.file_id
         details = {
@@ -85,26 +73,32 @@ async def active_afk(self: Client, ctx: Message):
             "data": _data,
             "reason": None,
         }
-        afk_messages = [
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] has activated AFK mode with an animation.",
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is now AFK. Please expect a delayed response.",
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is currently away. They will get back to you soon.",
-        ]
-        send = await ctx.reply_text(random.choice(afk_messages))
+    elif len(ctx.command) > 1 and ctx.reply_to_message.animation:
+        _data = ctx.reply_to_message.animation.file_id
+        _reason = (ctx.text.split(None, 1)[1].strip())[:100]
+        details = {
+            "type": "animation",
+            "time": time.time(),
+            "data": _data,
+            "reason": _reason,
+        }
     elif len(ctx.command) == 1 and ctx.reply_to_message.photo:
-        await app.download_media(ctx.reply_to_message, file_name=f"downloads/{user_id}.jpg")
+        await app.download_media(ctx.reply_to_message, file_name=f"{user_id}.jpg")
         details = {
             "type": "photo",
             "time": time.time(),
             "data": None,
             "reason": None,
         }
-        afk_messages = [
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] has activated AFK mode with a photo.",
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is now AFK. Please expect a delayed response.",
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is currently away. They will get back to you soon.",
-        ]
-        send = await ctx.reply_text(random.choice(afk_messages))
+    elif len(ctx.command) > 1 and ctx.reply_to_message.photo:
+        await app.download_media(ctx.reply_to_message, file_name=f"{user_id}.jpg")
+        _reason = ctx.text.split(None, 1)[1].strip()
+        details = {
+            "type": "photo",
+            "time": time.time(),
+            "data": None,
+            "reason": _reason,
+        }
     elif len(ctx.command) == 1 and ctx.reply_to_message.sticker:
         if ctx.reply_to_message.sticker.is_animated:
             details = {
@@ -113,39 +107,31 @@ async def active_afk(self: Client, ctx: Message):
                 "data": None,
                 "reason": None,
             }
-            afk_messages = [
-                f"{ctx.from_user.mention} [`{ctx.from_user.id}`] has activated AFK mode with an animated sticker.",
-                f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is now AFK. Please expect a delayed response.",
-                f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is currently away. They will get back to you soon.",
-            ]
-            send = await ctx.reply_text(random.choice(afk_messages))
         else:
-            await app.download_media(ctx.reply_to_message, file_name=f"downloads/{user_id}.jpg")
+            await app.download_media(ctx.reply_to_message, file_name=f"{user_id}.jpg")
             details = {
                 "type": "photo",
                 "time": time.time(),
                 "data": None,
                 "reason": None,
             }
-            afk_messages = [
-                f"{ctx.from_user.mention} [`{ctx.from_user.id}`] has activated AFK mode with a sticker.",
-                f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is now AFK. Please expect a delayed response.",
-                f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is currently away. They will get back to you soon.",
-            ]
-            send = await ctx.reply_text(random.choice(afk_messages))
-    elif len(ctx.command) == 1 and ctx.reply_to_message.document and ctx.reply_to_message.document.mime_type == "image/gif":
-        _data = ctx.reply_to_message.document.file_id
-        details = {
-            "type": "animation",
-            "data": _data,
-            "reason": None,
-        }
-        afk_messages = [
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] has activated AFK mode with a GIF.",
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is now AFK. Please expect a delayed response.",
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is currently away. They will get back to you soon.",
-        ]
-        send = await ctx.reply_text(random.choice(afk_messages))
+    elif len(ctx.command) > 1 and ctx.reply_to_message.sticker:
+        _reason = (ctx.text.split(None, 1)[1].strip())[:100]
+        if ctx.reply_to_message.sticker.is_animated:
+            details = {
+                "type": "text_reason",
+                "time": time.time(),
+                "data": None,
+                "reason": _reason,
+            }
+        else:
+            await app.download_media(ctx.reply_to_message, file_name=f"{user_id}.jpg")
+            details = {
+                "type": "photo",
+                "time": time.time(),
+                "data": None,
+                "reason": _reason,
+            }
     else:
         details = {
             "type": "text",
@@ -153,12 +139,9 @@ async def active_afk(self: Client, ctx: Message):
             "data": None,
             "reason": None,
         }
-        afk_messages = [
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] has activated AFK mode.",
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is now AFK. Please expect a delayed response.",
-            f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is currently away. They will get back to you soon.",
-        ]
-        send = await ctx.reply_text(random.choice(afk_messages))
+
+    await add_afk(user_id, details)
+    send = await ctx.reply_text(f"{ctx.from_user.mention} [`{ctx.from_user.id}`] has activated AFK mode.")
     
 
 
