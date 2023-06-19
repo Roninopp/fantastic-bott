@@ -85,7 +85,8 @@ async def active_afk(self: Client, ctx: Message, strings):
         _data = ctx.reply_to_message.animation.file_id
         details = {
             "type": "animation",
-            "time": time.tim@capture_err
+            "time": time.time(),
+        }
 @app.on_message(filters.command(["afk"]))
 async def active_afk(self: Client, ctx: Message, strings):
     if ctx.sender_chat:
