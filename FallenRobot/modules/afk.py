@@ -245,9 +245,9 @@ async def afk_watcher_func(self: Client, ctx: Message):
                             msg += f"{mentioned_user_first_name} [`{user_id_mentioned}`] is AFK for {seenago}. Reason: {reasonafk}"
                         if afktype == "animation":
                             if str(reasonafk) == "None":
-                                send = await ctx.reply_animation(data, caption=f"User {mentioned_user_first_name} [`{user_id_mentioned}`] is AFK for {seenago}.")
+                                send = await ctx.reply_animation(data, caption=f"{mentioned_user_first_name} [`{user_id_mentioned}`] is AFK for {seenago}.")
                             else:
-                                send = await ctx.reply_animation(data, caption=f"User {mentioned_user_first_name} [`{user_id_mentioned}`] is AFK for {seenago}. Reason: {reasonafk}")
+                                send = await ctx.reply_animation(data, caption=f"{mentioned_user_first_name} [`{user_id_mentioned}`] is AFK for {seenago}. Reason: {reasonafk}")
                         if afktype == "photo":
                             if str(reasonafk) == "None":
                                 send = await ctx.reply_photo(photo=f"downloads/{user_id_mentioned}.jpg", caption=f"{mentioned_user_first_name} [`{user_id_mentioned}`] is AFK for {seenago}.")
