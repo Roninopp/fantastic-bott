@@ -46,7 +46,7 @@ async def hmm(yes):
     current_time = datetime.utcnow()
     uptime_sec = (current_time - START_TIME).total_seconds()
     uptime = await _human_time_duration(int(uptime_sec))
-    NekoX = f"**👋Hey there [{yes.sender.first_name}](tg://user?id={yes.sender.id})\n\n🌟I'm {BOT_NAME}\n💐I'm Functioning Flawlessly Darling💕 **\n\n"
+    NekoX = f"**👋Hey there [{yes.sender.first_name}](tg://user?id={yes.sender.id})\n\n🌟I'm {BOT_NAME}\n🫧I'm Functioning Flawlessly**\n\n"
     NekoX += f"**🔸My Uptime:🔸** `{uptime}`\n\n"
     NekoX += f"**🔸PTB Version :🔸** `{ptb}`\n\n"
     BUTTON = [
