@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from ZeroTwo import OWNER_ID
+from FallenRobot import OWNER_ID
 from FallenRobot import pbot as bot
 
 
