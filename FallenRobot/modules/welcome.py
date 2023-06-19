@@ -58,7 +58,7 @@ def welcomepic(pic, user, chat, count, id):
     background.save(welcome_filename)  # Saves the finished Image in the folder with the filename
     return welcome_filename
 
-@app.on_chat_member_updated(filters.group & filters.chat(-1001615276723))
+@app.on_chat_member_updated(filters.group)
 @capture_err
 async def member_has_joined(_, member: ChatMemberUpdated):
     if (
