@@ -1,5 +1,6 @@
 import time
 import re
+import random
 
 from pyrogram import filters, enums, Client
 from pyrogram.types import Message
@@ -176,9 +177,23 @@ async def afk_watcher_func(self: Client, ctx: Message):
             reasonafk = reasondb["reason"]
             seenago = get_readable_time2((int(time.time() - timeafk)))
             if afktype == "text":
-                msg += f"{user_name} [`{userid}`] is back. AFK for {seenago}."
+                afk_messages = [
+                    f"{user_name} [`{userid}`] is back. AFK for {seenago}.",
+                    f"{user_name} [`{userid}`] has returned. They were AFK for {seenago}.",
+                    f"{user_name} [`{userid}`] is no longer AFK.",
+                    f"{user_name} [`{userid}`] is back in action! They were away for {seenago}.",
+                    f"Welcome back, {user_name} [`{userid}`]! They were AFK for {seenago}.",
+                ]
+                msg += random.choice(afk_messages)
             if afktype == "text_reason":
-                msg += f"{user_name} [`{userid}`] is back. AFK for {seenago}. Reason: {reasonafk}"
+                afk_messages = [
+                    f"{user_name} [`{userid}`] is back. AFK for {seenago}. Reason: {reasonafk}",
+                    f"{user_name} [`{userid}`] has returned. They were AFK for {seenago}. Reason: {reasonafk}",
+                    f"{user_name} [`{userid}`] is no longer AFK. Reason: {reasonafk}",
+                    f"{user_name} [`{userid}`] is back in action! They were away for {seenago}. Reason: {reasonafk}",
+                    f"Welcome back, {user_name} [`{userid}`]! They were AFK for {seenago}. Reason: {reasonafk}",
+                ]
+                msg += random.choice(afk_messages)
             if afktype == "animation":
                 if str(reasonafk) == "None":
                     send = await ctx.reply_animation(data, caption=f"{user_name} [`{userid}`] is back. AFK for {seenago}.")
@@ -206,9 +221,21 @@ async def afk_watcher_func(self: Client, ctx: Message):
                     reasonafk = reasondb["reason"]
                     seenago = get_readable_time2((int(time.time() - timeafk)))
                     if afktype == "text":
-                        msg += f"{replied_first_name} [`{replied_user_id}`] is AFK for {seenago}."
+                        replied_afk_messages = [
+                            f"{replied_first_name} [`{replied_user_id}`] is AFK for {seenago}.",
+                            f"{replied_first_name} [`{replied_user_id}`] is currently away. Please expect a delayed response.",
+                            f"{replied_first_name} [`{replied_user_id}`] is temporarily unavailable. They will get back to you soon.",
+                            f"{replied_first_name} [`{replied_user_id}`] is AFK. Please leave a message and they will reply when they return.",
+                        ]
+                        msg += random.choice(replied_afk_messages)
                     if afktype == "text_reason":
-                        msg += f"{replied_first_name} [`{replied_user_id}`] is AFK for {seenago}. Reason: {reasonafk}"
+                        replied_afk_messages = [
+                            f"{replied_first_name} [`{replied_user_id}`] is AFK for {seenago}. Reason: {reasonafk}",
+                            f"{replied_first_name} [`{replied_user_id}`] is currently away. Reason: {reasonafk}",
+                            f"{replied_first_name} [`{replied_user_id}`] is temporarily unavailable. Reason: {reasonafk}",
+                            f"{replied_first_name} [`{replied_user_id}`] is AFK. Reason: {reasonafk} Please leave a message and they will reply when they return.",
+                        ]
+                        msg += random.choice(replied_afk_messages)
                     if afktype == "animation":
                         if str(reasonafk) == "None":
                             send = await ctx.reply_animation(data, caption=f"{replied_first_name} [`{replied_user_id}`] is AFK for {seenago}.")
@@ -240,9 +267,21 @@ async def afk_watcher_func(self: Client, ctx: Message):
                         reasonafk = reasondb["reason"]
                         seenago = get_readable_time2((int(time.time() - timeafk)))
                         if afktype == "text":
-                            msg += f"{mentioned_user_first_name} [`{user_id_mentioned}`] is AFK for {seenago}."
+                            mentioned_afk_messages = [
+                                f"{mentioned_user_first_name} [`{user_id_mentioned}`] is AFK for {seenago}.",
+                                f"{mentioned_user_first_name} [`{user_id_mentioned}`] is currently away. Please expect a delayed response.",
+                                f"{mentioned_user_first_name} [`{user_id_mentioned}`] is temporarily unavailable. They will get back to you soon.",
+                                f"{mentioned_user_first_name} [`{user_id_mentioned}`] is AFK. Please leave a message and they will reply when they return.",
+                            ]
+                            msg += random.choice(mentioned_afk_messages)
                         if afktype == "text_reason":
-                            msg += f"{mentioned_user_first_name} [`{user_id_mentioned}`] is AFK for {seenago}. Reason: {reasonafk}"
+                            mentioned_afk_messages = [
+                                f"{mentioned_user_first_name} [`{user_id_mentioned}`] is AFK for {seenago}. Reason: {reasonafk}",
+                                f"{mentioned_user_first_name} [`{user_id_mentioned}`] is currently away. Reason: {reasonafk}",
+                                f"{mentioned_user_first_name} [`{user_id_mentioned}`] is temporarily unavailable. Reason: {reasonafk}",
+                                f"{mentioned_user_first_name} [`{user_id_mentioned}`] is AFK. Reason: {reasonafk} Please leave a message and they will reply when they return.",
+                            ]
+                            msg += random.choice(mentioned_afk_messages)
                         if afktype == "animation":
                             if str(reasonafk) == "None":
                                 send = await ctx.reply_animation(data, caption=f"{mentioned_user_first_name} [`{user_id_mentioned}`] is AFK for {seenago}.")
@@ -258,4 +297,3 @@ async def afk_watcher_func(self: Client, ctx: Message):
 
     if msg != "":
         await ctx.reply_text(msg)
-        
