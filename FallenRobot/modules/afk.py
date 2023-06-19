@@ -14,7 +14,7 @@ from FallenRobot.utils.human_read import get_readable_time2
 @app.on_message(filters.command(["afk"]))
 async def active_afk(self: Client, ctx: Message):
     if ctx.sender_chat:
-        return await ctx.reply_msg("You can only use this command in a private chat.", del_in=6)
+        return await ctx.reply_text("You can only use this command in a private chat.", del_in=6)
 
     user_id = ctx.from_user.id
     verifier, reasondb = await is_afk(user_id)
@@ -140,7 +140,8 @@ async def active_afk(self: Client, ctx: Message):
         }
 
     await add_afk(user_id, details)
-    send = await ctx.reply_msg(f"{ctx.from_user.mention} (ID: {ctx.from_user.id}) is now AFK.")
+    send = await ctx.reply_text(f"{ctx.from_user.mention} (ID: {ctx.from_user.id}) is now AFK.")
+    
 
 
 # Detect user that AFK based on Yukki Repo
