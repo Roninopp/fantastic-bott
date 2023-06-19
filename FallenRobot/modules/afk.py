@@ -176,9 +176,9 @@ async def afk_watcher_func(self: Client, ctx: Message):
             reasonafk = reasondb["reason"]
             seenago = get_readable_time2((int(time.time() - timeafk)))
             if afktype == "text":
-                msg += f"User {user_name} [`{userid}`] is back. AFK for {seenago}."
+                msg += f"{user_name} [`{userid}`] is back. AFK for {seenago}."
             if afktype == "text_reason":
-                msg += f"User {user_name} [`{userid}`] is back. AFK for {seenago}. Reason: {reasonafk}"
+                msg += f"{user_name} [`{userid}`] is back. AFK for {seenago}. Reason: {reasonafk}"
             if afktype == "animation":
                 if str(reasonafk) == "None":
                     send = await ctx.reply_animation(data, caption=f"{user_name} [`{userid}`] is back. AFK for {seenago}.")
