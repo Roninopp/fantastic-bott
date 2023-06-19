@@ -31,22 +31,22 @@ async def active_afk(self: Client, ctx: Message):
 
             if afktype == "animation":
                 send = (
-                    await ctx.reply_animation(data, caption=f"{ctx.from_user.mention} (ID: {ctx.from_user.id}) is no longer AFK for {seenago}.")
+                    await ctx.reply_animation(data, caption=f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is no longer AFK for {seenago}.")
                     if str(reasonafk) == "None"
-                    else await ctx.reply_animation(data, caption=f"{ctx.from_user.mention} (ID: {ctx.from_user.id}) is no longer AFK for {seenago}. Reason: {reasonafk}")
+                    else await ctx.reply_animation(data, caption=f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is no longer AFK for {seenago}. Reason: {reasonafk}")
                 )
             elif afktype == "photo":
                 send = (
-                    await ctx.reply_photo(photo=f"downloads/{user_id}.jpg", caption=f"{ctx.from_user.mention} (ID: {ctx.from_user.id}) is no longer AFK for {seenago}.")
+                    await ctx.reply_photo(photo=f"downloads/{user_id}.jpg", caption=f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is no longer AFK for {seenago}.")
                     if str(reasonafk) == "None"
-                    else await ctx.reply_photo(photo=f"downloads/{user_id}.jpg", caption=f"{ctx.from_user.mention} (ID: {ctx.from_user.id}) is no longer AFK for {seenago}. Reason: {reasonafk}")
+                    else await ctx.reply_photo(photo=f"downloads/{user_id}.jpg", caption=f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is no longer AFK for {seenago}. Reason: {reasonafk}")
                 )
             elif afktype == "text":
-                send = await ctx.reply_text(f"{ctx.from_user.mention} (ID: {ctx.from_user.id}) is no longer AFK for {seenago}.", disable_web_page_preview=True)
+                send = await ctx.reply_text(f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is no longer AFK for {seenago}.", disable_web_page_preview=True)
             elif afktype == "text_reason":
-                send = await ctx.reply_text(f"{ctx.from_user.mention} (ID: {ctx.from_user.id}) is no longer AFK for {seenago}. Reason: {reasonafk}", disable_web_page_preview=True)
+                send = await ctx.reply_text(f"{ctx.from_user.mention} [`{ctx.from_user.id}`] is no longer AFK for {seenago}. Reason: {reasonafk}", disable_web_page_preview=True)
         except Exception:
-            send = await ctx.reply_text(f"{ctx.from_user.first_name} (ID: {ctx.from_user.id}) is online.", disable_web_page_preview=True)
+            send = await ctx.reply_text(f"{ctx.from_user.first_name} [`{ctx.from_user.id}`] is online.", disable_web_page_preview=True)
 
         return
 
@@ -140,7 +140,7 @@ async def active_afk(self: Client, ctx: Message):
         }
 
     await add_afk(user_id, details)
-    send = await ctx.reply_text(f"{ctx.from_user.mention} (ID: {ctx.from_user.id}) is now AFK.")
+    send = await ctx.reply_text(f"{ctx.from_user.mention} [`{ctx.from_user.id}`] has activated AFK mode.")
     
 
 
