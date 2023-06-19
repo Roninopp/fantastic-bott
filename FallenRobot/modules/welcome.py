@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import time
+import pytz
 import os
 from logging import getLogger
 from PIL import Image, ImageChops, ImageDraw, ImageFont
@@ -79,9 +80,10 @@ async def member_has_joined(_, member: ChatMemberUpdated):
             pass
     
     mention = f"<a href='tg://user?id={user.id}'>{user.first_name}</a>"
-    joined_date = datetime.fromtimestamp(time.time()).strftime("%d %B %Y %I:%M:%S %p")
+    joined_date = datetime.fromtimestamp(time.time(), tz=timezone).strftime("%d %B %Y %I:%M:%S %p")
     first_name = f"{user.first_name} {user.last_name}" if user.last_name else user.first_name
     id = user.id
+    timezone = pytz.timezone("Asia/Kolkata")  # Set the timezone to IST
     dc = user.dc_id or "Member tanpa PP"
     count = await app.get_chat_members_count(member.chat.id)
     
