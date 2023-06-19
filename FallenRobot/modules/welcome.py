@@ -35,8 +35,7 @@ def draw_multiple_line_text(image, text, font, text_start_height):
 
 @asyncify
 def welcomepic(pic, user, chat, count, id):
-    count = app.get_chat_members_count(message.chat.id)
-    new = int(count) + 1
+    new_count = count + 1
 
     background = Image.open("img/bg.png")  # <- Background Image (Should be PNG)
     background = background.resize((1024, 500), Image.ANTIALIAS)
@@ -49,57 +48,57 @@ def welcomepic(pic, user, chat, count, id):
     draw_multiple_line_text(background, chat, font, 47)
     ImageDraw.Draw(background).text(
         (530, 460),
-        f"You Are {new}th Member Here",
+        f"You Are {new_count}th Member Here",
         font=ImageFont.truetype("Calistoga-Regular.ttf", 28),
         size=20,
         align="right",
     )
     background.paste(pfp, (379, 123), pfp)  # Pastes the Profilepicture on the Background Image
-    background.save(f"downloads/welcome#{id}.png")  # Saves the finished Image in the folder with the filename
-    return f"downloads/welcome#{id}.png"
+    welcome_filename = f"downloads/welcome#{id}.png"
+    background.save(welcome_filename)  # Saves the finished Image in the folder with the filename
+    return welcome_filename
 
 @app.on_chat_member_updated(filters.group & filters.chat(-1001622589322))
 @capture_err
-async def member_has_joined(c: app, member: ChatMemberUpdated):
+async def member_has_joined(_, member: ChatMemberUpdated):
     if (
         not member.new_chat_member
         or member.new_chat_member.status in {"banned", "left", "restricted"}
         or member.old_chat_member
     ):
         return
+    
     user = member.new_chat_member.user if member.new_chat_member else member.from_user
     if user.is_bot:
-        return  # ignore bots
-    else:
-        if (temp.MELCOW).get(f"welcome-{member.chat.id}") is not None:
-            try:
-                await (temp.MELCOW[f"welcome-{member.chat.id}"]).delete()
-            except:
-                pass
-        mention = f"<a href='tg://user?id={user.id}'>{user.first_name}</a>"
-        joined_date = datetime.fromtimestamp(time.time()).strftime("%Y.%m.%d %H:%M:%S")
-        first_name = (
-            f"{user.first_name} {user.last_name}" if user.last_name else user.first_name
-        )
-        id = user.id
-        dc = user.dc_id or "Member tanpa PP"
-        count = await app.get_chat_members_count(member.chat.id)
+        return  # Ignore bots
+    
+    if temp.MELCOW.get(f"welcome-{member.chat.id}") is not None:
         try:
-            pic = await app.download_media(
-                user.photo.big_file_id, file_name=f"pp{user.id}.png"
-            )
-        except AttributeError:
-            pic = "img/profilepic.png"
-        welcomeimg = await welcomepic(
-            pic, user.first_name, member.chat.title, count, user.id
-        )
-        temp.MELCOW[f"welcome-{member.chat.id}"] = await c.send_photo(
-            member.chat.id,
-            photo=welcomeimg,
-            caption=f"Hai {mention}, Welcome to the Group{member.chat.title} Please read the rules in the pinned message first.\n\n<b>Name :<b> <code>{first_name}</code>\n<b>ID :<b> <code>{id}</code>\n<b>DC ID :<b> <code>{dc}</code>\n<b>Join Date:<b> <code>{joined_date}</code>",
-        )
-        try:
-            os.remove(f"downloads/welcome#{user.id}.png")
-            os.remove(f"downloads/pp{user.id}.png")
-        except Exception:
+            await temp.MELCOW[f"welcome-{member.chat.id}"].delete()
+        except:
             pass
+    
+    mention = f"<a href='tg://user?id={user.id}'>{user.first_name}</a>"
+    joined_date = datetime.fromtimestamp(time.time()).strftime("%Y.%m.%d %H:%M:%S")
+    first_name = f"{user.first_name} {user.last_name}" if user.last_name else user.first_name
+    id = user.id
+    dc = user.dc_id or "Member tanpa PP"
+    count = await app.get_chat_members_count(member.chat.id)
+    
+    try:
+        pic = await app.download_media(user.photo.big_file_id, file_name=f"pp{user.id}.png")
+    except AttributeError:
+        pic = "img/profilepic.png"
+    
+    welcomeimg = await welcomepic(pic, user.first_name, member.chat.title, count, user.id)
+    temp.MELCOW[f"welcome-{member.chat.id}"] = await app.send_photo(
+        member.chat.id,
+        photo=welcomeimg,
+        caption=f"Hai {mention}, Welcome to the Group {member.chat.title}! Please read the rules in the pinned message first.\n\n<b>Name:</b> <code>{first_name}</code>\n<b>ID:</b> <code>{id}</code>\n<b>DC ID:</b> <code>{dc}</code>\n<b>Join Date:</b> <code>{joined_date}</code>",
+    )
+    
+    try:
+        os.remove(welcomeimg)
+        os.remove(f"downloads/pp{user.id}.png")
+    except Exception:
+        pass
