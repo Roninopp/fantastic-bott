@@ -176,19 +176,19 @@ async def afk_watcher_func(self: Client, ctx: Message):
             reasonafk = reasondb["reason"]
             seenago = get_readable_time2((int(time.time() - timeafk)))
             if afktype == "text":
-                msg += f"User {user_name} (ID: {userid}) is back. AFK for {seenago}."
+                msg += f"User {user_name} [`{userid}`] is back. AFK for {seenago}."
             if afktype == "text_reason":
-                msg += f"User {user_name} (ID: {userid}) is back. AFK for {seenago}. Reason: {reasonafk}"
+                msg += f"User {user_name} [`{userid}`] is back. AFK for {seenago}. Reason: {reasonafk}"
             if afktype == "animation":
                 if str(reasonafk) == "None":
-                    send = await ctx.reply_animation(data, caption=f"User {user_name} (ID: {userid}) is back. AFK for {seenago}.")
+                    send = await ctx.reply_animation(data, caption=f"{user_name} [`{userid}`] is back. AFK for {seenago}.")
                 else:
-                    send = await ctx.reply_animation(data, caption=f"User {user_name} (ID: {userid}) is back. AFK for {seenago}. Reason: {reasonafk}")
+                    send = await ctx.reply_animation(data, caption=f"{user_name} [`{userid}`] is back. AFK for {seenago}. Reason: {reasonafk}")
             if afktype == "photo":
                 if str(reasonafk) == "None":
-                    send = await ctx.reply_photo(photo=f"downloads/{userid}.jpg", caption=f"User {user_name} (ID: {userid}) is back. AFK for {seenago}.")
+                    send = await ctx.reply_photo(photo=f"downloads/{userid}.jpg", caption=f"{user_name} [`{userid}`] is back. AFK for {seenago}.")
                 else:
-                    send = await ctx.reply_photo(photo=f"downloads/{userid}.jpg", caption=f"User {user_name} (ID: {userid}) is back. AFK for {seenago}. Reason: {reasonafk}")
+                    send = await ctx.reply_photo(photo=f"downloads/{userid}.jpg", caption=f"{user_name} [`{userid}`] is back. AFK for {seenago}. Reason: {reasonafk}")
         except:
             msg += f"User {user_name} (ID: {userid}) is online."
 
@@ -240,19 +240,19 @@ async def afk_watcher_func(self: Client, ctx: Message):
                         reasonafk = reasondb["reason"]
                         seenago = get_readable_time2((int(time.time() - timeafk)))
                         if afktype == "text":
-                            msg += f"User {mentioned_user_first_name} (ID: {user_id_mentioned}) is AFK for {seenago}."
+                            msg += f"User {mentioned_user_first_name} [`{user_id_mentioned}`] is AFK for {seenago}."
                         if afktype == "text_reason":
-                            msg += f"User {mentioned_user_first_name} (ID: {user_id_mentioned}) is AFK for {seenago}. Reason: {reasonafk}"
+                            msg += f"User {mentioned_user_first_name} [`{user_id_mentioned}`] is AFK for {seenago}. Reason: {reasonafk}"
                         if afktype == "animation":
                             if str(reasonafk) == "None":
-                                send = await ctx.reply_animation(data, caption=f"User {mentioned_user_first_name} (ID: {user_id_mentioned}) is AFK for {seenago}.")
+                                send = await ctx.reply_animation(data, caption=f"User {mentioned_user_first_name} [`{user_id_mentioned}`] is AFK for {seenago}.")
                             else:
-                                send = await ctx.reply_animation(data, caption=f"User {mentioned_user_first_name} (ID: {user_id_mentioned}) is AFK for {seenago}. Reason: {reasonafk}")
+                                send = await ctx.reply_animation(data, caption=f"User {mentioned_user_first_name} [`{user_id_mentioned}`] is AFK for {seenago}. Reason: {reasonafk}")
                         if afktype == "photo":
                             if str(reasonafk) == "None":
-                                send = await ctx.reply_photo(photo=f"downloads/{user_id_mentioned}.jpg", caption=f"User {mentioned_user_first_name} (ID: {user_id_mentioned}) is AFK for {seenago}.")
+                                send = await ctx.reply_photo(photo=f"downloads/{user_id_mentioned}.jpg", caption=f"{mentioned_user_first_name} [`{user_id_mentioned}`] is AFK for {seenago}.")
                             else:
-                                send = await ctx.reply_photo(photo=f"downloads/{user_id_mentioned}.jpg", caption=f"User {mentioned_user_first_name} (ID: {user_id_mentioned}) is AFK for {seenago}. Reason: {reasonafk}")
+                                send = await ctx.reply_photo(photo=f"downloads/{user_id_mentioned}.jpg", caption=f"{mentioned_user_first_name} [`{user_id_mentioned}`] is AFK for {seenago}. Reason: {reasonafk}")
                 except:
                     pass
 
