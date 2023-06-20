@@ -8,6 +8,10 @@ from FallenRobot.Pyro.permissions import adminsOnly
 from FallenRobot.Pyro.message_utils import kirimPesan
 
 
+async def get_name_change_history(user_id: int):
+    user = await matadb.find_one({"user_id": user_id})
+    return user.get("name_changes", [])
+    
 # Check user that change first_name, last_name and username
 @app.on_message(filters.group & ~filters.bot & ~filters.via_bot, group=3)
 async def cek_mataa(_, m):
@@ -41,15 +45,16 @@ async def cek_mataa(_, m):
             history_msg = f"🔰 <b>Name History:</b>\n\n"
             history_msg += f"👤 {user_id}\n\n"
 
-            name_changes = await matadb.find({"user_id": user_id}).sort("_id", -1).to_list(length=5)
+            name_changes = await get_name_change_history(user_id)
 
             for idx, change in enumerate(name_changes, 1):
                 change_username = escape(change["username"])
                 change_first_name = escape(change["first_name"])
                 change_last_name = escape(change["last_name"]) if change["last_name"] else "None"
-                change_date = datetime.fromtimestamp(change["_id"].generation_time.timestamp(), tz=timezone("UTC")).astimezone(timezone("Asia/Kolkata")).strftime("%d/%m/%Y %H:%M:%S")
+                change_date = datetime.fromtimestamp(change["timestamp"], tz=timezone("Asia/Kolkata")).strftime("%d/%m/%Y %H:%M:%S")
+                change_description = escape(change["description"])
 
-                history_msg += f"{idx}. {change_date} {change_first_name} {change_last_name}\n"
+                history_msg += f"{idx}. {change_date} {change_first_name} {change_last_name} - {change_description}\n"
 
             await kirimPesan(m, history_msg, quote=True)
 
