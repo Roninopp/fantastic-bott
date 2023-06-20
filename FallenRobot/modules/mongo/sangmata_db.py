@@ -1,6 +1,7 @@
 from FallenRobot.utils.mongo import db
 
-matadb = db.sangmata
+matadb = dbname.sangmata
+history_db = dbname.name_history
 
 # Get Data User
 async def cek_userdata(user_id: int) -> bool:
