@@ -15,6 +15,7 @@ async def get_userdata(user_id: int) -> bool:
 
 async def add_userdata(user_id: int, username, first_name, last_name):
     await matadb.update_one({"user_id": user_id}, {"$set": {"username": username, "first_name": first_name, "last_name": last_name}}, upsert=True)
+    await history_db.insert_one({"user_id": user_id, "username": username, "first_name": first_name, "last_name": last_name})
 
 
 # Enable Mata MissKaty in Selected Chat
