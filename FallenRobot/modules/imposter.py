@@ -47,14 +47,17 @@ async def cek_mataa(_, m):
 
             name_changes = await get_name_change_history(user_id)
 
-            for idx, change in enumerate(name_changes, 1):
-                change_username = escape(change["username"])
-                change_first_name = escape(change["first_name"])
-                change_last_name = escape(change["last_name"]) if change["last_name"] else "None"
-                change_date = datetime.fromtimestamp(change["timestamp"], tz=timezone("Asia/Kolkata")).strftime("%d/%m/%Y %H:%M:%S")
-                change_description = escape(change["description"])
+            if name_changes:
+                for idx, change in enumerate(name_changes, 1):
+                    change_username = escape(change["username"])
+                    change_first_name = escape(change["first_name"])
+                    change_last_name = escape(change["last_name"]) if change["last_name"] else "None"
+                    change_date = datetime.fromtimestamp(change["timestamp"], tz=timezone("Asia/Kolkata")).strftime("%d/%m/%Y %H:%M:%S")
+                    change_description = escape(change["description"])
 
-                history_msg += f"{idx}. {change_date} {change_first_name} {change_last_name} - {change_description}\n"
+                    history_msg += f"{idx}. {change_date} {change_first_name} {change_last_name} - {change_description}\n"
+            else:
+                history_msg += "No name change history found for this user."
 
             await kirimPesan(m, history_msg, quote=True)
 
