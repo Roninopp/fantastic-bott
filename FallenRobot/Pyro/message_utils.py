@@ -2,7 +2,6 @@ import asyncio
 from logging import getLogger
 
 from pyrogram.errors import ChatWriteForbidden, FloodWait, MessageNotModified, ChatAdminRequired, MessageDeleteForbidden, MessageIdInvalid, MessageEmpty
-from FallenRobot import pbot as app
 
 LOGGER = getLogger(__name__)
 
@@ -10,16 +9,16 @@ LOGGER = getLogger(__name__)
 
 
 # Send MSG Pyro
-async def kirimPesan(chat, text, **kwargs):
+async def kirimPesan(msg, text, **kwargs):
     try:
-        return await app.send_message(chat_id=chat.id, text=text, **kwargs)
+        return await msg.reply(text, **kwargs)
     except FloodWait as e:
         LOGGER.warning(str(e))
-        await asyncio.sleep(e.x)
-        return await kirimPesan(chat, text, **kwargs)
+        await asyncio.sleep(e.value)
+        return await kirimPesan(msg, text, **kwargs)
     except (ChatWriteForbidden, ChatAdminRequired):
-        LOGGER.info(f"Leaving from {chat.title} [{chat.id}] because it doesn't have admin permission.")
-        return await app.leave_chat(chat.id)
+        LOGGER.info(f"Leaving from {msg.chat.title} [{msg.chat.id}] because doesn't have admin permission.")
+        return await msg.leave()
     except Exception as e:
         LOGGER.error(str(e))
         return
