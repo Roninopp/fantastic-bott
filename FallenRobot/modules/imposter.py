@@ -60,7 +60,7 @@ async def show_name_history(_, m):
 
             history_msg += "\n"
 
-        await kirimPesan(m, history_msg, quote=True, monospace=True)
+        await kirimPesan(m, history_msg, quote=True)
     else:
         await kirimPesan(m, "User data not found.")
     
