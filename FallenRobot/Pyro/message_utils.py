@@ -2,6 +2,7 @@ import asyncio
 from logging import getLogger
 
 from pyrogram.errors import ChatWriteForbidden, FloodWait, MessageNotModified, ChatAdminRequired, MessageDeleteForbidden, MessageIdInvalid, MessageEmpty
+from FallenRobot import pbot as app
 
 LOGGER = getLogger(__name__)
 
