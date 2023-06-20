@@ -28,19 +28,24 @@ def format_username_change(change_username):
     return ""
 
 
+async def get_user_data(user_id):
+    username, first_name, last_name = await get_userdata(user_id)
+    return username, first_name, last_name
+
+
 def get_user_history(user_id):
     name_history = list(history_db.find({"user_id": user_id}).sort("_id", -1))
     return name_history
 
 
 def get_user_history_message(user_id):
-    username, first_name, last_name = get_userdata(user_id)
+    username, first_name, last_name = await get_user_data(user_id)
     history_msg = "<b>🔰 Name History:</b>\n\n"
     history_msg += f"<code>👤 {user_id}</code>\n\n"
 
     name_history = get_user_history(user_id)
 
-    for i, history in enumerate(name_history, start=1):
+    for i, history in enumerate(name_history[::-1], start=1):
         timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
         formatted_timestamp = format_timestamp(timestamp)
         change_first_name = history["first_name"]
@@ -74,12 +79,14 @@ async def cek_mataa(_, m):
                         user_id = user.id
 
                 if user_id:
-                    history_msg = get_user_history_message(user_id)
+                    username, first_name, last_name = await get_user_data(user_id)
+                    history_msg = await get_user_history_message(user_id, username, first_name, last_name)
                     await kirimPesan(m, history_msg, quote=True)
                     return
             else:
                 user_id = m.reply_to_message.from_user.id if m.reply_to_message else m.from_user.id
-                history_msg = get_user_history_message(user_id)
+                username, first_name, last_name = await get_user_data(user_id)
+                history_msg = await get_user_history_message(user_id, username, first_name, last_name)
                 await kirimPesan(m, history_msg, quote=True)
 
 
