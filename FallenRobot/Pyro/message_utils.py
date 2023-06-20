@@ -9,16 +9,16 @@ LOGGER = getLogger(__name__)
 
 
 # Send MSG Pyro
-async def kirimPesan(msg, text, **kwargs):
+async def kirimPesan(chat, text, **kwargs):
     try:
-        return await msg.reply(text, **kwargs)
+        return await chat.reply(text, **kwargs)
     except FloodWait as e:
         LOGGER.warning(str(e))
         await asyncio.sleep(e.value)
-        return await kirimPesan(msg, text, **kwargs)
+        return await kirimPesan(chat, text, **kwargs)
     except (ChatWriteForbidden, ChatAdminRequired):
-        LOGGER.info(f"Leaving from {msg.chat.title} [{msg.chat.id}] because doesn't have admin permission.")
-        return await msg.leave()
+        LOGGER.info(f"Leaving from {chat.title} [{chat.id}] because it doesn't have admin permission.")
+        return await chat.leave()
     except Exception as e:
         LOGGER.error(str(e))
         return
