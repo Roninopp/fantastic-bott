@@ -16,7 +16,9 @@ async def get_enabled_chat_ids():
 
 async def get_userdata(user_id: int, chat_id: int):
     user = await matadb.find_one({"user_id": user_id, "chat_id": chat_id})
-    return user["username"], user["first_name"], user["last_name"]
+    if user:
+        return user.get("username"), user.get("first_name"), user.get("last_name")
+    return None, None, None
 
 
 async def add_userdata(user_id: int, chat_id: int, username, first_name, last_name):
