@@ -6,7 +6,8 @@ from FallenRobot.Pyro.message_utils import kirimPesan
 
 user_data = {}
 
-# Check user that changes first_name, last_name, and username
+
+# Check user that change first_name, last_name and username
 @app.on_message(filters.group & ~filters.bot & ~filters.via_bot, group=3)
 async def cek_mataa(_, m):
     if not await is_sangmata_on(m.chat.id):
@@ -15,21 +16,18 @@ async def cek_mataa(_, m):
     chat_id = m.chat.id
     user_id = m.from_user.id
 
-    if chat_id not in user_data:
-        user_data[chat_id] = {}
-
-    if user_id not in user_data[chat_id]:
-        user_data[chat_id][user_id] = {
+    if user_id not in user_data:
+        user_data[user_id] = {
             "username": m.from_user.username,
             "first_name": m.from_user.first_name,
             "last_name": m.from_user.last_name,
-            "sent_first_message": False,  # Track if user has sent their first message
+            "sent_first_message": False  # Track if user has sent their first message
         }
     else:
-        username = user_data[chat_id][user_id]["username"]
-        first_name = user_data[chat_id][user_id]["first_name"]
-        last_name = user_data[chat_id][user_id]["last_name"]
-        sent_first_message = user_data[chat_id][user_id]["sent_first_message"]
+        username = user_data[user_id]["username"]
+        first_name = user_data[user_id]["first_name"]
+        last_name = user_data[user_id]["last_name"]
+        sent_first_message = user_data[user_id]["sent_first_message"]
         msg = ""
 
         if username != m.from_user.username or first_name != m.from_user.first_name or last_name != m.from_user.last_name:
@@ -37,23 +35,40 @@ async def cek_mataa(_, m):
 
         if username != m.from_user.username:
             msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed username from @{username} to @{m.from_user.username}.\n"
-            user_data[chat_id][user_id]["username"] = m.from_user.username
+            user_data[user_id]["username"] = m.from_user.username
 
         if first_name != m.from_user.first_name:
             msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed first Name from {first_name} to {m.from_user.first_name}.\n"
-            user_data[chat_id][user_id]["first_name"] = m.from_user.first_name
+            user_data[user_id]["first_name"] = m.from_user.first_name
 
         if last_name != m.from_user.last_name:
             msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed last name from {last_name} to {m.from_user.last_name}."
-            user_data[chat_id][user_id]["last_name"] = m.from_user.last_name
 
         if msg != "" and not sent_first_message:
-            user_data[chat_id][user_id]["sent_first_message"] = True
-            await kirimPesan(m, msg, quote=True)
+            user_data[user_id]["sent_first_message"] = True
+            for group_id in user_data[user_id]["groups"]:
+                await kirimPesan(m, msg, quote=True, chat_id=group_id)
+
+
+@app.on_message(filters.group & ~filters.bot & ~filters.via_bot)
+async def track_user_groups(_, m):
+    chat_id = m.chat.id
+    user_id = m.from_user.id
+
+    if user_id not in user_data:
+        user_data[user_id] = {
+            "username": m.from_user.username,
+            "first_name": m.from_user.first_name,
+            "last_name": m.from_user.last_name,
+            "groups": [chat_id]
+        }
+    else:
+        user_data[user_id]["groups"].append(chat_id)
 
 
 @app.on_message(filters.group & filters.command("detectimposter") & ~filters.bot & ~filters.via_bot)
 @adminsOnly("can_change_info")
+@ratelimiter
 async def set_mataa(_, m):
     if len(m.command) == 1:
         return await kirimPesan(m, f"Use <code>/{m.command[0]} on</code>, to enable Imposter Detection. If you want to disable, you can use off parameter.")
@@ -81,4 +96,4 @@ __help__ = """
 
 *• /detectimposter:* Use this command to track name and username changes in the group. If a user changes their name and username, the bot will send a message showing any related changes.
 """
-                
+        
