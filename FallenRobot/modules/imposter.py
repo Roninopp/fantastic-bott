@@ -37,45 +37,49 @@ async def cek_mataa(_, m):
         if msg != "":
             await kirimPesan(m, msg, quote=True)
 
-    # Check if the command is /history
-    if m.text and m.text.startswith("/history"):
-        query = m.text.replace("/history", "").strip()
-        user_id = None
-        if query.startswith("@"):
-            username = query[1:]
-            try:
-                user_id = (await app.get_users(username)).id
-            except:
-                await kirimPesan(m, f"User with username '{username}' not found.")
-        elif re.match(r"^\d+$", query):
-            user_id = int(query)
-        if user_id is None:
-            return await kirimPesan(m, f"Invalid user ID or username. Please provide a valid user ID or username to search the history.")
+import re
 
-        if await cek_userdata(user_id):
-            username, first_name, last_name = await get_userdata(user_id)
-            history_msg = "<b>🔰 Name History:</b>\n\n"
-            history_msg += f"<code>👤 {user_id}</code>\n\n"
+@app.on_message(filters.group & filters.command("history") & ~filters.bot & ~filters.via_bot)
+async def search_history(_, m):
+    if len(m.command) == 1:
+        return await kirimPesan(m, f"Please provide a user ID or username to search the history.")
+    query = m.command[1].strip()
+    user_id = None
+    if query.startswith("@"):
+        username = query[1:]
+        try:
+            user_id = (await app.get_users(username)).id
+        except:
+            await kirimPesan(m, f"User with username '{username}' not found.")
+    elif re.match(r"^\d+$", query):
+        user_id = int(query)
+    if user_id is None:
+        return await kirimPesan(m, f"Invalid user ID or username. Please provide a valid user ID or username to search the history.")
 
-            name_history = await history_db.find({"user_id": user_id}).sort("_id", -1).to_list(None)
+    if await cek_userdata(user_id):
+        username, first_name, last_name = await get_userdata(user_id)
+        history_msg = "<b>🔰 Name History:</b>\n\n"
+        history_msg += f"<code>👤 {user_id}</code>\n\n"
 
-            for i, history in enumerate(name_history, start=1):
-                timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
-                formatted_timestamp = timestamp.strftime("[<code>%d/%m/%Y %I:%M:%S %p</code>]")
-                change_first_name = escape(history["first_name"])
-                change_last_name = escape(history["last_name"]) if history["last_name"] is not None else ""
-                history_msg += f"<code>{i}.</code> {formatted_timestamp}\n"
-                history_msg += f"   <code>{change_first_name}</code> <code>{change_last_name}</code>\n"
+        name_history = await history_db.find({"user_id": user_id}).sort("_id", -1).to_list(None)
 
-                if history["username"]:
-                    change_username = escape(history["username"])
-                    history_msg += f"   @{change_username}\n"
+        for i, history in enumerate(name_history, start=1):
+            timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
+            formatted_timestamp = timestamp.strftime("[<code>%d/%m/%Y %I:%M:%S %p</code>]")
+            change_first_name = escape(history["first_name"])
+            change_last_name = escape(history["last_name"]) if history["last_name"] is not None else ""
+            history_msg += f"<code>{i}.</code> {formatted_timestamp}\n"
+            history_msg += f"   <code>{change_first_name}</code> <code>{change_last_name}</code>\n"
 
-                history_msg += "\n"
+            if history["username"]:
+                change_username = escape(history["username"])
+                history_msg += f"   @{change_username}\n"
 
-            await kirimPesan(m, history_msg, quote=True)
-        else:
-            await kirimPesan(m, "User data not found.")
+            history_msg += "\n"
+
+        await kirimPesan(m, history_msg, quote=True)
+    else:
+        await kirimPesan(m, "User data not found.")
         
 
 @app.on_message(filters.group & filters.command("detectimposter") & ~filters.bot & ~filters.via_bot)
