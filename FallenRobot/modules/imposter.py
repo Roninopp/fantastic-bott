@@ -1,4 +1,5 @@
 from pyrogram import filters
+from html import escape
 from FallenRobot.modules.mongo.sangmata_db import *
 from FallenRobot import pbot as app
 from FallenRobot.Pyro.permissions import adminsOnly
@@ -8,28 +9,49 @@ from FallenRobot.Pyro.message_utils import kirimPesan
 # Check user that change first_name, last_name and username
 @app.on_message(filters.group & ~filters.bot & ~filters.via_bot, group=3)
 async def cek_mataa(_, m):
-    enabled_chat_ids = await get_enabled_chat_ids()
-    for chat_id in enabled_chat_ids:
-        if not await cek_userdata(m.from_user.id):
-            await add_userdata(m.from_user.id, chat_id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
-        else:
-            username, first_name, last_name = await get_userdata(m.from_user.id, chat_id)
-            msg = ""
-            old_user = await app.get_chat_member(chat_id, m.from_user.id)
-            if username != m.from_user.username or first_name != m.from_user.first_name or last_name != m.from_user.last_name:
-                msg += "👀 <b>Imposter Detected</b>\n\n"
-            if username != m.from_user.username:
-                msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed username from @{username} to @{m.from_user.username}.\n"
-                await add_userdata(m.from_user.id, chat_id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
-            if first_name != m.from_user.first_name:
-                msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed first Name from {first_name} to {m.from_user.first_name}.\n"
-                await add_userdata(m.from_user.id, chat_id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
-            if last_name != m.from_user.last_name:
-                msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed last name from {last_name} to {m.from_user.last_name}."
-                await add_userdata(m.from_user.id, chat_id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
-            if msg != "":
-                chat = await app.get_chat(chat_id)
-                await kirimPesan(chat, msg, quote=True)
+    if not await is_sangmata_on(m.chat.id):
+        return
+    if not await cek_userdata(m.from_user.id):
+        await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
+    else:
+        username, first_name, last_name = await get_userdata(m.from_user.id)
+        msg = ""
+        old_user = await app.get_chat_member(m.chat.id, m.from_user.id)
+        if username != m.from_user.username or first_name != m.from_user.first_name or last_name != m.from_user.last_name:
+            msg += "👀 <b>Imposter Detected</b>\n\n"
+        if username != m.from_user.username:
+            msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed username from @{username} to @{m.from_user.username}.\n"
+            await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
+        if first_name != m.from_user.first_name:
+            msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed first Name from {first_name} to {m.from_user.first_name}.\n"
+            await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
+        if last_name != m.from_user.last_name:
+            msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed last name from {last_name} to {m.from_user.last_name}.\n"
+            await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
+        if msg != "":
+            await kirimPesan(m, msg, quote=True)
+
+    # Check if the command is /history
+    if m.text and m.text.startswith("/history"):
+        user_id = m.reply_to_message.from_user.id if m.reply_to_message else m.from_user.id
+        if await cek_userdata(user_id):
+            username, first_name, last_name = await get_userdata(user_id)
+            history_msg = f"📜 <b>Name Change History</b> 📜\n\n"
+            history_msg += f"User ID: <code>{user_id}</code>\n\n"
+            history_msg += f"Username: @{username}\n"
+            history_msg += f"First Name: {first_name}\n"
+            history_msg += f"Last Name: {last_name}\n\n"
+            history_msg += "<b>Previous Name Changes:</b>\n"
+
+            name_changes = await matadb.find({"user_id": user_id}).sort("_id", -1).to_list(length=5)
+
+            for change in name_changes:
+                change_username = escape(change["username"])
+                change_first_name = escape(change["first_name"])
+                change_last_name = escape(change["last_name"])
+                history_msg += f"📌 @{change_username} - {change_first_name} - {change_last_name}\n"
+
+            await kirimPesan(m, history_msg, quote=True)
 
 
 @app.on_message(filters.group & filters.command("detectimposter") & ~filters.bot & ~filters.via_bot)
