@@ -42,19 +42,25 @@ import re
 @app.on_message(filters.group & filters.command("history") & ~filters.bot & ~filters.via_bot)
 async def search_history(_, m):
     if len(m.command) == 1:
-        return await kirimPesan(m, f"Please provide a user ID or username to search the history.")
-    query = m.command[1].strip()
-    user_id = None
-    if query.startswith("@"):
-        username = query[1:]
-        try:
-            user_id = (await app.get_users(username)).id
-        except:
-            await kirimPesan(m, f"User with username '{username}' not found.")
-    elif re.match(r"^\d+$", query):
-        user_id = int(query)
-    if user_id is None:
-        return await kirimPesan(m, f"Invalid user ID or username. Please provide a valid user ID or username to search the history.")
+        # Check if the command was replied to a message
+        if m.reply_to_message and m.reply_to_message.from_user:
+            user_id = m.reply_to_message.from_user.id
+            username = m.reply_to_message.from_user.username
+        else:
+            return await kirimPesan(m, f"Please provide a user ID, username, or reply to a message to search the history.")
+    else:
+        query = m.command[1].strip()
+        user_id = None
+        if query.startswith("@"):
+            username = query[1:]
+            try:
+                user_id = (await app.get_users(username)).id
+            except:
+                await kirimPesan(m, f"User with username '{username}' not found.")
+        elif re.match(r"^\d+$", query):
+            user_id = int(query)
+        if user_id is None:
+            return await kirimPesan(m, f"Invalid user ID or username. Please provide a valid user ID or username to search the history.")
 
     if await cek_userdata(user_id):
         username, first_name, last_name = await get_userdata(user_id)
