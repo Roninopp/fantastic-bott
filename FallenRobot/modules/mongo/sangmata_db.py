@@ -9,6 +9,11 @@ async def cek_userdata(user_id: int) -> bool:
     return bool(user)
 
 
+async def get_enabled_chat_ids():
+    chats = await matadb.find({"chat_id_toggle": {"$exists": True}})
+    return [chat["chat_id_toggle"] for chat in chats]
+
+
 async def get_userdata(user_id: int) -> bool:
     user = await matadb.find_one({"user_id": user_id})
     return user["username"], user["first_name"], user["last_name"]
