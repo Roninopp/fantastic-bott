@@ -1,13 +1,10 @@
 from pyrogram import filters
-from datetime import datetime
 import pytz
-from pytz import timezone
 from html import escape
 from FallenRobot.modules.mongo.sangmata_db import *
 from FallenRobot import pbot as app
 from FallenRobot.Pyro.permissions import adminsOnly
 from FallenRobot.Pyro.message_utils import kirimPesan
-from FallenRobot.utils.mongo import db as dbname
 
 
 def format_timestamp(timestamp):
@@ -38,7 +35,7 @@ def get_user_history(user_id):
     return name_history
 
 
-def get_user_history_message(user_id):
+async def get_user_history_message(user_id):
     username, first_name, last_name = await get_user_data(user_id)
     history_msg = "<b>🔰 Name History:</b>\n\n"
     history_msg += f"<code>👤 {user_id}</code>\n\n"
@@ -79,14 +76,12 @@ async def cek_mataa(_, m):
                         user_id = user.id
 
                 if user_id:
-                    username, first_name, last_name = await get_user_data(user_id)
-                    history_msg = await get_user_history_message(user_id, username, first_name, last_name)
+                    history_msg = await get_user_history_message(user_id)
                     await kirimPesan(m, history_msg, quote=True)
                     return
             else:
                 user_id = m.reply_to_message.from_user.id if m.reply_to_message else m.from_user.id
-                username, first_name, last_name = await get_user_data(user_id)
-                history_msg = await get_user_history_message(user_id, username, first_name, last_name)
+                history_msg = await get_user_history_message(user_id)
                 await kirimPesan(m, history_msg, quote=True)
 
 
@@ -98,7 +93,7 @@ async def cek_mataa_reply(_, m):
         await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
     else:
         user_id = m.reply_to_message.from_user.id
-        history_msg = get_user_history_message(user_id)
+        history_msg = await get_user_history_message(user_id)
         await kirimPesan(m, history_msg, quote=True)
 
 
@@ -115,6 +110,6 @@ async def cek_mataa_username(_, m):
             user = await app.get_users(search_query)
             if user:
                 user_id = user.id
-                history_msg = get_user_history_message(user_id)
+                history_msg = await get_user_history_message(user_id)
                 await kirimPesan(m, history_msg, quote=True)
-        
+                
