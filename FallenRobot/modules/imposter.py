@@ -11,6 +11,8 @@ from FallenRobot.Pyro.message_utils import kirimPesan
 async def get_name_change_history(user_id: int):
     user = await matadb.find_one({"user_id": user_id})
     return user.get("name_changes", [])
+    
+history_db = dbname.name_history  # New collection for name history
 
 @app.on_message(filters.group & ~filters.bot & ~filters.via_bot, group=3)
 async def cek_mataa(_, m):
@@ -44,19 +46,24 @@ async def cek_mataa(_, m):
             history_msg = "🔰 <b>Name History:</b>\n\n"
             history_msg += f"👤 {user_id}\n\n"
 
-            name_changes = await matadb.find({"user_id": user_id}).sort("_id", -1).to_list(length=12)
+            name_history = await history_db.find({"user_id": user_id}).sort("_id", 1).to_list(length=12)
 
-            for i, change in enumerate(name_changes, start=1):
-                timestamp = datetime.fromtimestamp(change["_id"].generation_time.timestamp()).strftime("%d/%m/%Y %H:%M:%S")
-                change_first_name = escape(change["first_name"])
-                change_last_name = escape(change["last_name"]) if change["last_name"] else "None"
+            for i, history in enumerate(name_history, start=1):
+                timestamp = datetime.fromtimestamp(history["_id"].generation_time.timestamp()).strftime("%d/%m/%Y %H:%M:%S")
+                change_first_name = escape(history["first_name"])
+                change_last_name = escape(history["last_name"]) if history["last_name"] else "None"
                 history_msg += f"{i}. {timestamp} {change_first_name} {change_last_name}\n"
 
-                if change["username"]:
-                    change_username = escape(change["username"])
+                if history["username"]:
+                    change_username = escape(history["username"])
                     history_msg += f"   Username: @{change_username}\n"
 
+                history_msg += "\n"
+
             await kirimPesan(m, history_msg, quote=True)
+        else:
+            await kirimPesan(m, "User data not found.")
+    
 
 
 @app.on_message(filters.group & filters.command("detectimposter") & ~filters.bot & ~filters.via_bot)
