@@ -12,8 +12,6 @@ from FallenRobot.utils.mongo import db as dbname
 async def get_name_change_history(user_id: int):
     user = await matadb.find_one({"user_id": user_id})
     return user.get("name_changes", [])
-    
-history_db = dbname.name_history  # New collection for name history
 
 @app.on_message(filters.group & ~filters.bot & ~filters.via_bot, group=3)
 async def cek_mataa(_, m):
