@@ -23,11 +23,13 @@ async def cek_mataa(_, m):
             "username": m.from_user.username,
             "first_name": m.from_user.first_name,
             "last_name": m.from_user.last_name,
+            "sent_first_message": False,  # Track if user has sent their first message
         }
     else:
         username = user_data[chat_id][user_id]["username"]
         first_name = user_data[chat_id][user_id]["first_name"]
         last_name = user_data[chat_id][user_id]["last_name"]
+        sent_first_message = user_data[chat_id][user_id]["sent_first_message"]
         msg = ""
 
         if username != m.from_user.username or first_name != m.from_user.first_name or last_name != m.from_user.last_name:
@@ -45,7 +47,8 @@ async def cek_mataa(_, m):
             msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed last name from {last_name} to {m.from_user.last_name}."
             user_data[chat_id][user_id]["last_name"] = m.from_user.last_name
 
-        if msg != "":
+        if msg != "" and not sent_first_message:
+            user_data[chat_id][user_id]["sent_first_message"] = True
             await kirimPesan(m, msg, quote=True)
 
 
@@ -61,7 +64,7 @@ async def set_mataa(_, m):
             await kirimPesan(m, "Imposter Detection already enabled in your group.")
         else:
             await sangmata_on(m.chat.id)
-            await kirimPesan(m, "Imposter Detection enabled in your group. I will track name and username changes in this chat. If a user changes their name and username, I will send a message showing any related changes")
+            await kirimPesan(m, "Imposter Detection enabled in your group. I will track name and username changes in this chat. If a user changes their name and username, I will send a message showing any related changes.")
     elif m.command[1] == "off":
         cekset = await is_sangmata_on(m.chat.id)
         if not cekset:
@@ -70,7 +73,7 @@ async def set_mataa(_, m):
             await sangmata_off(m.chat.id)
             await kirimPesan(m, "Imposter Detection has been disabled in your group.")
     else:
-        await kirimPesan(m, "Invalid command, Use <code>/detectimposter on/off</code> to enable or disable Imposter Detection in your chat.")
+        await kirimPesan(m, "Invalid command. Use <code>/detectimposter on/off</code> to enable or disable Imposter Detection in your chat.")
 
 
 __mod_name__ = "𝙳ᴇᴛᴇᴄᴛ 𝙸ᴍᴘᴏsᴛᴇʀ"
@@ -78,3 +81,4 @@ __help__ = """
 
 *• /detectimposter:* Use this command to track name and username changes in the group. If a user changes their name and username, the bot will send a message showing any related changes.
 """
+                
