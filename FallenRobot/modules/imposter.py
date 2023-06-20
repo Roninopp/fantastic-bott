@@ -1,4 +1,6 @@
 from pyrogram import filters
+from datetime import datetime
+from pytz import timezone
 from html import escape
 from FallenRobot.modules.mongo.sangmata_db import *
 from FallenRobot import pbot as app
@@ -36,20 +38,18 @@ async def cek_mataa(_, m):
         user_id = m.reply_to_message.from_user.id if m.reply_to_message else m.from_user.id
         if await cek_userdata(user_id):
             username, first_name, last_name = await get_userdata(user_id)
-            history_msg = f"📜 <b>Name Change History</b> 📜\n\n"
-            history_msg += f"User ID: <code>{user_id}</code>\n\n"
-            history_msg += f"Username: @{username}\n"
-            history_msg += f"First Name: {first_name}\n"
-            history_msg += f"Last Name: {last_name}\n\n"
-            history_msg += "<b>Previous Name Changes:</b>\n"
+            history_msg = f"🔰 <b>Name History:</b>\n\n"
+            history_msg += f"👤 {user_id}\n\n"
 
             name_changes = await matadb.find({"user_id": user_id}).sort("_id", -1).to_list(length=5)
 
-            for change in name_changes:
+            for idx, change in enumerate(name_changes, 1):
                 change_username = escape(change["username"])
                 change_first_name = escape(change["first_name"])
                 change_last_name = escape(change["last_name"]) if change["last_name"] else "None"
-                history_msg += f"📌 @{change_username} - {change_first_name} - {change_last_name}\n"
+                change_date = datetime.fromtimestamp(change["_id"].generation_time.timestamp(), tz=timezone("UTC")).astimezone(timezone("Asia/Kolkata")).strftime("%d/%m/%Y %H:%M:%S")
+
+                history_msg += f"{idx}. {change_date} {change_first_name} {change_last_name}\n"
 
             await kirimPesan(m, history_msg, quote=True)
 
