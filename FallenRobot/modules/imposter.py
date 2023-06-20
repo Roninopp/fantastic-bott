@@ -14,7 +14,6 @@ async def get_name_change_history(user_id: int):
     user = await matadb.find_one({"user_id": user_id})
     return user.get("name_changes", [])
 
-@app.on_message(filters.group & ~filters.bot & ~filters.via_bot, group=3)
 async def cek_mataa(_, m):
     if not await is_sangmata_on(m.chat.id):
         return
@@ -40,24 +39,19 @@ async def cek_mataa(_, m):
 
     # Check if the command is /history
     if m.text and m.text.startswith("/history"):
-        search_key = m.command[1] if len(m.command) > 1 else None
-        if not search_key:
-            user_id = m.reply_to_message.from_user.id if m.reply_to_message else m.from_user.id
-        else:
-            user_id = None
-            
-            if search_key.startswith("@"):
-                username = search_key[1:]
-                user = await dbname.users.find_one({"username": username})
-                if user:
-                    user_id = user["user_id"]
-            elif re.match(r"^\d+$", search_key):
-                user_id = int(search_key)
-            
-            if not user_id:
-                await kirimPesan(m, "User not found. Please provide a valid username or user ID to search.")
-                return
-        
+        query = m.text.replace("/history", "").strip()
+        user_id = None
+        if query.startswith("@"):
+            username = query[1:]
+            try:
+                user_id = (await app.get_users(username)).id
+            except:
+                await kirimPesan(m, f"User with username '{username}' not found.")
+        elif re.match(r"^\d+$", query):
+            user_id = int(query)
+        if user_id is None:
+            return await kirimPesan(m, f"Invalid user ID or username. Please provide a valid user ID or username to search the history.")
+
         if await cek_userdata(user_id):
             username, first_name, last_name = await get_userdata(user_id)
             history_msg = "<b>🔰 Name History:</b>\n\n"
