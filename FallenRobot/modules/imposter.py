@@ -6,7 +6,7 @@ from FallenRobot.Pyro.message_utils import kirimPesan
 
 
 # Check user that change first_name, last_name and username
-@app.on_message(filters.group & ~filters.bot & ~filters.via_bot, group=3)
+app.on_message(filters.group & ~filters.bot & ~filters.via_bot, group=3)
 async def cek_mataa(_, m):
     chat_ids = await get_enabled_chat_ids()  # Get all chat IDs where imposter detection is enabled
     if not await cek_userdata(m.from_user.id):
@@ -29,7 +29,9 @@ async def cek_mataa(_, m):
         if msg != "":
             for chat_id in chat_ids:
                 chat = await app.get_chat(chat_id)
-                await kirimPesan(chat, msg, quote=True)
+                formatted_msg = f"<b>Imposter Detected</b>\n\n{msg}\n\n"
+                formatted_msg += f"Quoted Message:\n{m.text.html}"
+                await kirimPesan(chat, formatted_msg)
 
 @app.on_message(filters.group & filters.command("detectimposter") & ~filters.bot & ~filters.via_bot)
 @adminsOnly("can_change_info")
