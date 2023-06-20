@@ -51,7 +51,6 @@ async def cek_mataa(_, m):
 
 @app.on_message(filters.group & filters.command("detectimposter") & ~filters.bot & ~filters.via_bot)
 @adminsOnly("can_change_info")
-@ratelimiter
 async def set_mataa(_, m):
     if len(m.command) == 1:
         return await kirimPesan(m, f"Use <code>/{m.command[0]} on</code>, to enable Imposter Detection. If you want to disable, you can use off parameter.")
