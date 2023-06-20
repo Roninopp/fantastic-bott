@@ -43,17 +43,18 @@ async def cek_mataa(_, m):
         user_id = m.reply_to_message.from_user.id if m.reply_to_message else m.from_user.id
         if await cek_userdata(user_id):
             username, first_name, last_name = await get_userdata(user_id)
-            history_msg = "🔰 <b>Name History:</b>\n\n"
-            history_msg += f"👤 {user_id}\n\n"
+            history_msg = "<b>🔰 Name History:</b>\n\n"
+            history_msg += f"<code>👤 {user_id}</code>\n\n"
 
-            name_history = await history_db.find({"user_id": user_id}).sort("_id", 1).to_list(length=12)
+            name_history = await history_db.find({"user_id": user_id}).sort("_id", -1).to_list(None)
 
             for i, history in enumerate(name_history, start=1):
                 timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
-                formatted_timestamp = timestamp.strftime("%d/%m/%Y %I:%M:%S %p")
+                formatted_timestamp = timestamp.strftime("[%d/%m/%Y %I:%M:%S %p]")
                 change_first_name = escape(history["first_name"])
                 change_last_name = escape(history["last_name"]) if history["last_name"] else "None"
-                history_msg += f"{i}. [{formatted_timestamp}]\n   {change_first_name} {change_last_name}\n"
+                history_msg += f"<code>{i}.</code> {formatted_timestamp}\n"
+                history_msg += f"   {change_first_name} {change_last_name}\n"
 
                 if history["username"]:
                     change_username = escape(history["username"])
