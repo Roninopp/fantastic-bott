@@ -6,32 +6,31 @@ from FallenRobot.Pyro.message_utils import kirimPesan
 
 
 # Check user that change first_name, last_name and username
-app.on_message(filters.group & ~filters.bot & ~filters.via_bot, group=3)
+@app.on_message(filters.group & ~filters.bot & ~filters.via_bot, group=3)
 async def cek_mataa(_, m):
-    chat_ids = await get_enabled_chat_ids()  # Get all chat IDs where imposter detection is enabled
-    if not await cek_userdata(m.from_user.id):
-        await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
-    else:
-        username, first_name, last_name = await get_userdata(m.from_user.id)
-        msg = ""
-        old_user = await app.get_chat_member(m.chat.id, m.from_user.id)
-        if username != m.from_user.username or first_name != m.from_user.first_name or last_name != m.from_user.last_name:
-            msg += "👀 <b>Imposter Detected</b>\n\n"
-        if username != m.from_user.username:
-            msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed username from @{username} to @{m.from_user.username}.\n"
-            await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
-        if first_name != m.from_user.first_name:
-            msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed first Name from {first_name} to {m.from_user.first_name}.\n"
-            await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
-        if last_name != m.from_user.last_name:
-            msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed last name from {last_name} to {m.from_user.last_name}."
-            await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
-        if msg != "":
-            for chat_id in chat_ids:
+    enabled_chat_ids = await get_enabled_chat_ids()
+    for chat_id in enabled_chat_ids:
+        if not await cek_userdata(m.from_user.id):
+            await add_userdata(m.from_user.id, chat_id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
+        else:
+            username, first_name, last_name = await get_userdata(m.from_user.id, chat_id)
+            msg = ""
+            old_user = await app.get_chat_member(chat_id, m.from_user.id)
+            if username != m.from_user.username or first_name != m.from_user.first_name or last_name != m.from_user.last_name:
+                msg += "👀 <b>Imposter Detected</b>\n\n"
+            if username != m.from_user.username:
+                msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed username from @{username} to @{m.from_user.username}.\n"
+                await add_userdata(m.from_user.id, chat_id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
+            if first_name != m.from_user.first_name:
+                msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed first Name from {first_name} to {m.from_user.first_name}.\n"
+                await add_userdata(m.from_user.id, chat_id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
+            if last_name != m.from_user.last_name:
+                msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed last name from {last_name} to {m.from_user.last_name}."
+                await add_userdata(m.from_user.id, chat_id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
+            if msg != "":
                 chat = await app.get_chat(chat_id)
-                formatted_msg = f"<b>Imposter Detected</b>\n\n{msg}\n\n"
-                formatted_msg += f"Quoted Message:\n{m.text.html}"
-                await kirimPesan(chat, formatted_msg)
+                await kirimPesan(chat, msg, quote=True)
+
 
 @app.on_message(filters.group & filters.command("detectimposter") & ~filters.bot & ~filters.via_bot)
 @adminsOnly("can_change_info")
