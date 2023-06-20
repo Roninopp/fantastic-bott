@@ -6,6 +6,7 @@ from FallenRobot.modules.mongo.sangmata_db import *
 from FallenRobot import pbot as app
 from FallenRobot.Pyro.permissions import adminsOnly
 from FallenRobot.Pyro.message_utils import kirimPesan
+from FallenRobot.utils.mongo import db as dbname
 
 
 async def get_name_change_history(user_id: int):
