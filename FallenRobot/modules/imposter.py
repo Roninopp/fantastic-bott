@@ -52,7 +52,7 @@ async def cek_mataa(_, m):
                 timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
                 formatted_timestamp = timestamp.strftime("[<code>%d/%m/%Y %I:%M:%S %p</code>]")
                 change_first_name = escape(history["first_name"])
-                change_last_name = escape(history["last_name"]) if history["last_name"] else "None"
+                change_last_name = escape(history["last_name"]) if history["last_name"] is not None else ""
                 history_msg += f"<code>{i}.</code> {formatted_timestamp}\n"
                 history_msg += f"   <code>{change_first_name}</code> <code>{change_last_name}</code>\n"
 
