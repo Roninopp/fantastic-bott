@@ -13,7 +13,7 @@ from FallenRobot.utils.mongo import db as dbname
 async def get_name_change_history(user_id: int):
     user = await matadb.find_one({"user_id": user_id})
     return user.get("name_changes", [])
-    
+
 @app.on_message(filters.group & ~filters.bot & ~filters.via_bot, group=3)
 async def cek_mataa(_, m):
     if not await is_sangmata_on(m.chat.id):
@@ -49,10 +49,11 @@ async def cek_mataa(_, m):
             name_history = await history_db.find({"user_id": user_id}).sort("_id", 1).to_list(length=12)
 
             for i, history in enumerate(name_history, start=1):
-                timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata")).strftime("%d/%m/%Y %H:%M:%S")
+                timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
+                formatted_timestamp = timestamp.strftime("%d/%m/%Y %I:%M:%S %p")
                 change_first_name = escape(history["first_name"])
                 change_last_name = escape(history["last_name"]) if history["last_name"] else "None"
-                history_msg += f"{i}. {timestamp} {change_first_name} {change_last_name}\n"
+                history_msg += f"{i}. [{formatted_timestamp}]\n   {change_first_name} {change_last_name}\n"
 
                 if history["username"]:
                     change_username = escape(history["username"])
