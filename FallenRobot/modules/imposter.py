@@ -48,7 +48,7 @@ async def cek_mataa(_, m):
             for change in name_changes:
                 change_username = escape(change["username"])
                 change_first_name = escape(change["first_name"])
-                change_last_name = escape(change["last_name"])
+                change_last_name = escape(change["last_name"]) if change["last_name"] else "None"
                 history_msg += f"📌 @{change_username} - {change_first_name} - {change_last_name}\n"
 
             await kirimPesan(m, history_msg, quote=True)
