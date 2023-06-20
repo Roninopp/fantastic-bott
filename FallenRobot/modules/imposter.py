@@ -1,5 +1,5 @@
 from pyrogram import filters
-from FallenRobot.mongo.sangmata_db import *
+from FallenRobot.modules.mongo.sangmata_db import *
 from FallenRobot import pbot as app
 from FallenRobot.Pyro.permissions import adminsOnly
 from FallenRobot.Pyro.message_utils import kirimPesan
