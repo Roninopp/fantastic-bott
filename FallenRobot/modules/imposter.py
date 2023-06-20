@@ -30,8 +30,10 @@ async def get_user_data(user_id):
     return username, first_name, last_name
 
 
-def get_user_history(user_id):
-    name_history = list(history_db.find({"user_id": user_id}).sort("_id", -1))
+async def get_user_history(user_id):
+    name_history = []
+    async for history in history_db.find({"user_id": user_id}).sort("_id", -1):
+        name_history.append(history)
     return name_history
 
 
