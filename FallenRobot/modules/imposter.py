@@ -8,7 +8,7 @@ from FallenRobot import pbot as app
 from FallenRobot.Pyro.permissions import adminsOnly
 from FallenRobot.Pyro.message_utils import kirimPesan
 from FallenRobot.utils.mongo import db as dbname
-
+import re
 
 async def get_name_change_history(user_id: int):
     user = await matadb.find_one({"user_id": user_id})
@@ -40,7 +40,24 @@ async def cek_mataa(_, m):
 
     # Check if the command is /history
     if m.text and m.text.startswith("/history"):
-        user_id = m.reply_to_message.from_user.id if m.reply_to_message else m.from_user.id
+        search_key = m.command[1] if len(m.command) > 1 else None
+        if not search_key:
+            user_id = m.reply_to_message.from_user.id if m.reply_to_message else m.from_user.id
+        else:
+            user_id = None
+            
+            if search_key.startswith("@"):
+                username = search_key[1:]
+                user = await dbname.users.find_one({"username": username})
+                if user:
+                    user_id = user["user_id"]
+            elif re.match(r"^\d+$", search_key):
+                user_id = int(search_key)
+            
+            if not user_id:
+                await kirimPesan(m, "User not found. Please provide a valid username or user ID to search.")
+                return
+        
         if await cek_userdata(user_id):
             username, first_name, last_name = await get_userdata(user_id)
             history_msg = "<b>🔰 Name History:</b>\n\n"
@@ -65,8 +82,7 @@ async def cek_mataa(_, m):
             await kirimPesan(m, history_msg, quote=True)
         else:
             await kirimPesan(m, "User data not found.")
-    
-
+        
 
 @app.on_message(filters.group & filters.command("detectimposter") & ~filters.bot & ~filters.via_bot)
 @adminsOnly("can_change_info")
