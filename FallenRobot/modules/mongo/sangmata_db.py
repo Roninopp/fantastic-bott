@@ -9,11 +9,9 @@ async def cek_userdata(user_id: int) -> bool:
     return bool(user)
 
 
-async def get_imposter_detection_chat_ids():
-    chat_ids = []
-    async for chat in matadb.find({"chat_id_toggle": {"$exists": True}}):
-        chat_ids.append(chat["chat_id_toggle"])
-    return chat_ids
+async def get_enabled_chat_ids() -> list[int]:
+    chats = await matadb.find({"chat_id_toggle": {"$exists": True}})
+    return [chat["chat_id_toggle"] for chat in chats]
 
 
 async def get_userdata(user_id: int) -> bool:
