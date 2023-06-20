@@ -56,7 +56,7 @@ async def search_history(_, m):
             try:
                 user_id = (await app.get_users(username)).id
             except:
-                await kirimPesan(m, f"User with username '{username}' not found.")
+                return await kirimPesan(m, f"User with username '{username}' not found.")
         elif re.match(r"^\d+$", query):
             user_id = int(query)
         if user_id is None:
@@ -86,7 +86,7 @@ async def search_history(_, m):
         await kirimPesan(m, history_msg, quote=True)
     else:
         await kirimPesan(m, "User data not found.")
-        
+
 
 @app.on_message(filters.group & filters.command("detectimposter") & ~filters.bot & ~filters.via_bot)
 @adminsOnly("can_change_info")
@@ -109,7 +109,6 @@ async def set_mataa(_, m):
             await kirimPesan(m, "Imposter Detection has been disabled in your group.")
     else:
         await kirimPesan(m, "Invalid command, Use <code>/detectimposter on/off</code> to enable or disable Imposter Detection in your chat.")
-
 
 __mod_name__ = "ɪᴍᴘᴏsᴛᴇʀ ᴅᴇᴛᴇᴄᴛɪᴏɴ"
 __help__ = """
