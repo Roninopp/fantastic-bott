@@ -10,10 +10,7 @@ from FallenRobot.Pyro.message_utils import kirimPesan
 from FallenRobot.utils.mongo import db as dbname
 
 
-async def get_name_change_history(user_id: int):
-    user = await matadb.find_one({"user_id": user_id})
-    return user.get("name_changes", [])
-
+# Check user that change first_name, last_name, and username
 @app.on_message(filters.group & ~filters.bot & ~filters.via_bot, group=3)
 async def cek_mataa(_, m):
     if not await is_sangmata_on(m.chat.id):
@@ -33,38 +30,39 @@ async def cek_mataa(_, m):
             msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed first Name from {first_name} to {m.from_user.first_name}.\n"
             await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
         if last_name != m.from_user.last_name:
-            msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed last name from {last_name} to {m.from_user.last_name}.\n"
+            msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed last name from {last_name} to {m.from_user.last_name}."
             await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
-        if msg != "":
+        if msg:
             await kirimPesan(m, msg, quote=True)
 
-    # Check if the command is /history
-    if m.text and m.text.startswith("/history"):
-        user_id = m.reply_to_message.from_user.id if m.reply_to_message else m.from_user.id
-        if await cek_userdata(user_id):
-            username, first_name, last_name = await get_userdata(user_id)
-            history_msg = "<b>🔰 Name History:</b>\n\n"
-            history_msg += f"<code>👤 {user_id}</code>\n\n"
 
-            name_history = await history_db.find({"user_id": user_id}).sort("_id", -1).to_list(None)
+@app.on_message(filters.group & filters.command("history") & ~filters.bot & ~filters.via_bot)
+async def show_name_history(_, m):
+    user_id = m.reply_to_message.from_user.id if m.reply_to_message else m.from_user.id
+    if await cek_userdata(user_id):
+        username, first_name, last_name = await get_userdata(user_id)
+        history_msg = "<b>🔰 Name History:</b>\n\n"
+        history_msg += f"<code>👤 {user_id}</code>\n\n"
 
-            for i, history in enumerate(name_history, start=1):
-                timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
-                formatted_timestamp = timestamp.strftime("[<code>%d/%m/%Y %I:%M:%S %p</code>]")
-                change_first_name = escape(history["first_name"])
-                change_last_name = escape(history["last_name"]) if history["last_name"] is not None else ""
-                history_msg += f"<code>{i}.</code> {formatted_timestamp}\n"
-                history_msg += f"   <code>{change_first_name}</code> <code>{change_last_name}</code>\n"
+        name_history = await history_db.find({"user_id": user_id}).sort("_id", -1).to_list(None)
 
-                if history["username"]:
-                    change_username = escape(history["username"])
-                    history_msg += f"   @{change_username}\n"
+        for i, history in enumerate(name_history, start=1):
+            timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
+            formatted_timestamp = timestamp.strftime("[%d/%m/%Y %I:%M:%S %p]")
+            change_first_name = escape(history["first_name"])
+            change_last_name = escape(history["last_name"]) if history["last_name"] is not None else ""
+            history_msg += f"<code>{i}. {formatted_timestamp}</code>\n"
+            history_msg += f"{change_first_name} {change_last_name}\n"
 
-                history_msg += "\n"
+            if history["username"]:
+                change_username = escape(history["username"])
+                history_msg += f"@{change_username}\n"
 
-            await kirimPesan(m, history_msg, quote=True)
-        else:
-            await kirimPesan(m, "User data not found.")
+            history_msg += "\n"
+
+        await kirimPesan(m, history_msg, quote=True, monospace=True)
+    else:
+        await kirimPesan(m, "User data not found.")
     
 
 
