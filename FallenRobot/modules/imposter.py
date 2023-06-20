@@ -4,66 +4,47 @@ from FallenRobot import pbot as app
 from FallenRobot.Pyro.permissions import adminsOnly
 from FallenRobot.Pyro.message_utils import kirimPesan
 
+# Dictionary to keep track of user data
 user_data = {}
 
-
-# Check user that change first_name, last_name and username
+# Check user that changes first_name, last_name, and username
 @app.on_message(filters.group & ~filters.bot & ~filters.via_bot, group=3)
 async def cek_mataa(_, m):
     if not await is_sangmata_on(m.chat.id):
         return
-
+    
     chat_id = m.chat.id
     user_id = m.from_user.id
 
-    if user_id not in user_data:
-        user_data[user_id] = {
-            "username": m.from_user.username,
-            "first_name": m.from_user.first_name,
-            "last_name": m.from_user.last_name,
-            "sent_first_message": False  # Track if user has sent their first message
-        }
-    else:
-        username = user_data[user_id]["username"]
-        first_name = user_data[user_id]["first_name"]
-        last_name = user_data[user_id]["last_name"]
-        sent_first_message = user_data[user_id]["sent_first_message"]
-        msg = ""
+    if not await cek_userdata(user_id):
+        await add_userdata(user_id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
 
-        if username != m.from_user.username or first_name != m.from_user.first_name or last_name != m.from_user.last_name:
-            msg += "👀 <b>Imposter Detected</b>\n\n"
+    username, first_name, last_name = await get_userdata(user_id)
+    msg = ""
+    old_user = await app.get_chat_member(chat_id, user_id)
 
-        if username != m.from_user.username:
-            msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed username from @{username} to @{m.from_user.username}.\n"
-            user_data[user_id]["username"] = m.from_user.username
+    if username != m.from_user.username or first_name != m.from_user.first_name or last_name != m.from_user.last_name:
+        msg += "👀 <b>Imposter Detected</b>\n\n"
 
-        if first_name != m.from_user.first_name:
-            msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed first Name from {first_name} to {m.from_user.first_name}.\n"
-            user_data[user_id]["first_name"] = m.from_user.first_name
+    if username != m.from_user.username:
+        msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed username from @{username} to @{m.from_user.username}.\n"
+        await add_userdata(user_id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
 
-        if last_name != m.from_user.last_name:
-            msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed last name from {last_name} to {m.from_user.last_name}."
+    if first_name != m.from_user.first_name:
+        msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed first Name from {first_name} to {m.from_user.first_name}.\n"
+        await add_userdata(user_id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
 
-        if msg != "" and not sent_first_message:
-            user_data[user_id]["sent_first_message"] = True
-            for group_id in user_data[user_id]["groups"]:
-                await kirimPesan(m, msg, quote=True, chat_id=group_id)
+    if last_name != m.from_user.last_name:
+        msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed last name from {last_name} to {m.from_user.last_name}."
+        await add_userdata(user_id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
 
+    if msg != "":
+        if user_id not in user_data:
+            user_data[user_id] = []
 
-@app.on_message(filters.group & ~filters.bot & ~filters.via_bot)
-async def track_user_groups(_, m):
-    chat_id = m.chat.id
-    user_id = m.from_user.id
-
-    if user_id not in user_data:
-        user_data[user_id] = {
-            "username": m.from_user.username,
-            "first_name": m.from_user.first_name,
-            "last_name": m.from_user.last_name,
-            "groups": [chat_id]
-        }
-    else:
-        user_data[user_id]["groups"].append(chat_id)
+        if chat_id not in user_data[user_id]:
+            user_data[user_id].append(chat_id)
+            await kirimPesan(m, msg, quote=True)
 
 
 @app.on_message(filters.group & filters.command("detectimposter") & ~filters.bot & ~filters.via_bot)
@@ -71,14 +52,13 @@ async def track_user_groups(_, m):
 async def set_mataa(_, m):
     if len(m.command) == 1:
         return await kirimPesan(m, f"Use <code>/{m.command[0]} on</code>, to enable Imposter Detection. If you want to disable, you can use off parameter.")
-
     if m.command[1] == "on":
         cekset = await is_sangmata_on(m.chat.id)
         if cekset:
             await kirimPesan(m, "Imposter Detection already enabled in your group.")
         else:
             await sangmata_on(m.chat.id)
-            await kirimPesan(m, "Imposter Detection enabled in your group. I will track name and username changes in this chat. If a user changes their name and username, I will send a message showing any related changes.")
+            await kirimPesan(m, "Imposter Detection enabled in your group. I will track name and username changes in this chat. If user change their name and username, I will send a message showing any related changes")
     elif m.command[1] == "off":
         cekset = await is_sangmata_on(m.chat.id)
         if not cekset:
@@ -87,12 +67,11 @@ async def set_mataa(_, m):
             await sangmata_off(m.chat.id)
             await kirimPesan(m, "Imposter Detection has been disabled in your group.")
     else:
-        await kirimPesan(m, "Invalid command. Use <code>/detectimposter on/off</code> to enable or disable Imposter Detection in your chat.")
+        await kirimPesan(m, "Invalid command, Use <code>/detectimposter on/off</code> to enable or disable Imposter Detection in your chat.")
 
 
 __mod_name__ = "𝙳ᴇᴛᴇᴄᴛ 𝙸ᴍᴘᴏsᴛᴇʀ"
 __help__ = """
 
-*• /detectimposter:* Use this command to track name and username changes in the group. If a user changes their name and username, the bot will send a message showing any related changes.
+*• /detectimposter:* Use this command to track name and username changes in group. If user change their name and username, I will send a message showing any related changes.
 """
-        
