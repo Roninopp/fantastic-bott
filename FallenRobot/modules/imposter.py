@@ -96,56 +96,56 @@ async def search_history(_, m):
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 import math
 
-@app.on_message(filters.group & filters.command("history") & ~filters.bot & ~filters.via_bot)
-async def search_history(_, m):
-    if len(m.command) == 1:
-        # Check if the command was replied to a message
-        if m.reply_to_message and m.reply_to_message.from_user:
-            user_id = m.reply_to_message.from_user.id
-            username = m.reply_to_message.from_user.username
-        else:
-            return await kirimPesan(m, f"Please provide a user ID, username, or reply to a message to search the history.")
+@app.on_callback_query(filters.regex(r"^history_page_"))
+async def history_page_callback(_, cq: CallbackQuery):
+    _, user_id, page = cq.data.split("_")
+    user_id = int(user_id)
+    page = int(page)
+
+    if await cek_userdata(user_id):
+        username, first_name, last_name = await get_userdata(user_id)
+        history_msg = "<b>🔰 Name History:</b>\n\n"
+        history_msg += f"<code>👤 {user_id}</code>\n\n"
+
+        name_history = await history_db.find({"user_id": user_id}).sort("_id", -1).to_list(None)
+        total_pages = math.ceil(len(name_history) / 5)
+
+        start_index = (page - 1) * 5
+        end_index = start_index + 5
+        current_history = name_history[start_index:end_index]
+
+        for i, history in enumerate(current_history, start=start_index+1):
+            timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
+            formatted_timestamp = timestamp.strftime("[<code>%d/%m/%Y %I:%M:%S %p</code>]")
+            change_first_name = escape(history["first_name"])
+            change_last_name = escape(history["last_name"]) if history["last_name"] is not None else ""
+            history_msg += f"<code>{i}.</code> {formatted_timestamp}\n"
+            history_msg += f"   <code>{change_first_name}</code> <code>{change_last_name}</code>\n"
+
+            if history["username"]:
+                change_username = escape(history["username"])
+                history_msg += f"   @{change_username}\n"
+
+            history_msg += "\n"
+
+        buttons = []
+
+        if page > 1:
+            buttons.append(
+                InlineKeyboardButton("< Previous", callback_data=f"history_page_{user_id}_{page-1}")
+            )
+        if page < total_pages:
+            buttons.append(
+                InlineKeyboardButton("Next >", callback_data=f"history_page_{user_id}_{page+1}")
+            )
+
+        buttons.append(
+            InlineKeyboardButton("Back", callback_data="history_back")
+        )
+
+        await cq.message.edit_text(history_msg, reply_markup=InlineKeyboardMarkup([buttons]))
     else:
-        query = m.command[1].strip()
-        user_id = None
-        if query.startswith("@"):
-            username = query[1:]
-            try:
-                user = await app.get_users(username)
-                user_id = user.id
-            except:
-                await kirimPesan(m, f"User with username '{username}' not found.")
-        else:
-            try:
-                user_id = int(query)
-            except ValueError:
-                await kirimPesan(m, f"Invalid user ID or username. Please provide a valid user ID or username to search the history.")
-
-    if user_id is not None:
-        if await cek_userdata(user_id):
-            username, first_name, last_name = await get_userdata(user_id)
-            history_msg = "<b>🔰 Name History:</b>\n\n"
-            history_msg += f"<code>👤 {user_id}</code>\n\n"
-
-            name_history = await history_db.find({"user_id": user_id}).sort("_id", -1).to_list(None)
-
-            for i, history in enumerate(name_history, start=1):
-                timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
-                formatted_timestamp = timestamp.strftime("[<code>%d/%m/%Y %I:%M:%S %p</code>]")
-                change_first_name = escape(history["first_name"])
-                change_last_name = escape(history["last_name"]) if history["last_name"] is not None else ""
-                history_msg += f"<code>{i}.</code> {formatted_timestamp}\n"
-                history_msg += f"   <code>{change_first_name}</code> <code>{change_last_name}</code>\n"
-
-                if history["username"]:
-                    change_username = escape(history["username"])
-                    history_msg += f"   @{change_username}\n"
-
-                history_msg += "\n"
-
-            await kirimPesan(m, history_msg, quote=True)
-        else:
-            await kirimPesan(m, "User data not found.")
+        await cq.answer("User data not found.", show_alert=True)
 
 @app.on_message(filters.group & filters.command("namechangelog") & ~filters.bot & ~filters.via_bot)
 @adminsOnly("can_change_info")
