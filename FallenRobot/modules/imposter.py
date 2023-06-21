@@ -98,9 +98,11 @@ import math
 
 @app.on_callback_query(filters.regex(r"^history_page_"))
 async def history_page_callback(_, cq: CallbackQuery):
-    _, user_id, page = cq.data.split("_")
-    user_id = int(user_id)
-    page = int(page)
+    data_parts = cq.data.split("_")
+    if len(data_parts) != 3:
+        return  # Invalid data, ignore the callback
+
+    user_id, page = map(int, data_parts[1:])
 
     if await cek_userdata(user_id):
         username, first_name, last_name = await get_userdata(user_id)
