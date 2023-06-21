@@ -80,7 +80,7 @@ async def search_history(_, m):
                     change_username = escape(history["username"])
                     history_msg += f"   @{change_username}\n"
 
-                history_msg += "\n"
+                history_mg += "\n"
 
             buttons = []
             total_history_pages = (len(name_history) // 5) + 1
@@ -93,8 +93,11 @@ async def search_history(_, m):
         else:
             await kirimPesan(m, "User data not found.")
 
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+import math
+
 @app.on_callback_query(filters.regex(r"^history_page_"))
-async def history_page_callback(cq: CallbackQuery):
+async def history_page_callback(_, cq: CallbackQuery):
     _, user_id, page = cq.data.split("_")
     user_id = int(user_id)
     page = int(page)
@@ -129,18 +132,18 @@ async def history_page_callback(cq: CallbackQuery):
 
         if page > 1:
             buttons.append(
-                types.InlineKeyboardButton("< Previous", callback_data=f"history_page_{user_id}_{page-1}")
+                InlineKeyboardButton("< Previous", callback_data=f"history_page_{user_id}_{page-1}")
             )
         if page < total_pages:
             buttons.append(
-                types.InlineKeyboardButton("Next >", callback_data=f"history_page_{user_id}_{page+1}")
+                InlineKeyboardButton("Next >", callback_data=f"history_page_{user_id}_{page+1}")
             )
 
         buttons.append(
-            types.InlineKeyboardButton("Back", callback_data="history_back")
+            InlineKeyboardButton("Back", callback_data="history_back")
         )
 
-        await cq.message.edit_text(history_msg, reply_markup=types.InlineKeyboardMarkup([buttons]))
+        await cq.message.edit_text(history_msg, reply_markup=InlineKeyboardMarkup([buttons]))
     else:
         await cq.answer("User data not found.", show_alert=True)
 
