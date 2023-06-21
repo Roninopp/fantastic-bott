@@ -1,4 +1,5 @@
-from pyrogram import filters, types, CallbackQuery
+from pyrogram import filters, types
+from pyrogram.types import CallbackQuery
 from datetime import datetime
 import pytz
 import math
