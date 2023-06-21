@@ -1,4 +1,4 @@
-from pyrogram import filters
+from pyrogram import filters, types
 from datetime import datetime
 import pytz
 from pytz import timezone
@@ -80,79 +80,67 @@ async def search_history(_, m):
 
                 history_msg += "\n"
 
-            await kirimPesan(m, history_msg, quote=True)
-
-            # Interactive Name History
-            if len(name_history) > 0:
-                await app.send_message(
-                    chat_id=m.chat.id,
-                    text="To view the complete name change history, use the buttons below:",
-                    reply_markup={
-                        "inline_keyboard": [
-                            [
-                                {
-                                    "text": "View All",
-                                    "callback_data": f"view_name_history:{user_id}:1"
-                                }
-                            ]
-                        ]
-                    }
+            buttons = []
+            total_history_pages = (len(name_history) // 5) + 1
+            for page in range(1, total_history_pages + 1):
+                buttons.append(
+                    [types.InlineKeyboardButton(f"Page {page}", callback_data=f"history_page_{user_id}_{page}")]
                 )
+
+            await kirimPesan(m, history_msg, reply_markup=types.InlineKeyboardMarkup(buttons), quote=True)
         else:
             await kirimPesan(m, "User data not found.")
 
-@app.on_callback_query(filters.regex(r"^view_name_history:(\d+):(\d+)$"))
-async def callback_view_name_history(_, cq):
-    user_id = int(cq.matches[0].group(1))
-    page_number = int(cq.matches[0].group(2))
+@app.on_callback_query(filters.regex(r"history_page_(\d+)_(\d+)"))
+async def history_page_callback(_, cq: types.CallbackQuery):
+    user_id, page_number = map(int, cq.matches[0].groups())
+    name_history = await history_db.find({"user_id": user_id}).sort("_id", -1).to_list(None)
+    total_history_pages = (len(name_history) // 5) + 1
 
-    name_history = await history_db.find({"user_id": user_id}).sort("_id", -1).skip((page_number - 1) * 5).limit(5).to_list(None)
-    
-    history_msg = "<b>🔰 Name History:</b>\n\n"
-    history_msg += f"<code>👤 {user_id}</code>\n\n"
+    if page_number <= total_history_pages:
+        history_msg = "<b>🔰 Name History:</b>\n\n"
+        history_msg += f"<code>👤 {user_id}</code>\n\n"
 
-    for i, history in enumerate(name_history, start=(page_number - 1) * 5 + 1):
-        timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
-        formatted_timestamp = timestamp.strftime("[<code>%d/%m/%Y %I:%M:%S %p</code>]")
-        change_first_name = escape(history["first_name"])
-        change_last_name = escape(history["last_name"]) if history["last_name"] is not None else ""
-        history_msg += f"<code>{i}.</code> {formatted_timestamp}\n"
-        history_msg += f"   <code>{change_first_name}</code> <code>{change_last_name}</code>\n"
+        start_index = (page_number - 1) * 5
+        end_index = start_index + 5
+        current_page_history = name_history[start_index:end_index]
 
-        if history["username"]:
-            change_username = escape(history["username"])
-            history_msg += f"   @{change_username}\n"
+        for i, history in enumerate(current_page_history, start=start_index+1):
+            timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
+            formatted_timestamp = timestamp.strftime("[<code>%d/%m/%Y %I:%M:%S %p</code>]")
+            change_first_name = escape(history["first_name"])
+            change_last_name = escape(history["last_name"]) if history["last_name"] is not None else ""
+            history_msg += f"<code>{i}.</code> {formatted_timestamp}\n"
+            history_msg += f"   <code>{change_first_name}</code> <code>{change_last_name}</code>\n"
 
-        history_msg += "\n"
+            if history["username"]:
+                change_username = escape(history["username"])
+                history_msg += f"   @{change_username}\n"
 
-    if len(name_history) == 5:
-        history_msg += "<i>More name changes available. Use the buttons below to navigate:</i>"
+            history_msg += "\n"
 
-        inline_keyboard = []
-        if page_number > 1:
-            inline_keyboard.append(
-                {
-                    "text": "Previous",
-                    "callback_data": f"view_name_history:{user_id}:{page_number - 1}"
-                }
-            )
-        inline_keyboard.append(
-            {
-                "text": "Next",
-                "callback_data": f"view_name_history:{user_id}:{page_number + 1}"
-            }
-        )
+        buttons = []
+        for page in range(1, total_history_pages + 1):
+            if page == page_number:
+                buttons.append(
+                    types.InlineKeyboardButton(f"Page {page}", callback_data=f"history_page_{user_id}_{page}"),
+                    row_width=1
+                )
+            else:
+                buttons.append(
+                    types.InlineKeyboardButton(f"Page {page}", callback_data=f"history_page_{user_id}_{page}")
+                )
 
-        await cq.message.edit_text(history_msg, reply_markup={"inline_keyboard": [inline_keyboard]})
+        await cq.message.edit_text(history_msg, reply_markup=types.InlineKeyboardMarkup([buttons]))
     else:
-        await cq.message.edit_text(history_msg)
+        await cq.answer("Invalid page number.", show_alert=True)
 
 @app.on_message(filters.group & filters.command("namechangelog") & ~filters.bot & ~filters.via_bot)
 @adminsOnly("can_change_info")
 async def name_change_log(_, m):
     if len(m.command) == 1:
-        return await kirimPesan(m, f"Please provide the user ID or username to get the name change log.")
-    
+        return await kirimPesan(m, f"Please provide a user ID, username, or reply to a message to get the name change log.")
+
     query = m.command[1].strip()
     user_id = None
     if query.startswith("@"):
@@ -174,14 +162,20 @@ async def name_change_log(_, m):
             log_msg = "<b>📜 Name Change Log:</b>\n\n"
             log_msg += f"<code>👤 {user_id}</code>\n\n"
 
-            name_changes = await history_db.find({"user_id": user_id}).sort("_id", -1).to_list(None)
+            name_log = await history_db.find({"user_id": user_id}).sort("_id", -1).to_list(None)
 
-            for i, change in enumerate(name_changes, start=1):
-                timestamp = change["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
+            for i, log in enumerate(name_log, start=1):
+                timestamp = log["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
                 formatted_timestamp = timestamp.strftime("[<code>%d/%m/%Y %I:%M:%S %p</code>]")
+                change_first_name = escape(log["first_name"])
+                change_last_name = escape(log["last_name"]) if log["last_name"] is not None else ""
                 log_msg += f"<code>{i}.</code> {formatted_timestamp}\n"
-                log_msg += f"   <code>From:</code> {escape(change['old_first_name'])} <code>{escape(change['old_last_name']) if change['old_last_name'] else ''}</code>\n"
-                log_msg += f"   <code>To:</code> {escape(change['new_first_name'])} <code>{escape(change['new_last_name']) if change['new_last_name'] else ''}</code>\n"
+                log_msg += f"   <code>{change_first_name}</code> <code>{change_last_name}</code>\n"
+
+                if log["username"]:
+                    change_username = escape(log["username"])
+                    log_msg += f"   @{change_username}\n"
+
                 log_msg += "\n"
 
             await kirimPesan(m, log_msg, quote=True)
@@ -194,6 +188,6 @@ __help__ = """
 
 *• /history:* Reply to a user with this command to get their previous name change history.
 
-*• /namechangelog:* Get the name change log for a specific user by providing their user ID or username.
+*• /namechangelog:* Use this command followed by a user ID, username, or reply to a message to get the name change log of a user.
 """
-                         
+                
