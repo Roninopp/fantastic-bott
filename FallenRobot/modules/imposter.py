@@ -93,7 +93,7 @@ async def search_history(_, m):
 
             previous_entry = None
 
-            for history in reversed(name_history):
+            for i, history in enumerate(reversed(name_history), start=1):
                 change_first_name = escape(history["first_name"])
                 change_last_name = escape(history["last_name"]) if history["last_name"] is not None else ""
                 change_username = escape(history["username"])
@@ -102,12 +102,11 @@ async def search_history(_, m):
                     timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
                     formatted_timestamp = timestamp.strftime("[<code>%d/%m/%Y %I:%M:%S %p</code>]")
 
-                    history_msg += f"<b>{len(name_history)}.</b> {formatted_timestamp}\n"
+                    history_msg += f"<b>{i}.</b> {formatted_timestamp}\n"
                     history_msg += f"   <code>{change_first_name}</code> <code>{change_last_name}</code>\n"
                     history_msg += f"   @{change_username}\n\n"
 
                 previous_entry = (change_first_name, change_last_name, change_username)
-                len(name_history) -= 1
 
             await kirimPesan(m, history_msg, quote=True)
         else:
