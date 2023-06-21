@@ -12,10 +12,19 @@ from FallenRobot.utils.mongo import db as dbname
 # Set the log channel ID where name change logs will be sent
 LOG_CHANNEL_ID = -1001905357214  # Replace with the actual log channel ID
 
+# Default value for impostor detection
+DEFAULT_IMPOSTOR_DETECTION = True
+
+# Enable impostor detection by default
+dbname.sangmata.update_many({}, {"$set": {"impostor_detection": DEFAULT_IMPOSTOR_DETECTION}})
+
+
 @app.on_message(filters.group & ~filters.bot & ~filters.via_bot, group=3)
 async def cek_mataa(_, m):
-    if not await is_sangmata_on(m.chat.id):
+    impostor_detection_enabled = await is_sangmata_on(m.chat.id)
+    if not impostor_detection_enabled:
         return
+
     if not await cek_userdata(m.from_user.id):
         await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
     else:
@@ -57,6 +66,7 @@ async def cek_mataa(_, m):
             await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
         if msg != "":
             await kirimPesan(m, msg, quote=True)
+                
 
 @app.on_message(filters.group & filters.command("history") & ~filters.bot & ~filters.via_bot)
 async def search_history(_, m):
@@ -113,23 +123,23 @@ async def search_history(_, m):
 @adminsOnly("can_change_info")
 async def set_mataa(_, m):
     if len(m.command) == 1:
-        return await kirimPesan(m, f"Use <code>/{m.command[0]} on</code>, to enable Imposter Detection. If you want to disable, you can use off parameter.")
+        return await kirimPesan(m, f"Use <code>/{m.command[0]} on</code> to enable Imposter Detection. If you want to disable it, use <code>/{m.command[0]} off</code>.")
     if m.command[1] == "on":
-        cekset = await is_sangmata_on(m.chat.id)
-        if cekset:
-            await kirimPesan(m, "Imposter Detection already enabled in your group.")
+        impostor_detection_enabled = await is_sangmata_on(m.chat.id)
+        if impostor_detection_enabled:
+            await kirimPesan(m, "Imposter Detection is already enabled in this group.")
         else:
             await sangmata_on(m.chat.id)
-            await kirimPesan(m, "Imposter Detection enabled in your group. I will track name and username changes in this chat. If a user changes their name and username, I will send a message showing any related changes.")
+            await kirimPesan(m, "Imposter Detection has been enabled in this group. I will track name and username changes. If a user changes their name or username, I will send a message showing the changes.")
     elif m.command[1] == "off":
-        cekset = await is_sangmata_on(m.chat.id)
-        if not cekset:
-            await kirimPesan(m, "Imposter Detection already disabled in your group.")
+        impostor_detection_enabled = await is_sangmata_on(m.chat.id)
+        if not impostor_detection_enabled:
+            await kirimPesan(m, "Imposter Detection is already disabled in this group.")
         else:
             await sangmata_off(m.chat.id)
-            await kirimPesan(m, "Imposter Detection has been disabled in your group.")
+            await kirimPesan(m, "Imposter Detection has been disabled in this group.")
     else:
-        await kirimPesan(m, "Invalid command. Use <code>/detectimposter on/off</code> to enable or disable Imposter Detection in your chat.")
+        await kirimPesan(m, "Invalid command. Use <code>/detectimposter on/off</code> to enable or disable Imposter Detection in this chat.")
 
 __mod_name__ = "ɪᴍᴘᴏsᴛᴇʀ ᴅᴇᴛᴇᴄᴛɪᴏɴ"
 __help__ = """
