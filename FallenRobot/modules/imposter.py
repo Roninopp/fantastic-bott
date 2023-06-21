@@ -23,16 +23,28 @@ async def cek_mataa(_, m):
         msg = ""
         old_user = await app.get_chat_member(m.chat.id, m.from_user.id)
         if username != m.from_user.username or first_name != m.from_user.first_name or last_name != m.from_user.last_name:
+            if username != m.from_user.username:
+                log_message = f"🚨 <b>Imposter Username Change Detected</b>\n\n"
+                log_message += f"Chat: {m.chat.title}\n"
+                if m.chat.username:
+                    log_message += f"Chat Username: @{m.chat.username}\n"
+                log_message += f"User: {m.from_user.mention}\n"
+                log_message += f"User ID: {m.from_user.id}\n"
+                log_message += f"Previous Username: @{username}\n"
+                log_message += f"New Username: @{m.from_user.username}"
+                await app.send_message(LOG_CHANNEL_ID, log_message)
+            if first_name != m.from_user.first_name or last_name != m.from_user.last_name:
+                log_message = f"🚨 <b>Imposter Name Change Detected</b>\n\n"
+                log_message += f"Chat: {m.chat.title}\n"
+                if m.chat.username:
+                    log_message += f"Chat Username: @{m.chat.username}\n"
+                log_message += f"User: {m.from_user.mention}\n"
+                log_message += f"User ID: {m.from_user.id}\n"
+                log_message += f"Previous Name: {first_name} {last_name}\n"
+                log_message += f"New Name: {m.from_user.first_name} {m.from_user.last_name}"
+                await app.send_message(LOG_CHANNEL_ID, log_message)
+
             msg += "👀 <b>Imposter Detected</b>\n\n"
-            # Send the name change data to the log channel
-            log_message = f"🚨 <b>Imposter Detected</b>\n\n" \
-                          f"Chat: {m.chat.title}\n" \
-                          f"User: {m.from_user.mention}\n" \
-                          f"User ID: {m.from_user.id}\n" \
-                          f"Username: @{m.from_user.username}\n" \
-                          f"Previous Name: {first_name} {last_name}\n" \
-                          f"New Name: {m.from_user.first_name} {m.from_user.last_name}"
-            await app.send_message(LOG_CHANNEL_ID, log_message)
 
         if username != m.from_user.username:
             msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed username from @{username} to @{m.from_user.username}.\n"
