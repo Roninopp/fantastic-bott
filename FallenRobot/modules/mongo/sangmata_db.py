@@ -22,7 +22,8 @@ async def add_userdata(user_id: int, username, first_name, last_name):
 # Enable Mata MissKaty in Selected Chat
 async def is_sangmata_on(chat_id: int) -> bool:
     chat = await matadb.find_one({"chat_id_toggle": chat_id})
-    return bool(chat) if chat else True  # Return True if the chat is not found (default enabled)
+    return bool(chat)
+
 
 async def sangmata_on(chat_id: int) -> bool:
     await matadb.insert_one({"chat_id_toggle": chat_id})
