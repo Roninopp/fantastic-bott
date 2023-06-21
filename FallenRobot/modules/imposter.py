@@ -96,7 +96,7 @@ async def search_history(_, m):
                 formatted_timestamp = timestamp.strftime("[<code>%d/%m/%Y %I:%M:%S %p</code>]")
                 change_first_name = escape(history["first_name"])
                 change_last_name = escape(history["last_name"]) if history["last_name"] is not None else ""
-                history_msg += f"<code>{i}.</code> {formatted_timestamp}\n"
+                history_msg += f"<b>{i}.</b> {formatted_timestamp}\n"
                 history_msg += f"   <code>{change_first_name}</code> <code>{change_last_name}</code>\n"
 
                 if history["username"]:
