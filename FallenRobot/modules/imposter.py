@@ -8,12 +8,8 @@ from FallenRobot import pbot as app
 from FallenRobot.Pyro.permissions import adminsOnly
 from FallenRobot.Pyro.message_utils import kirimPesan
 from FallenRobot.utils.mongo import db as dbname
-import re
 
-async def get_name_change_history(user_id: int):
-    user = await matadb.find_one({"user_id": user_id})
-    return user.get("name_changes", [])
-
+@app.on_message(filters.group & ~filters.bot & ~filters.via_bot, group=3)
 async def cek_mataa(_, m):
     if not await is_sangmata_on(m.chat.id):
         return
@@ -37,10 +33,6 @@ async def cek_mataa(_, m):
         if msg != "":
             await kirimPesan(m, msg, quote=True)
 
-@app.on_message(filters.group & filters.user)
-async def handle_user_change(_, m):
-    await cek_mataa(_, m)
-
 @app.on_message(filters.group & filters.command("history") & ~filters.bot & ~filters.via_bot)
 async def search_history(_, m):
     if len(m.command) == 1:
@@ -58,7 +50,7 @@ async def search_history(_, m):
             try:
                 user_id = (await app.get_users(username)).id
             except:
-                return await kirimPesan(m, f"User with username '{username}' not found.")
+                await kirimPesan(m, f"User with username '{username}' not found.")
         elif re.match(r"^\d+$", query):
             user_id = int(query)
         if user_id is None:
@@ -88,10 +80,8 @@ async def search_history(_, m):
         await kirimPesan(m, history_msg, quote=True)
     else:
         await kirimPesan(m, "User data not found.")
+    
 
-@app.on_user_update()
-async def handle_user_update(_, update):
-    await cek_mataa(_, update)
 
 @app.on_message(filters.group & filters.command("detectimposter") & ~filters.bot & ~filters.via_bot)
 @adminsOnly("can_change_info")
@@ -104,7 +94,7 @@ async def set_mataa(_, m):
             await kirimPesan(m, "Imposter Detection already enabled in your group.")
         else:
             await sangmata_on(m.chat.id)
-            await kirimPesan(m, "Imposter Detection enabled in your group. I will track name and username changes in this chat. If a user changes their name and username, I will send a message showing any related changes.")
+            await kirimPesan(m, "Imposter Detection enabled in your group. I will track name and username changes in this chat. If user change their name and username, I will send a message showing any related changes")
     elif m.command[1] == "off":
         cekset = await is_sangmata_on(m.chat.id)
         if not cekset:
@@ -115,10 +105,10 @@ async def set_mataa(_, m):
     else:
         await kirimPesan(m, "Invalid command, Use <code>/detectimposter on/off</code> to enable or disable Imposter Detection in your chat.")
 
+
 __mod_name__ = "ɪᴍᴘᴏsᴛᴇʀ ᴅᴇᴛᴇᴄᴛɪᴏɴ"
 __help__ = """
 *• /detectimposter:* Use this command to track name and username changes in the group. If a user changes their name and username, the bot will send a message showing any related changes.
 
 *• /history:* Reply to a user with this command to get their previous name changes history.
 """
-    
