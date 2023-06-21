@@ -80,7 +80,7 @@ async def search_history(_, m):
                     change_username = escape(history["username"])
                     history_msg += f"   @{change_username}\n"
 
-                history_mg += "\n"
+                history_msg += "\n"
 
             buttons = []
             total_history_pages = (len(name_history) // 5) + 1
