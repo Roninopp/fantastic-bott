@@ -93,20 +93,21 @@ async def search_history(_, m):
 
             previous_entry = None
 
-            for i, history in enumerate(reversed(name_history), start=1):
-                change_first_name = escape(history["first_name"])
-                change_last_name = escape(history["last_name"]) if history["last_name"] is not None else ""
-                change_username = escape(history["username"])
+            name_history.reverse()
+for i, history in enumerate(name_history, start=1):
+    change_first_name = escape(history["first_name"])
+    change_last_name = escape(history["last_name"]) if history["last_name"] is not None else ""
+    change_username = escape(history["username"])
 
-                if (change_first_name, change_last_name, change_username) != previous_entry:
-                    timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
-                    formatted_timestamp = timestamp.strftime("[<code>%d/%m/%Y %I:%M:%S %p</code>]")
+    if (change_first_name, change_last_name, change_username) != previous_entry:
+        timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
+        formatted_timestamp = timestamp.strftime("[<code>%d/%m/%Y %I:%M:%S %p</code>]")
 
-                    history_msg += f"<b>{i}.</b> {formatted_timestamp}\n"
-                    history_msg += f"   <code>{change_first_name}</code> <code>{change_last_name}</code>\n"
-                    history_msg += f"   @{change_username}\n\n"
+        history_msg += f"<b>{i}.</b> {formatted_timestamp}\n"
+        history_msg += f"   <code>{change_first_name}</code> <code>{change_last_name}</code>\n"
+        history_msg += f"   @{change_username}\n\n"
 
-                previous_entry = (change_first_name, change_last_name, change_username)
+    previous_entry = (change_first_name, change_last_name, change_username)
 
             await kirimPesan(m, history_msg, quote=True)
         else:
