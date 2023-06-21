@@ -1,8 +1,6 @@
-from pyrogram import filters, types
-from pyrogram.types import CallbackQuery
+from pyrogram import filters
 from datetime import datetime
 import pytz
-import math
 from pytz import timezone
 from html import escape
 from FallenRobot.modules.mongo.sangmata_db import *
@@ -10,6 +8,9 @@ from FallenRobot import pbot as app
 from FallenRobot.Pyro.permissions import adminsOnly
 from FallenRobot.Pyro.message_utils import kirimPesan
 from FallenRobot.utils.mongo import db as dbname
+
+# Set the log channel ID where name change logs will be sent
+LOG_CHANNEL_ID = -1001905357214  # Replace with the actual log channel ID
 
 @app.on_message(filters.group & ~filters.bot & ~filters.via_bot, group=3)
 async def cek_mataa(_, m):
@@ -23,6 +24,16 @@ async def cek_mataa(_, m):
         old_user = await app.get_chat_member(m.chat.id, m.from_user.id)
         if username != m.from_user.username or first_name != m.from_user.first_name or last_name != m.from_user.last_name:
             msg += "👀 <b>Imposter Detected</b>\n\n"
+            # Send the name change data to the log channel
+            log_message = f"🚨 <b>Imposter Detected</b>\n\n" \
+                          f"Chat: {m.chat.title}\n" \
+                          f"User: {m.from_user.mention}\n" \
+                          f"User ID: {m.from_user.id}\n" \
+                          f"Username: @{m.from_user.username}\n" \
+                          f"Previous Name: {first_name} {last_name}\n" \
+                          f"New Name: {m.from_user.first_name} {m.from_user.last_name}"
+            await app.send_message(LOG_CHANNEL_ID, log_message)
+
         if username != m.from_user.username:
             msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed username from @{username} to @{m.from_user.username}.\n"
             await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
@@ -82,126 +93,35 @@ async def search_history(_, m):
 
                 history_msg += "\n"
 
-            buttons = []
-            total_history_pages = (len(name_history) // 5) + 1
-            for page in range(1, total_history_pages + 1):
-                buttons.append(
-                    [types.InlineKeyboardButton(f"Page {page}", callback_data=f"history_page_{user_id}_{page}")]
-                )
-
-            await kirimPesan(m, history_msg, reply_markup=types.InlineKeyboardMarkup(buttons), quote=True)
+            await kirimPesan(m, history_msg, quote=True)
         else:
             await kirimPesan(m, "User data not found.")
 
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-import math
-
-@app.on_callback_query(filters.regex(r"^history_page_"))
-async def history_page_callback(_, cq: CallbackQuery):
-    data_parts = cq.data.split("_")
-    if len(data_parts) != 3:
-        return  # Invalid data, ignore the callback
-
-    user_id, page = map(int, data_parts[1:])
-
-    if await cek_userdata(user_id):
-        username, first_name, last_name = await get_userdata(user_id)
-        history_msg = "<b>🔰 Name History:</b>\n\n"
-        history_msg += f"<code>👤 {user_id}</code>\n\n"
-
-        name_history = await history_db.find({"user_id": user_id}).sort("_id", -1).to_list(None)
-        total_pages = math.ceil(len(name_history) / 5)
-
-        start_index = (page - 1) * 5
-        end_index = start_index + 5
-        current_history = name_history[start_index:end_index]
-
-        for i, history in enumerate(current_history, start=start_index+1):
-            timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
-            formatted_timestamp = timestamp.strftime("[<code>%d/%m/%Y %I:%M:%S %p</code>]")
-            change_first_name = escape(history["first_name"])
-            change_last_name = escape(history["last_name"]) if history["last_name"] is not None else ""
-            history_msg += f"<code>{i}.</code> {formatted_timestamp}\n"
-            history_msg += f"   <code>{change_first_name}</code> <code>{change_last_name}</code>\n"
-
-            if history["username"]:
-                change_username = escape(history["username"])
-                history_msg += f"   @{change_username}\n"
-
-            history_msg += "\n"
-
-        buttons = []
-
-        if page > 1:
-            buttons.append(
-                InlineKeyboardButton("< Previous", callback_data=f"history_page_{user_id}_{page-1}")
-            )
-        if page < total_pages:
-            buttons.append(
-                InlineKeyboardButton("Next >", callback_data=f"history_page_{user_id}_{page+1}")
-            )
-
-        buttons.append(
-            InlineKeyboardButton("Back", callback_data="history_back")
-        )
-
-        await cq.message.edit_text(history_msg, reply_markup=InlineKeyboardMarkup([buttons]))
-    else:
-        await cq.answer("User data not found.", show_alert=True)
-
-@app.on_message(filters.group & filters.command("namechangelog") & ~filters.bot & ~filters.via_bot)
+@app.on_message(filters.group & filters.command("detectimposter") & ~filters.bot & ~filters.via_bot)
 @adminsOnly("can_change_info")
-async def name_change_log(_, m):
+async def set_mataa(_, m):
     if len(m.command) == 1:
-        return await kirimPesan(m, f"Please provide a user ID, username, or reply to a message to get the name change log.")
-
-    query = m.command[1].strip()
-    user_id = None
-    if query.startswith("@"):
-        username = query[1:]
-        try:
-            user = await app.get_users(username)
-            user_id = user.id
-        except:
-            await kirimPesan(m, f"User with username '{username}' not found.")
-    else:
-        try:
-            user_id = int(query)
-        except ValueError:
-            await kirimPesan(m, f"Invalid user ID or username. Please provide a valid user ID or username to get the name change log.")
-
-    if user_id is not None:
-        if await cek_userdata(user_id):
-            username, first_name, last_name = await get_userdata(user_id)
-            log_msg = "<b>📜 Name Change Log:</b>\n\n"
-            log_msg += f"<code>👤 {user_id}</code>\n\n"
-
-            name_log = await history_db.find({"user_id": user_id}).sort("_id", -1).to_list(None)
-
-            for i, log in enumerate(name_log, start=1):
-                timestamp = log["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
-                formatted_timestamp = timestamp.strftime("[<code>%d/%m/%Y %I:%M:%S %p</code>]")
-                change_first_name = escape(log["first_name"])
-                change_last_name = escape(log["last_name"]) if log["last_name"] is not None else ""
-                log_msg += f"<code>{i}.</code> {formatted_timestamp}\n"
-                log_msg += f"   <code>{change_first_name}</code> <code>{change_last_name}</code>\n"
-
-                if log["username"]:
-                    change_username = escape(log["username"])
-                    log_msg += f"   @{change_username}\n"
-
-                log_msg += "\n"
-
-            await kirimPesan(m, log_msg, quote=True)
+        return await kirimPesan(m, f"Use <code>/{m.command[0]} on</code>, to enable Imposter Detection. If you want to disable, you can use off parameter.")
+    if m.command[1] == "on":
+        cekset = await is_sangmata_on(m.chat.id)
+        if cekset:
+            await kirimPesan(m, "Imposter Detection already enabled in your group.")
         else:
-            await kirimPesan(m, "User data not found.")
+            await sangmata_on(m.chat.id)
+            await kirimPesan(m, "Imposter Detection enabled in your group. I will track name and username changes in this chat. If a user changes their name and username, I will send a message showing any related changes.")
+    elif m.command[1] == "off":
+        cekset = await is_sangmata_on(m.chat.id)
+        if not cekset:
+            await kirimPesan(m, "Imposter Detection already disabled in your group.")
+        else:
+            await sangmata_off(m.chat.id)
+            await kirimPesan(m, "Imposter Detection has been disabled in your group.")
+    else:
+        await kirimPesan(m, "Invalid command. Use <code>/detectimposter on/off</code> to enable or disable Imposter Detection in your chat.")
 
 __mod_name__ = "ɪᴍᴘᴏsᴛᴇʀ ᴅᴇᴛᴇᴄᴛɪᴏɴ"
 __help__ = """
 *• /detectimposter:* Use this command to track name and username changes in the group. If a user changes their name and username, the bot will send a message showing any related changes.
 
 *• /history:* Reply to a user with this command to get their previous name change history.
-
-*• /namechangelog:* Use this command followed by a user ID, username, or reply to a message to get the name change log of a user.
 """
-                
