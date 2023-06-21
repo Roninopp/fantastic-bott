@@ -91,21 +91,25 @@ async def search_history(_, m):
         else:
             await kirimPesan(m, "User data not found.")
 
-@app.on_callback_query(filters.regex(r"history_page_(\d+)_(\d+)"))
-async def history_page_callback(_, cq: types.CallbackQuery):
-    user_id, page_number = map(int, cq.matches[0].groups())
-    name_history = await history_db.find({"user_id": user_id}).sort("_id", -1).to_list(None)
-    total_history_pages = (len(name_history) // 5) + 1
+@app.on_callback_query(filters.regex(r"^history_page_"))
+async def history_page_callback(cq: CallbackQuery):
+    _, user_id, page = cq.data.split("_")
+    user_id = int(user_id)
+    page = int(page)
 
-    if page_number <= total_history_pages:
+    if await cek_userdata(user_id):
+        username, first_name, last_name = await get_userdata(user_id)
         history_msg = "<b>🔰 Name History:</b>\n\n"
         history_msg += f"<code>👤 {user_id}</code>\n\n"
 
-        start_index = (page_number - 1) * 5
-        end_index = start_index + 5
-        current_page_history = name_history[start_index:end_index]
+        name_history = await history_db.find({"user_id": user_id}).sort("_id", -1).to_list(None)
+        total_pages = math.ceil(len(name_history) / 5)
 
-        for i, history in enumerate(current_page_history, start=start_index+1):
+        start_index = (page - 1) * 5
+        end_index = start_index + 5
+        current_history = name_history[start_index:end_index]
+
+        for i, history in enumerate(current_history, start=start_index+1):
             timestamp = history["_id"].generation_time.astimezone(pytz.timezone("Asia/Kolkata"))
             formatted_timestamp = timestamp.strftime("[<code>%d/%m/%Y %I:%M:%S %p</code>]")
             change_first_name = escape(history["first_name"])
@@ -120,20 +124,23 @@ async def history_page_callback(_, cq: types.CallbackQuery):
             history_msg += "\n"
 
         buttons = []
-        for page in range(1, total_history_pages + 1):
-            if page == page_number:
-                buttons.append(
-                    types.InlineKeyboardButton(f"Page {page}", callback_data=f"history_page_{user_id}_{page}"),
-                    row_width=1
-                )
-            else:
-                buttons.append(
-                    types.InlineKeyboardButton(f"Page {page}", callback_data=f"history_page_{user_id}_{page}")
-                )
+
+        if page > 1:
+            buttons.append(
+                types.InlineKeyboardButton("< Previous", callback_data=f"history_page_{user_id}_{page-1}")
+            )
+        if page < total_pages:
+            buttons.append(
+                types.InlineKeyboardButton("Next >", callback_data=f"history_page_{user_id}_{page+1}")
+            )
+
+        buttons.append(
+            types.InlineKeyboardButton("Back", callback_data="history_back")
+        )
 
         await cq.message.edit_text(history_msg, reply_markup=types.InlineKeyboardMarkup([buttons]))
     else:
-        await cq.answer("Invalid page number.", show_alert=True)
+        await cq.answer("User data not found.", show_alert=True)
 
 @app.on_message(filters.group & filters.command("namechangelog") & ~filters.bot & ~filters.via_bot)
 @adminsOnly("can_change_info")
