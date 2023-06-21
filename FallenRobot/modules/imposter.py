@@ -14,31 +14,32 @@ async def get_name_change_history(user_id: int):
     user = await matadb.find_one({"user_id": user_id})
     return user.get("name_changes", [])
 
-async def cek_mataa(_, update, user_id=None):
-    if user_id is None:
-        user_id = update.user.id
-
-    if not await is_sangmata_on(update.chat.id):
+async def cek_mataa(_, m):
+    if not await is_sangmata_on(m.chat.id):
         return
-
-    if not await cek_userdata(user_id):
-        await add_userdata(user_id, update.user.username, update.user.first_name, update.user.last_name)
+    if not await cek_userdata(m.from_user.id):
+        await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
     else:
-        username, first_name, last_name = await get_userdata(user_id)
+        username, first_name, last_name = await get_userdata(m.from_user.id)
         msg = ""
-        if username != update.user.username or first_name != update.user.first_name or last_name != update.user.last_name:
+        old_user = await app.get_chat_member(m.chat.id, m.from_user.id)
+        if username != m.from_user.username or first_name != m.from_user.first_name or last_name != m.from_user.last_name:
             msg += "👀 <b>Imposter Detected</b>\n\n"
-        if username != update.user.username:
-            msg += f"❇️ {update.user.mention} [<code>{user_id}</code>] changed username from @{username} to @{update.user.username}.\n"
-            await add_userdata(user_id, update.user.username, update.user.first_name, update.user.last_name)
-        if first_name != update.user.first_name:
-            msg += f"❇️ {update.user.mention} [<code>{user_id}</code>] changed first Name from {first_name} to {update.user.first_name}.\n"
-            await add_userdata(user_id, update.user.username, update.user.first_name, update.user.last_name)
-        if last_name != update.user.last_name:
-            msg += f"❇️ {update.user.mention} [<code>{user_id}</code>] changed last name from {last_name} to {update.user.last_name}.\n"
-            await add_userdata(user_id, update.user.username, update.user.first_name, update.user.last_name)
+        if username != m.from_user.username:
+            msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed username from @{username} to @{m.from_user.username}.\n"
+            await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
+        if first_name != m.from_user.first_name:
+            msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed first Name from {first_name} to {m.from_user.first_name}.\n"
+            await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
+        if last_name != m.from_user.last_name:
+            msg += f"❇️ {m.from_user.mention} [<code>{m.from_user.id}</code>] changed last name from {last_name} to {m.from_user.last_name}.\n"
+            await add_userdata(m.from_user.id, m.from_user.username, m.from_user.first_name, m.from_user.last_name)
         if msg != "":
-            await kirimPesan(update, msg, quote=True)
+            await kirimPesan(m, msg, quote=True)
+
+@app.on_message(filters.group & filters.user)
+async def handle_user_change(_, m):
+    await cek_mataa(_, m)
 
 @app.on_message(filters.group & filters.command("history") & ~filters.bot & ~filters.via_bot)
 async def search_history(_, m):
