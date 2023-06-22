@@ -19,8 +19,7 @@ async def _whisper(_, inline_query):
                 title="💒 Whisper",
                 description=f"@{BOT_USERNAME} [ USERNAME | ID ] [ TEXT ]",
                 input_message_content=InputTextMessageContent(f"💒 Usage:\n\n@{BOT_USERNAME} [ USERNAME | ID ] [ TEXT ]"),
-                thumb_url="https://graph.org/file/2c3c693d1b460c309da1d.jpg",
-                reply_markup=switch_btn
+                thumb_url="https://graph.org/file/2c3c693d1b460c309da1d.jpg"
             )
         ]
     else:
@@ -38,8 +37,7 @@ async def _whisper(_, inline_query):
                     title="💒 Whisper",
                     description="Invalid username or ID!",
                     input_message_content=InputTextMessageContent("Invalid username or ID!"),
-                    thumb_url="https://graph.org/file/14782c2116addc0537bce.jpg",
-                    reply_markup=switch_btn
+                    thumb_url="https://graph.org/file/14782c2116addc0537bce.jpg"
                 )
             ]
         
@@ -50,16 +48,12 @@ async def _whisper(_, inline_query):
                 InlineQueryResultArticle(
                     title="💒 Whisper",
                     description=f"Send a Whisper to {user.first_name}!",
-                    input_message_content=InputTextMessageContent(f"💒 You are sending a whisper to {user.first_name}.\n\nType your message/sentence."),
-                    thumb_url="https://graph.org/file/2c3c693d1b460c309da1d.jpg",
-                    reply_markup=whisper_btn
+                    input_message_content=InputTextMessageContent(f"💒 You are sending a whisper to {user.first_name}.\n\nType your message/sentence.")
                 ),
                 InlineQueryResultArticle(
                     title="⏲️ One-Time Whisper",
                     description=f"Send a one-time whisper to {user.first_name}!",
-                    input_message_content=InputTextMessageContent(f"⏲️ You are sending a one-time whisper to {user.first_name}.\n\nType your message/sentence."),
-                    thumb_url="https://graph.org/file/2c3c693d1b460c309da1d.jpg",
-                    reply_markup=one_time_whisper_btn
+                    input_message_content=InputTextMessageContent(f"⏲️ You are sending a one-time whisper to {user.first_name}.\n\nType your message/sentence.")
                 )
             ]
         except Exception as e:
@@ -102,3 +96,12 @@ async def whispes_cb(_, query):
     if data[3] == "one":
         if user_id == to_user:
             await query.edit_message_text("📬 Whisper has been read!\n\nPress the button below to send a whisper!", reply_markup=SWITCH)
+
+
+@pgram.on_inline_query()
+async def bot_inline(_, inline_query):
+    string = inline_query.query.lower()
+    
+    if BOT_USERNAME in string:
+        answers = await _whisper(_, inline_query)
+        await inline_query.answer(answers[-1], cache_time=0)
