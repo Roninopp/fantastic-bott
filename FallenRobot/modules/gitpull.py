@@ -5,7 +5,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from FallenRobot import pbot as pgram
 
-DEV_USERS = (1143358497, 2033411815, 5667156680)
+DEV_USERS = (2033411815)
 
 @pgram.on_message(filters.command(["update"]) & filters.user(DEV_USERS))
 async def _gitpull(client, message):
