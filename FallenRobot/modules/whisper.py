@@ -76,8 +76,8 @@ async def inline(app, query):
         pass
 
 
-# Initialize a set to store user IDs who have already received the message
-already_notified = set()
+# Initialize a dictionary to store the already notified users
+already_notified = {}
 
 @pgram.on_callback_query()
 async def cbq(app, iquery):
@@ -90,9 +90,9 @@ async def cbq(app, iquery):
             except Unauthorized:
                 pass
             # Check if the user has already been notified
-            if id not in already_notified:
+            if already_notified.get(id) != stark[1]:
                 await iquery.answer("This whisper is not for you 🚧", show_alert=True)
-                already_notified.add(id)  # Add user ID to the set
+                already_notified[id] = stark[1]  # Store the user ID and target ID
             return  # Exit the function to prevent further execution
         for_search = stark[0] + "_" + stark[1]
         print(stark)
