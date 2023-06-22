@@ -111,7 +111,7 @@ async def in_help():
     answers = [
         InlineQueryResultArticle(
             title="Help Menu!",
-            input_message_content=InputTextMessageContent("Inline Commands!"),
+            input_message_content=InputTextMessageContent("Inline Commands"),
             thumb_url="https://graph.org/file/33b3ac5d2fe66ec747971.jpg",
             reply_markup=keywords
         )
