@@ -26,54 +26,47 @@ async def inline(app, query):
     global ALPHA, BUN
     if not BUN:
         BUN = (await app.get_me()).username
-    res = [InlineQueryResultArticle(title="Whisper",
-                                    description=f"@{BUN} [USERNAME | ID] [TEXT]",
-                                    input_message_content=InputTextMessageContent(f"**📍Usage:**\n\n@{BUN} @Yorr_Forgerr_Bot (Target Username or ID) (Your Message).\nExample: `@Yorr_Forgerr_Bot @username Yo, I Wanna Phuck You`"),
-                                    thumb_url="https://graph.org/file/4d5d893c631e83c590a75.jpg")]
+    res = [
+        InlineQueryResultArticle(
+            title="Whisper",
+            description=f"@{BUN} [USERNAME | ID] [TEXT]",
+            input_message_content=InputTextMessageContent(
+                f"**📍Usage:**\n\n@{BUN} @Yorr_Forgerr_Bot (Target Username or ID) (Your Message).\nExample: `@Yorr_Forgerr_Bot @username Yo, I Wanna Phuck You`"),
+            thumb_url="https://graph.org/file/4d5d893c631e83c590a75.jpg"
+        )
+    ]
     txt = query.query
-    if not len(txt.split(None, 1)) == 2:
+    if not len(txt.split()) == 2:
         await app.answer_inline_query(query.id, results=res, cache_time=0)
+        return
     try:
-        tar = int(txt.split()[0])
+        tar = (await app.get_users(txt.split()[0])).id
     except:
-        try:
-            tar = (await app.get_users(txt.split()[0])).id
-        except:
-            await app.answer_inline_query(query.id, results=res1, cache_time=0)
-    try:
-        Na = (await app.get_users(tar)).first_name
-    except:
-        pass
-    try:
-        whisp = txt.split(None, 1)[1]
-    except IndexError:
-        pass
-    try:
-        WTXT = "💌 A whisper has been sent to {}.\n\nOnly he/she can open it."
-        SHOW = InlineKeyboardMarkup([[InlineKeyboardButton("📬 Whisper", callback_data=f"{query.from_user.id}_{tar}")]])
-        SHOW_ONE = InlineKeyboardMarkup([[InlineKeyboardButton("🔩 One-Time Whisper",
-                                                               callback_data=f"{query.from_user.id}_{tar}_one")]])
-        res2 = [InlineQueryResultArticle(title="Whisper",
-                                         description=f"Send a Whisper to {Na}!",
-                                         input_message_content=InputTextMessageContent(WTXT.format(Na)),
-                                         thumb_url="https://graph.org/file/4d5d893c631e83c590a75.jpg",
-                                         reply_markup=SHOW),
-                InlineQueryResultArticle(title="Whisper",
-                                         description=f"Send One-Time whisper to {Na}!",
-                                         input_message_content=InputTextMessageContent(WTXT.format(Na)),
-                                         thumb_url="https://graph.org/file/4d5d893c631e83c590a75.jpg",
-                                         reply_markup=SHOW_ONE)]
-        await app.answer_inline_query(query.id, results=res2, cache_time=0)
-    except:
-        pass
-    try:
-        ALPHA.pop(f"{query.from_user.id}_{tar}")
-    except:
-        pass
-    try:
-        ALPHA[f"{query.from_user.id}_{tar}"] = whisp
-    except:
-        pass
+        await app.answer_inline_query(query.id, results=res1, cache_time=0)
+        return
+    Na = (await app.get_users(tar)).first_name
+    whisp = txt.split(None, 1)[1]
+    WTXT = "💌 A whisper has been sent to {}.\n\nOnly he/she can open it."
+    SHOW = InlineKeyboardMarkup([[InlineKeyboardButton("📬 Whisper", callback_data=f"{query.from_user.id}_{tar}")]])
+    SHOW_ONE = InlineKeyboardMarkup([[InlineKeyboardButton("🔩 One-Time Whisper", callback_data=f"{query.from_user.id}_{tar}_one")]])
+    res2 = [
+        InlineQueryResultArticle(
+            title="Whisper",
+            description=f"Send a Whisper to {Na}!",
+            input_message_content=InputTextMessageContent(WTXT.format(Na)),
+            thumb_url="https://graph.org/file/4d5d893c631e83c590a75.jpg",
+            reply_markup=SHOW
+        ),
+        InlineQueryResultArticle(
+            title="Whisper",
+            description=f"Send One-Time whisper to {Na}!",
+            input_message_content=InputTextMessageContent(WTXT.format(Na)),
+            thumb_url="https://graph.org/file/4d5d893c631e83c590a75.jpg",
+            reply_markup=SHOW_ONE
+        )
+    ]
+    await app.answer_inline_query(query.id, results=res2, cache_time=0)
+    ALPHA[f"{query.from_user.id}_{tar}"] = whisp
 
 
 @pgram.on_callback_query()
