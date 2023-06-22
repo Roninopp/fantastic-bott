@@ -103,10 +103,11 @@ async def cbq(app, iquery):
         for_search = stark[0] + "_" + stark[1]
         print("for_search:", for_search)  # Add this print statement
 
-        try:
-            msg = ALPHA[for_search]
-        except:
-            msg = "🚫 Error‼️\n\nWhisper has been deleted from the database!"
+        if for_search not in ALPHA:
+            await iquery.answer("🚫 Error‼️\n\nWhisper has been deleted from the database!", show_alert=True)
+            return
+
+        msg = ALPHA[for_search]
 
         SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline 🪝", switch_inline_query_current_chat="")]])
         await iquery.answer(msg, show_alert=True)
@@ -119,3 +120,4 @@ async def cbq(app, iquery):
     except Exception as e:
         print("Error:", e)  # Add this print statement
         await iquery.answer(str(e), show_alert=True)
+        
