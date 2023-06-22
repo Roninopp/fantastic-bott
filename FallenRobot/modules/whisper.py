@@ -7,7 +7,24 @@ from pyrogram.types import (
 
 whisper_db = {}
 
-switch_btn = InlineKeyboardMarkup([[InlineKeyboardButton("💒 Start Whisper", switch_inline_query_current_chat="")]])
+switch_btn = InlineKeyboardMarkup([[InlineKeyboardButton("💒 Start Whisper", switch_inline_query_current_chat=".whisper")]])
+
+async def process_message(_, message):
+    if message.reply_to_message:
+        replied_msg = message.reply_to_message
+        if replied_msg.from_user and replied_msg.from_user.id != _.me.id:
+            sender = replied_msg.from_user
+            text = message.text
+            if not text:
+                await message.reply("Please provide a whisper message.")
+                return
+            whisper_db[f"{message.from_user.id}_{sender.id}"] = text
+            await message.reply(f"Whisper sent to {sender.mention()} successfully!")
+        else:
+            await message.reply("Please reply to a message from the user you want to whisper to.")
+    else:
+        await message.reply("Please reply to a message from the user you want to whisper to.")
+
 
 async def _whisper(_, inline_query):
     data = inline_query.query
@@ -17,16 +34,15 @@ async def _whisper(_, inline_query):
         mm = [
             InlineQueryResultArticle(
                 title="💒 Whisper",
-                description=f"@{BOT_USERNAME} [ USERNAME | ID ] [ TEXT ]",
-                input_message_content=InputTextMessageContent(f"💒 Usage:\n\n@{BOT_USERNAME} [ USERNAME | ID ] [ TEXT ]"),
+                description=f"@{BOT_USERNAME} [USERNAME | ID]",
+                input_message_content=InputTextMessageContent(f"💒 Usage:\n\n@{BOT_USERNAME} [USERNAME | ID]"),
                 thumb_url="https://graph.org/file/2c3c693d1b460c309da1d.jpg"
             )
         ]
     else:
         try:
-            user_id = data.split()[0]
-            msg = data.split(None, 1)[1]
-        except IndexError as e:
+            user_id = data.split()[1]
+        except IndexError:
             pass
         
         try:
@@ -58,10 +74,6 @@ async def _whisper(_, inline_query):
             ]
         except Exception as e:
             print(e)
-        try:
-            whisper_db[f"{inline_query.from_user.id}_{user.id}"] = msg
-        except:
-            pass
     
     results.append(mm)
     return results
@@ -107,19 +119,13 @@ async def bot_inline(_, inline_query):
         await inline_query.answer(answers[-1], cache_time=0)
 
 
-@pgram.on_message(filters.private & ~filters.command("whisper"))
-async def handle_private_message(_, message):
-    # Check if the message is a reply and the sender is a bot
-    if message.reply_to_message and message.reply_to_message.from_user.is_bot:
-        replied_msg = message.reply_to_message
-        # Check if the replied message is a whisper
-        if replied_msg.message_id in whisper_db.values():
-            # Get the user IDs of the sender and receiver
-            from_user_id = replied_msg.from_user.id
-            to_user_id = replied_msg.forward_from.id
-            # Check if the current user is the sender or receiver of the whisper
-            if message.from_user.id in [from_user_id, to_user_id]:
-                # Forward the whispered message
-                await replied_msg.copy(chat_id=message.chat.id)
-                # Delete the original whispered message
-                await replied_msg.delete()
+# Add filters to process the messages
+@pgram.on_message(filters.text & ~filters.edited & filters.private)
+async def process_private_message(_, message):
+    await process_message(_, message)
+
+
+@pgram.on_message(filters.text & ~filters.edited & filters.group)
+async def process_group_message(_, message):
+    if message.reply_to_message and message.reply_to_message.from_user and message.reply_to_message.from_user.id == _.me.id:
+        await process_message(_, message)
