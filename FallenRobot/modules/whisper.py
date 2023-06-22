@@ -102,13 +102,3 @@ async def whispes_cb(_, query):
     if data[3] == "one":
         if user_id == to_user:
             await query.edit_message_text("📬 Whisper has been read!\n\nPress the button below to send a whisper!", reply_markup=SWITCH)
-
-
-@pgram.on_inline_query()
-async def bot_inline(_, inline_query):
-    string = inline_query.query.lower()
-    
-    if string.strip() == "":
-        await inline_query.answer([])
-    else:
-        await _whisper(_, inline_query)
