@@ -81,7 +81,6 @@ async def inline(app, query):
     except:
         pass
 
-
 @pgram.on_callback_query()
 async def cbq(app, iquery):
     try:
@@ -95,18 +94,18 @@ async def cbq(app, iquery):
             return await iquery.answer("This whisper is not for you 🚧", show_alert=True)
         for_search = stark[0] + "_" + stark[1]
         print(stark)
-        try:
-            msg = ALPHA[for_search]
-        except:
-            msg = "🚫 Error‼️\n\nWhisper has been deleted from the database!"
 
-        # Store whisper message in the database
-        whisper_data = {
+        # Retrieve whisper message from the database
+        whisper_query = {
             "sender_id": int(stark[0]),
-            "receiver_id": int(stark[1]),
-            "message": msg
+            "receiver_id": int(stark[1])
         }
-        whisper_collection.insert_one(whisper_data)
+        whisper_message = whisper_collection.find_one(whisper_query)
+
+        if whisper_message:
+            msg = whisper_message["message"]
+        else:
+            msg = "🚫 Error‼️\n\nWhisper has been deleted from the database!"
 
         SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline 🪝", switch_inline_query_current_chat="")]])
         await iquery.answer(msg, show_alert=True)
