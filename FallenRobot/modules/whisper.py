@@ -55,9 +55,9 @@ async def inline(app, query):
         pass
     try:
         WTXT = "💌 A whisper has been sent to {}.\n\nOnly he/she can open it."
-        SHOW = InlineKeyboardMarkup([[InlineKeyboardButton("📬 Whisper", callback_data=f"{query.from_user.id}_{tar}")]])
+        SHOW = InlineKeyboardMarkup([[InlineKeyboardButton("📬 Whisper", callback_data=f"fdaywhisper_{inline_query.from_user.id}_{user.id}")]])
         SHOW_ONE = InlineKeyboardMarkup([[InlineKeyboardButton("⏲️ One-Time Whisper",
-                                                               callback_data=f"{query.from_user.id}_{tar}_one")]])
+                                                               callback_data=f"fdaywhisper_{inline_query.from_user.id}_{user.id}_one")]])
         res2 = [InlineQueryResultArticle(title="Whisper",
                                          description=f"Send a Whisper to {Na}!",
                                          input_message_content=InputTextMessageContent(WTXT.format(Na)),
