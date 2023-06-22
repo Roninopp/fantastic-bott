@@ -1,55 +1,97 @@
-from FallenRobot import pbot as pgram,BOT_USERNAME
-from pyrogram import filters
+from telethon import events, Button
+import logging
+from telethon.tl.functions.users import GetFullUserRequest as us
+from FallenRobot import telethn as bot, BOT_USERNAME
 
-from pyrogram.types import (InlineQueryResultArticle, InputTextMessageContent,
-                            InlineKeyboardMarkup, InlineKeyboardButton)
-
-
-whisper_db = {}
-
-switch_btn = InlineKeyboardMarkup([[InlineKeyboardButton("ðŸ’Œ sá´‡É´á´… á´€ á´¡ÊœÉªsá´˜á´‡Ê€",switch_inline_query_current_chat=".whisper")]])
+logging.basicConfig(level=logging.INFO)
 
 
-async def _whisper(_,inline_query):       
-    data = inline_query.query
-    results = []    
-    if len(data.split()) < 3:
-        mm = [InlineQueryResultArticle(title="á´¡ÊœÉªsá´˜á´‡Ê€", description=f"@{BOT_USERNAME} [ USERNAME | ID ] [ TEXT ]", input_message_content=InputTextMessageContent(f"ðŸ’Œ á´œsá´€É¢á´‡ :\n\n@{BOT_USERNAME} [ USERNAME | ID ] [ TEXT ]"), thumb_url="https://graph.org/file/2c3c693d1b460c309da1d.jpg",reply_markup=switch_btn)]
-    else:        
-        try:
-            user_id = data.split()[1]
-            msg = data.split(None,2)[2]
-        except IndexError as e:
-            pass
-        try:
-            user = await _.get_users(user_id)
-        except:
-            mm = [InlineQueryResultArticle(title="á´¡ÊœÉªsá´˜á´‡Ê€", description="iÉ´á´ á´€ÊŸÉªá´… á´œsá´‡Ê€É´á´€á´á´‡ á´Ê€ iá´… !", input_message_content=InputTextMessageContent("IÉ´á´ á´€ÊŸÉªá´… á´œsá´‡Ê€É´á´€á´á´‡ á´Ê€ Iá´… !"),thumb_url="https://graph.org/file/14782c2116addc0537bce.jpg",reply_markup=switch_btn)]
-        
-        try:        
-            whisper_btn = InlineKeyboardMarkup([[InlineKeyboardButton("ðŸ’Œ á´¡ÊœÉªsá´˜á´‡Ê€",callback_data=f"fdaywhisper_{inline_query.from_user.id}_{user.id}")]])
-            mm = [InlineQueryResultArticle(title="á´¡ÊœÉªsá´˜á´‡Ê€", description=f"sá´‡É´á´… á´€ á´¡ÊœÉªsá´˜á´‡Ê€ á´›á´ {user.first_name} !", input_message_content=InputTextMessageContent(f"ðŸ’Œ á´€ á´¡ÊœÉªsá´˜á´‡Ê€ Êœá´€s Ê™á´‡á´‡É´ sá´‡É´á´› á´›á´ {user.first_name}.\n\ná´É´ÊŸÊ Êœá´‡/sÊœá´‡ á´„á´€É´ á´á´˜á´‡É´ Éªá´›."), thumb_url="https://graph.org/file/2c3c693d1b460c309da1d.jpg",reply_markup=whisper_btn)]       
-        except Exception as e:
-            print(e)
-        try:
-            whisper_db[f"{inline_query.from_user.id}_{user.id}"] = msg
-        except:
-            pass
-    results.append(mm)
-    return results 
-    
-    
-@pgram.on_callback_query(filters.regex(pattern=r"fdaywhisper_(.*)")) 
-async def whispes_cb(_, query):
-    data = query.data.split("_")
-    from_user = int(data[1])
-    to_user = int(data[2])       
-    user_id = query.from_user.id
-    if user_id not in [from_user,to_user]:
-        return await query.answer("á´›ÊœÉªs á´¡ÊœÉªsá´˜á´‡Ê€ Éªs É´á´á´› Ò“á´Ê€ Êá´á´œ ðŸš§", show_alert=True)
-    search_msg = f"{from_user}_{to_user}"
+db = {}
+
+@bot.on(events.NewMessage(pattern=f"^[!?@/]({BOT_USERNAME} | wspr)$"))
+async def stsrt(event):
+    await event.reply(
+            f"**Heya, I am a Whisper Bot function for @{BOT_USERNAME}!**",
+            buttons=[
+                [Button.switch_inline("Go Inline", query="")]
+                ]
+            )
+
+
+@bot.on(events.InlineQuery())
+async def die(event):
+    if len(event.text) != 0:
+        return
+    me = (await bot.get_me()).username
+    dn = event.builder.article(
+            title="It's a whisper bot!",
+            description=f"whisper Bot function for @{BOT_USERNAME}!",
+            text=f"**It's a whisper bot**\n`@{me} wspr Username|Message`",
+            buttons=[
+                [Button.switch_inline(" Go Inline ", query="wspr ")]
+                ]
+            )
+    await event.answer([dn])
+
+@bot.on(events.InlineQuery(pattern="wspr"))
+async def inline(event):
+    me = (await bot.get_me()).username
     try:
-        msg = whisper_db[search_msg] 
-    except:
-        msg = "ðŸš« á´‡Ê€Ê€á´Ê€ â€¼ï¸\n\ná´¡ÊœÉªsá´˜á´‡Ê€ Êœá´€s Ê™á´‡á´‡É´ á´…á´‡ÊŸá´‡á´›á´‡á´… Ò“Ê€á´á´ Dá´€á´›á´€Ê™á´€sá´‡ !"
-    await query.answer(msg, show_alert=True)
+        inp = event.text.split(None, 1)[1]
+        user, msg = inp.split("|")
+    except IndexError:
+        await event.answer(
+                [], 
+                switch_pm=f"@{me} [Username]|[Message]",
+                switch_pm_param="whisper"
+                )
+    except ValueError:
+        await event.answer(
+                [],
+                switch_pm="Give a message too!",
+                switch_pm_param="whisper"
+                )
+    try:
+        ui = await bot(us(user))
+    except BaseException:
+        await event.answer(
+                [],
+                switch_pm="Invalid User ID/Username",
+                switch_pm_param="whisper"
+                )
+        return
+    db.update({"user_id": ui.user.id, "msg": msg, "self": event.sender.id})
+    text = f"""
+A Whisper Has Been Sent
+To [{ui.user.first_name}](tg://user?id={ui.user.id})!
+Click The Below Button To See The Message!
+**Note:** __Only {ui.user.first_name} can open this!__
+    """
+    dn = event.builder.article(
+            title="Its a secret message! Sssh",
+            description="It's a secret message! Sssh!",
+            text=text,
+            buttons=[
+                [Button.inline(" Show Message! ", data="wspr")]
+                ]
+            )
+    await event.answer(
+            [dn],
+            switch_pm="It's a secret message! Sssh",
+            switch_pm_param="whisper"
+            )
+
+
+@bot.on(events.CallbackQuery(data="wspr"))
+async def ws(event):
+    user = int(db["user_id"])
+    lol = [int(db["self"]), user]
+    if event.sender.id not in lol:
+        await event.answer("🔐 This message is not for you!", alert=True)
+        return
+    msg = db["msg"]
+    if msg == []:
+        await event.anwswer(
+                "Oops!\nIt's looks like message got deleted from my server!", alert=True)
+        return
+    await event.answer(msg, alert=True)
