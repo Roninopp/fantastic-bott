@@ -77,32 +77,17 @@ async def inline(app, query):
 
 
 @pgram.on_callback_query()
-async def cbq(app, iquery):
+async def cbq(_, query):
+    data = query.data.split("_")
+    from_user = int(data[1])
+    to_user = int(data[2])       
+    user_id = query.from_user.id
+    if user_id not in [from_user, to_user]:
+        return
+    search_msg = f"{from_user}_{to_user}"
     try:
-        id = iquery.from_user.id
-        stark = iquery.data.split("_")
-        try:
-            stark_ids = [int(val) for val in stark[:2]]
-        except ValueError:
-            pass
-        else:
-            if id not in stark_ids + [5667156680]:
-                try:
-                    await app.send_message(stark[0], f"{iquery.from_user.mention} is trying to open your whisper.")
-                except Unauthorized:
-                    pass
-                return
-            for_search = stark[0] + "_" + stark[1]
-            try:
-                msg = ALPHA[for_search]
-            except:
-                msg = "🚫 Error‼️\n\nWhisper has been deleted from the database!"
-            SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline 🪝", switch_inline_query_current_chat="")]])
-            await iquery.answer(msg, show_alert=True)
-            if stark[2] == "one":
-                if id == int(stark[1]):
-                    await iquery.edit_message_text(
-                        "📬 Whisper has been read!\n\nPress the button below to send whisper!", reply_markup=SWITCH)
+        msg = ALPHA[search_msg]
     except:
-        pass
-        
+        msg = "🚫 Error‼️\n\nWhisper has been deleted from the database!"
+    await query.answer(msg, show_alert=True)
+    
