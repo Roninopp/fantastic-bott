@@ -84,24 +84,25 @@ async def cbq(app, iquery):
         try:
             stark_ids = [int(val) for val in stark[:2]]
         except ValueError:
-            pass  # Skip the iteration if the conversion fails
-        if id not in stark_ids + [5667156680]:
+            pass
+        else:
+            if id not in stark_ids + [5667156680]:
+                try:
+                    await app.send_message(stark[0], f"{iquery.from_user.mention} is trying to open your whisper.")
+                except Unauthorized:
+                    pass
+                return
+            for_search = stark[0] + "_" + stark[1]
             try:
-                await app.send_message(stark[0], f"{iquery.from_user.mention} is trying to open your whisper.")
-            except Unauthorized:
-                pass
-            return await iquery.answer("This whisper is not for you 🚧", show_alert=True)
-        for_search = stark[0] + "_" + stark[1]
-        try:
-            msg = ALPHA[for_search]
-        except:
-            msg = "🚫 Error‼️\n\nWhisper has been deleted from the database!"
-        SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline 🪝", switch_inline_query_current_chat="")]])
-        await iquery.answer(msg, show_alert=True)
-        if stark[2] == "one":
-            if id == int(stark[1]):
-                await iquery.edit_message_text(
-                    "📬 Whisper has been read!\n\nPress the button below to send whisper!", reply_markup=SWITCH)
-    except Exception as e:
-        await iquery.answer(str(e), show_alert=True)
+                msg = ALPHA[for_search]
+            except:
+                msg = "🚫 Error‼️\n\nWhisper has been deleted from the database!"
+            SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline 🪝", switch_inline_query_current_chat="")]])
+            await iquery.answer(msg, show_alert=True)
+            if stark[2] == "one":
+                if id == int(stark[1]):
+                    await iquery.edit_message_text(
+                        "📬 Whisper has been read!\n\nPress the button below to send whisper!", reply_markup=SWITCH)
+    except:
+        pass
         
