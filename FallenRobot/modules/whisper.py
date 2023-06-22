@@ -91,5 +91,21 @@ async def in_help():
         InlineQueryResultArticle(
             title="Help Menu!",
             input_message_content=InputTextMessageContent("Inline Commands!"),
-            thumb_url="https://graph.org/file/f6278ec869dbb1eeb
-          
+            thumb_url="https://graph.org/file/f6278ec869dbb1eebfe0e.jpg",
+            reply_markup=keywords
+        )
+    ]
+    return answers
+
+
+@pgram.on_inline_query()
+async def bot_inline(_, inline_query):
+    string = inline_query.query.lower()
+    
+    if string.strip() == "":
+        answers = await in_help()
+        await inline_query.answer(answers)
+    elif string.split()[0] == ".whisper":
+        answers = await _whisper(_, inline_query)
+        await inline_query.answer(answers[-1], cache_time=0)
+      
