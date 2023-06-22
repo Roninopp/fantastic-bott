@@ -1,9 +1,7 @@
 from FallenRobot import pbot as pgram, BOT_USERNAME
 from pyrogram import filters
-from pyrogram.types import (
-    InlineQueryResultArticle, InputTextMessageContent,
-    InlineKeyboardMarkup, InlineKeyboardButton
-)
+from pyrogram.types import (InlineQueryResultArticle, InputTextMessageContent,
+                            InlineKeyboardMarkup, InlineKeyboardButton)
 
 whisper_db = {}
 
@@ -45,7 +43,6 @@ async def _whisper(_, inline_query):
         
         try:
             whisper_btn = InlineKeyboardMarkup([[InlineKeyboardButton("💒 Whisper", callback_data=f"fdaywhisper_{inline_query.from_user.id}_{user.id}")]])
-            one_time_whisper_btn = InlineKeyboardMarkup([[InlineKeyboardButton("⏲️ One-Time Whisper", callback_data=f"fdaywhisper_{inline_query.from_user.id}_{user.id}_one")]])
             mm = [
                 InlineQueryResultArticle(
                     title="💒 Whisper",
@@ -53,13 +50,6 @@ async def _whisper(_, inline_query):
                     input_message_content=InputTextMessageContent(f"💒 You are sending a whisper to {user.first_name}.\n\nType your message/sentence."),
                     thumb_url="https://graph.org/file/2c3c693d1b460c309da1d.jpg",
                     reply_markup=whisper_btn
-                ),
-                InlineQueryResultArticle(
-                    title="⏲️ One-Time Whisper",
-                    description=f"Send a one-time whisper to {user.first_name}!",
-                    input_message_content=InputTextMessageContent(f"⏲️ You are sending a one-time whisper to {user.first_name}.\n\nType your message/sentence."),
-                    thumb_url="https://graph.org/file/2c3c693d1b460c309da1d.jpg",
-                    reply_markup=one_time_whisper_btn
                 )
             ]
         except Exception as e:
@@ -82,25 +72,27 @@ async def whispes_cb(_, query):
     user_id = query.from_user.id
     
     if user_id not in [from_user, to_user]:
-        return await query.answer("⚠️ You are not allowed to access this!", show_alert=True)
+        try:
+            await _.send_message(from_user, f"{query.from_user.mention} is trying to open your whisper.")
+        except Unauthorized:
+            pass
+        
+        return await query.answer("This whisper is not for you 🚧", show_alert=True)
     
     search_msg = f"{from_user}_{to_user}"
     
     try:
         msg = whisper_db[search_msg]
     except:
-        msg = "🚫 Message not found! Whisper has expired."
+        msg = "🚫 Error!\n\nWhisper has been deleted from the database!"
     
-    if len(data) > 3 and data[3] == "one":
-        msg = "📬 Whisper has been read!\n\nPress the button below to send a one-time whisper!"
+    SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline 🪝", switch_inline_query_current_chat="")]])
     
-    whisper_btn = InlineKeyboardMarkup([[InlineKeyboardButton("💒 Whisper", callback_data=f"fdaywhisper_{from_user}_{to_user}")]])
-    one_time_whisper_btn = InlineKeyboardMarkup([[InlineKeyboardButton("⏲️ One-Time Whisper", callback_data=f"fdaywhisper_{from_user}_{to_user}_one")]])
+    await query.answer(msg, show_alert=True)
     
-    await query.edit_message_text(
-        text=msg,
-        reply_markup=one_time_whisper_btn if len(data) > 3 and data[3] == "one" else whisper_btn
-    )
+    if data[3] == "one":
+        if user_id == to_user:
+            await query.edit_message_text("📬 Whisper has been read!\n\nPress the button below to send a whisper!", reply_markup=SWITCH)
 
 
 keywords = InlineKeyboardMarkup([[InlineKeyboardButton("💒 Send Whisper", switch_inline_query_current_chat=".whisper")]])
@@ -127,4 +119,4 @@ async def bot_inline(_, inline_query):
     elif string.split()[0] == ".whisper":
         answers = await _whisper(_, inline_query)
         await inline_query.answer(answers[-1], cache_time=0)
-        
+      
