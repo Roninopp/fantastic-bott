@@ -100,12 +100,13 @@ async def whispes_cb(_, query):
 
 @pgram.on_inline_query()
 async def bot_inline(_, inline_query):
-    string = inline_query.query.lower()
+    query = inline_query.query.lower()
 
-    if BOT_USERNAME in string and "whisper" not in string:
-        query_string = f".whisper {string}"  # Prepend ".whisper" to the query string
-        inline_query.query = query_string  # Update the modified query string
-        await _whisper(_, inline_query)
+    if BOT_USERNAME in query and "whisper" not in query:
+        whisper_query = f"{BOT_USERNAME} {query}"  # Prepend the bot username to the query
+        results = await _whisper(_, whisper_query)
     else:
-        await _whisper(_, inline_query)
-        
+        results = await _whisper(_, query)
+
+    await inline_query.answer(results, cache_time=0)
+    
