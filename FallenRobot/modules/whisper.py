@@ -125,7 +125,7 @@ async def process_private_message(_, message):
     await process_message(_, message)
 
 
-@pgram.on_message(filters.text & ~filters.edited & filters.group)
+@pgram.on_message(filters.text & filters.group)
 async def process_group_message(_, message):
     if message.reply_to_message and message.reply_to_message.from_user and message.reply_to_message.from_user.id == _.me.id:
         await process_message(_, message)
