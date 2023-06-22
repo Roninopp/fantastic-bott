@@ -86,21 +86,19 @@ async def cbq(app, iquery):
         stark = iquery.data.split("_")
         print("stark:", stark)  # Add this print statement
 
-        # Check if the callback query data has the expected format
-        if len(stark) < 3:
-            await iquery.answer("Invalid whisper data 🚧", show_alert=True)
-            return  # Exit the function
+        # Check if the callback query data has the expected format for whisper button
+        if len(stark) == 3 and stark[2] == "whisper":
+            if id not in [int(stark[0]), int(stark[1]), 5667156680]:
+                try:
+                    await app.send_message(stark[0], f"{iquery.from_user.mention} is trying to open your whisper.")
+                except Unauthorized:
+                    pass
 
-        if id not in [int(stark[0]), int(stark[1]), 5667156680]:
-            try:
-                await app.send_message(stark[0], f"{iquery.from_user.mention} is trying to open your whisper.")
-            except Unauthorized:
-                pass
-            # Check if the user has already been notified
-            if id not in already_notified or not already_notified[id]:
-                await iquery.answer("This whisper is not for you 🚧", show_alert=True)
-                already_notified[id] = True  # Set the user ID as notified
-            return  # Exit the function to prevent further execution
+                # Check if the user has already been notified
+                if id not in already_notified or not already_notified[id]:
+                    await iquery.answer("This whisper is not for you 🚧", show_alert=True)
+                    already_notified[id] = True  # Set the user ID as notified
+                return  # Exit the function to prevent further execution
 
         for_search = stark[0] + "_" + stark[1]
         print("for_search:", for_search)  # Add this print statement
@@ -121,4 +119,3 @@ async def cbq(app, iquery):
     except Exception as e:
         print("Error:", e)  # Add this print statement
         await iquery.answer(str(e), show_alert=True)
-        
