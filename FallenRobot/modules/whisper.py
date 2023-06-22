@@ -2,24 +2,7 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InlineQueryResultArticle, InputTextMessageContent
 from FallenRobot import pbot as pgram
 from pyrogram.errors import Unauthorized
-from pymongo import MongoClient
 
-# Establish MongoDB connection
-client = MongoClient("mongodb+srv://eren:eren@cluster0.yxuwg4r.mongodb.net/?retryWrites=true&w=majority")
-db = client["whisper_db"]
-collection = db["whisper_collection"]
-
-# Function to save whisper messages to MongoDB
-async def save_whisper(sender_id, target_id, message):
-    collection.insert_one({"sender_id": sender_id, "target_id": target_id, "message": message})
-
-# Function to retrieve whisper messages from MongoDB
-async def get_whisper(sender_id, target_id):
-    result = collection.find_one({"sender_id": sender_id, "target_id": target_id})
-    if result:
-        return result["message"]
-    else:
-        return "🚫 Error‼️\n\nWhisper has been deleted from the database!"
 
 @pgram.on_message(filters.command("whisper"))
 async def _whisper(_, message):
@@ -32,7 +15,7 @@ async def _whisper(_, message):
 ALPHA = {}
 BUN = None
 SWITCH_PM = InlineKeyboardMarkup([[InlineKeyboardButton("📬 Send Whisper", switch_inline_query="")]])
-HLP = "**🫧 Whisper Bot Help**\n\n» `@{} [username] [whisper]`\n\nEx: `@{} @HSSLevii Hello‼️`"
+HLP = "**🫧 Whisper Bot Help**\n\n» `@{} [username] [whisper]`\n\nEx: `@{} @HSSLevii hello‼️`"
 res1 = [InlineQueryResultArticle(title="Whisper", description="Invalid username or ID!",
                                  input_message_content=InputTextMessageContent("Invalid username or ID!"),
                                  thumb_url="https://graph.org/file/14782c2116addc0537bce.jpg")]
@@ -45,7 +28,7 @@ async def inline(app, query):
         BUN = (await app.get_me()).username
     res = [InlineQueryResultArticle(title="Whisper",
                                     description=f"@{BUN} [USERNAME | ID] [TEXT]",
-                                    input_message_content=InputTextMessageContent(f"**📍Usage:**\n\n@{BUN} @Yorr_Forgerr_Bot (Target Username or ID) (Your Message).\nExample: `@Yorr_Forgerr_Bot @username Yo, I Wanna Phuck You`"),
+                                    input_message_content=InputTextMessageContent(f"📬 Usage:\n\n@{BUN} username text."),
                                     thumb_url="https://graph.org/file/4d5d893c631e83c590a75.jpg")]
     txt = query.query
     if not len(txt.split(None, 1)) == 2:
@@ -68,7 +51,7 @@ async def inline(app, query):
     try:
         WTXT = "💌 A whisper has been sent to {}.\n\nOnly he/she can open it."
         SHOW = InlineKeyboardMarkup([[InlineKeyboardButton("📬 Whisper", callback_data=f"{query.from_user.id}_{tar}")]])
-        SHOW_ONE = InlineKeyboardMarkup([[InlineKeyboardButton("🔩 One-Time Whisper",
+        SHOW_ONE = InlineKeyboardMarkup([[InlineKeyboardButton("⏲️ One-Time Whisper",
                                                                callback_data=f"{query.from_user.id}_{tar}_one")]])
         res2 = [InlineQueryResultArticle(title="Whisper",
                                          description=f"Send a Whisper to {Na}!",
@@ -81,7 +64,6 @@ async def inline(app, query):
                                          thumb_url="https://graph.org/file/4d5d893c631e83c590a75.jpg",
                                          reply_markup=SHOW_ONE)]
         await app.answer_inline_query(query.id, results=res2, cache_time=0)
-        await save_whisper(query.from_user.id, tar, whisp)  # Save whisper to MongoDB
     except:
         pass
     try:
@@ -106,8 +88,9 @@ async def cbq(app, iquery):
                 pass
             return await iquery.answer("This whisper is not for you 🚧", show_alert=True)
         for_search = stark[0] + "_" + stark[1]
+        print(stark)
         try:
-            msg = await get_whisper(stark[0], stark[1])  # Retrieve whisper from MongoDB
+            msg = ALPHA[for_search]
         except:
             msg = "🚫 Error‼️\n\nWhisper has been deleted from the database!"
         SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline 🪝", switch_inline_query_current_chat="")]])
