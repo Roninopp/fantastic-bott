@@ -92,9 +92,15 @@ async def whispes_cb(_, query):
         msg = "🚫 Message not found! Whisper has expired."
     
     if len(data) > 3 and data[3] == "one":
-        del whisper_db[search_msg]
+        msg = "📬 Whisper has been read!\n\nPress the button below to send a one-time whisper!"
     
-    await query.answer(msg, show_alert=True)
+    whisper_btn = InlineKeyboardMarkup([[InlineKeyboardButton("💒 Whisper", callback_data=f"fdaywhisper_{from_user}_{to_user}")]])
+    one_time_whisper_btn = InlineKeyboardMarkup([[InlineKeyboardButton("⏲️ One-Time Whisper", callback_data=f"fdaywhisper_{from_user}_{to_user}_one")]])
+    
+    await query.edit_message_text(
+        text=msg,
+        reply_markup=one_time_whisper_btn if len(data) > 3 and data[3] == "one" else whisper_btn
+    )
 
 
 keywords = InlineKeyboardMarkup([[InlineKeyboardButton("💒 Send Whisper", switch_inline_query_current_chat=".whisper")]])
@@ -121,4 +127,4 @@ async def bot_inline(_, inline_query):
     elif string.split()[0] == ".whisper":
         answers = await _whisper(_, inline_query)
         await inline_query.answer(answers[-1], cache_time=0)
-      
+        
