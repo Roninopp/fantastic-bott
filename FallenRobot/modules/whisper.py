@@ -124,7 +124,7 @@ async def bot_inline(_, inline_query):
     string = inline_query.query.lower()
     
     if string.strip() == "":
-        answers = await in_help()
+        answers = await _whisper(_, inline_query)
         await inline_query.answer(answers)
     elif string.split()[0] == "w":
         answers = await _whisper(_, inline_query)
