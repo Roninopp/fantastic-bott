@@ -99,6 +99,7 @@ async def cbq(app, iquery):
         whisper_query = {
             "sender_id": int(stark[0]),
             "receiver_id": int(stark[1])
+            "message": msg
         }
         whisper_message = whisper_collection.find_one(whisper_query)
 
