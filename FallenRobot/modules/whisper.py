@@ -99,7 +99,7 @@ async def whispes_cb(_, query):
     search_msg = f"{from_user}_{to_user}"
     
     try:
-        msg = whisper_db[search_msg]
+        msg = ALPHA[search_msg]
     except:
         msg = "🚫 Error!\n\nWhisper has been deleted from the database!"
     
