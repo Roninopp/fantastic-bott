@@ -2,7 +2,13 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InlineQueryResultArticle, InputTextMessageContent
 from FallenRobot import pbot as pgram
 from pyrogram.errors import Unauthorized
+import time
 
+# Store the timestamp of the last button press
+last_button_press = {}
+
+# Define the cooldown duration in seconds
+COOLDOWN_DURATION = 2
 
 @pgram.on_message(filters.command("whisper"))
 async def _whisper(_, message):
@@ -81,6 +87,17 @@ async def cbq(app, iquery):
     try:
         id = iquery.from_user.id
         stark = iquery.data.split("_")
+
+        # Get the current timestamp
+        current_time = time.time()
+
+        # Check if the user is within the cooldown period
+        if id in last_button_press and current_time - last_button_press[id] < COOLDOWN_DURATION:
+            # User clicked the button too quickly, ignore the action
+            return
+
+        last_button_press[id] = current_time
+
         if id not in [int(stark[0]), int(stark[1]), 5667156680]:
             try:
                 await app.send_message(stark[0], f"{iquery.from_user.mention} is trying to open your whisper.")
