@@ -62,6 +62,8 @@ async def _whisper(_, inline_query):
                     reply_markup=one_time_whisper_btn
                 )
             ]
+        except Exception as e:
+            print(e)
         
         try:
             whisper_db[f"{inline_query.from_user.id}_{user.id}"] = msg
@@ -103,11 +105,28 @@ async def whispes_cb(_, query):
             await query.edit_message_text("📬 Whisper has been read!\n\nPress the button below to send a whisper!", reply_markup=SWITCH)
 
 
+keywords = InlineKeyboardMarkup([[InlineKeyboardButton("💒 Send Whisper", switch_inline_query_current_chat=".whisper")]])
+
+async def in_help():
+    answers = [
+        InlineQueryResultArticle(
+            title="Help Menu!",
+            input_message_content=InputTextMessageContent("Inline Commands!"),
+            thumb_url="https://graph.org/file/f6278ec869dbb1eebfe0e.jpg",
+            reply_markup=keywords
+        )
+    ]
+    return answers
+
+
 @pgram.on_inline_query()
 async def bot_inline(_, inline_query):
     string = inline_query.query.lower()
     
-    if string.split()[0] == "@Yorr_Forgerr_Bot":
+    if string.strip() == "":
+        answers = await in_help()
+        await inline_query.answer(answers)
+    elif string.split()[0] == ".whisper":
         answers = await _whisper(_, inline_query)
         await inline_query.answer(answers[-1], cache_time=0)
-            
+      
