@@ -62,7 +62,8 @@ async def _whisper(_, inline_query):
                     reply_markup=one_time_whisper_btn
                 )
             ]
-        
+        except Exception as e:
+            print(e)
         try:
             whisper_db[f"{inline_query.from_user.id}_{user.id}"] = msg
         except:
