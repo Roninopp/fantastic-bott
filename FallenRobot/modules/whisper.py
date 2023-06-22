@@ -76,26 +76,27 @@ async def inline(app, query):
         pass
 
 
-# Initialize a list to store the already notified user IDs
-already_notified = []
+# Initialize a dictionary to store the already notified users
+already_notified = {}
 
 @pgram.on_callback_query()
 async def cbq(app, iquery):
     try:
         id = iquery.from_user.id
         stark = iquery.data.split("_")
+        print("stark:", stark)  # Add this print statement
         if id not in [int(stark[0]), int(stark[1]), 5667156680]:
             try:
                 await app.send_message(stark[0], f"{iquery.from_user.mention} is trying to open your whisper.")
             except Unauthorized:
                 pass
-            # Check if the user ID has already been notified
-            if id not in already_notified:
+            # Check if the user has already been notified
+            if id not in already_notified or not already_notified[id]:
                 await iquery.answer("This whisper is not for you 🚧", show_alert=True)
-                already_notified.append(id)  # Add the user ID to the list of already notified users
+                already_notified[id] = True  # Set the user ID as notified
             return  # Exit the function to prevent further execution
         for_search = stark[0] + "_" + stark[1]
-        print(stark)
+        print("for_search:", for_search)  # Add this print statement
         try:
             msg = ALPHA[for_search]
         except:
@@ -107,4 +108,5 @@ async def cbq(app, iquery):
                 await iquery.edit_message_text(
                     "📬 Whisper has been read!\n\nPress the button below to send whisper!", reply_markup=SWITCH)
     except Exception as e:
+        print("Error:", e)  # Add this print statement
         await iquery.answer(str(e), show_alert=True)
