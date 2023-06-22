@@ -101,7 +101,11 @@ async def whispes_cb(_, query):
 @pgram.on_inline_query()
 async def bot_inline(_, inline_query):
     string = inline_query.query.lower()
-    
+
     if BOT_USERNAME in string:
+        if ".whisper" not in string:  # Check if ".whisper" is already present
+            string += " .whisper"  # Append ".whisper" to the query string
+        
         answers = await _whisper(_, inline_query)
         await inline_query.answer(answers[-1], cache_time=0)
+        
