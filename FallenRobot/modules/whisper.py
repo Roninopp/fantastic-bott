@@ -62,8 +62,7 @@ async def _whisper(_, inline_query):
                     reply_markup=one_time_whisper_btn
                 )
             ]
-        except Exception as e:
-            print(e)
+        
         try:
             whisper_db[f"{inline_query.from_user.id}_{user.id}"] = msg
         except:
@@ -108,7 +107,7 @@ async def whispes_cb(_, query):
 async def bot_inline(_, inline_query):
     string = inline_query.query.lower()
     
-    if string.strip() and string.split()[0] == "@Yorr_Forgerr_Bot":
-        answers = await _whisper(_, inline_query)
-        await inline_query.answer(answers[-1], cache_time=0)
-        
+    if string.strip() == "":
+        await inline_query.answer([])
+    else:
+        await _whisper(_, inline_query)
