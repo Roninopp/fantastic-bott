@@ -120,7 +120,7 @@ async def bot_inline(_, inline_query):
 
 
 # Add filters to process the messages
-@pgram.on_message(filters.text & ~filters.edited & filters.private)
+@pgram.on_message(filters.text & filters.private)
 async def process_private_message(_, message):
     await process_message(_, message)
 
