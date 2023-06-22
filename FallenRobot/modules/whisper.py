@@ -2,6 +2,12 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InlineQueryResultArticle, InputTextMessageContent
 from FallenRobot import pbot as pgram
 from pyrogram.errors import Unauthorized
+from pymongo import MongoClient
+
+# Establish MongoDB connection
+client = MongoClient("mongodb+srv://eren:eren@cluster0.yxuwg4r.mongodb.net/?retryWrites=true&w=majority")
+db = client["your_database_name"]
+whisper_collection = db["whisper_messages"]
 
 
 @pgram.on_message(filters.command("whisper"))
@@ -93,6 +99,15 @@ async def cbq(app, iquery):
             msg = ALPHA[for_search]
         except:
             msg = "🚫 Error‼️\n\nWhisper has been deleted from the database!"
+
+        # Store whisper message in the database
+        whisper_data = {
+            "sender_id": int(stark[0]),
+            "receiver_id": int(stark[1]),
+            "message": msg
+        }
+        whisper_collection.insert_one(whisper_data)
+
         SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline 🪝", switch_inline_query_current_chat="")]])
         await iquery.answer(msg, show_alert=True)
         if stark[2] == "one":
