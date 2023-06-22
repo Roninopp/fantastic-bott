@@ -60,11 +60,10 @@ async def _mute(_, message):
     if not await fsub_stat(chat_id):
         return
     if not message.from_user:
-        return
-    SUPREME = await CHAD    
+        return   
     async for m in _.get_chat_members(chat_id, filter=enums.ChatMembersFilter.ADMINISTRATORS):
-        SUPREME.append(m.user.id)
-    if message.from_user.id in SUPREME:
+        CHAD.append(m.user.id)
+    if message.from_user.id in CHAD:
         return 
     ch = await get_channel(chat_id)
     channel = await _.get_chat(ch)
