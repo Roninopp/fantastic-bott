@@ -87,8 +87,8 @@ async def cbq(app, iquery):
         print("stark:", stark)  # Add this print statement
 
         # Check if the callback query data has the expected format for whisper button
-        if len(stark) == 3 and stark[2] == "whisper":
-            if id not in [int(stark[0]), int(stark[1]), 5667156680]:
+        if len(stark) >= 2 and stark[0].isdigit() and stark[1].isdigit():
+            if id not in [int(stark[0]), int(stark[1])]:
                 try:
                     await app.send_message(stark[0], f"{iquery.from_user.mention} is trying to open your whisper.")
                 except Unauthorized:
@@ -112,7 +112,7 @@ async def cbq(app, iquery):
         SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline 🪝", switch_inline_query_current_chat="")]])
         await iquery.answer(msg, show_alert=True)
 
-        if stark[2] == "one":
+        if len(stark) == 3 and stark[2] == "one":
             if id == int(stark[1]):
                 await iquery.edit_message_text(
                     "📬 Whisper has been read!\n\nPress the button below to send whisper!", reply_markup=SWITCH)
@@ -120,4 +120,3 @@ async def cbq(app, iquery):
     except Exception as e:
         print("Error:", e)  # Add this print statement
         await iquery.answer(str(e), show_alert=True)
-        
