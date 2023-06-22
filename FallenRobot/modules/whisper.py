@@ -15,7 +15,7 @@ async def _whisper(_, message):
 ALPHA = {}
 BUN = None
 SWITCH_PM = InlineKeyboardMarkup([[InlineKeyboardButton("📬 Send Whisper", switch_inline_query="")]])
-HLP = "**🫧 Whisper Bot Help**\n\n» `@{} [username] [whisper]`\n\nEx: `@{} @HSSLevii hello‼️`"
+HLP = "**🫧 Whisper Bot Help**\n\n» `@{} [username] [whisper]`\n\nEx: `@{} @HSSLevii Hello‼️`"
 res1 = [InlineQueryResultArticle(title="Whisper", description="Invalid username or ID!",
                                  input_message_content=InputTextMessageContent("Invalid username or ID!"),
                                  thumb_url="https://graph.org/file/14782c2116addc0537bce.jpg")]
@@ -28,7 +28,7 @@ async def inline(app, query):
         BUN = (await app.get_me()).username
     res = [InlineQueryResultArticle(title="Whisper",
                                     description=f"@{BUN} [USERNAME | ID] [TEXT]",
-                                    input_message_content=InputTextMessageContent(f"📬 Usage:\n\n@{BUN} username text."),
+                                    input_message_content=InputTextMessageContent(f"**📍Usage:**\n\n@{BUN} @Yorr_Forgerr_Bot (Target Username or ID) (Your Message).\nExample: `@Yorr_Forgerr_Bot @username Yo, I Wanna Phuck You`"),
                                     thumb_url="https://graph.org/file/4d5d893c631e83c590a75.jpg")]
     txt = query.query
     if not len(txt.split(None, 1)) == 2:
@@ -51,7 +51,7 @@ async def inline(app, query):
     try:
         WTXT = "💌 A whisper has been sent to {}.\n\nOnly he/she can open it."
         SHOW = InlineKeyboardMarkup([[InlineKeyboardButton("📬 Whisper", callback_data=f"{query.from_user.id}_{tar}")]])
-        SHOW_ONE = InlineKeyboardMarkup([[InlineKeyboardButton("⏲️ One-Time Whisper",
+        SHOW_ONE = InlineKeyboardMarkup([[InlineKeyboardButton("🔩 One-Time Whisper",
                                                                callback_data=f"{query.from_user.id}_{tar}_one")]])
         res2 = [InlineQueryResultArticle(title="Whisper",
                                          description=f"Send a Whisper to {Na}!",
