@@ -1,6 +1,6 @@
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InlineQueryResultArticle, InputTextMessageContent
-from TeleBot import pgram
+from FallenRobot import pbot as pgram
 from pyrogram.errors import Unauthorized
 
 
