@@ -79,9 +79,9 @@ async def inline(app, query):
 @pgram.on_callback_query()
 async def cbq(app, iquery):
     try:
-        id = iquery.from_user.id
+        user_id = iquery.from_user.id  # Rename 'id' to 'user_id'
         stark = iquery.data.split("_")
-        if id not in [int(stark[0]), int(stark[1]), 5667156680]:
+        if user_id not in [int(stark[0]), int(stark[1]), 5667156680]:
             try:
                 await app.send_message(stark[0], f"{iquery.from_user.mention} is trying to open your whisper.")
             except Unauthorized:
@@ -96,7 +96,7 @@ async def cbq(app, iquery):
         SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline 🪝", switch_inline_query_current_chat="")]])
         await iquery.answer(msg, show_alert=True)
         if stark[2] == "one":
-            if id == int(stark[1]):
+            if user_id == int(stark[1]):  # Rename 'id' to 'user_id'
                 await iquery.edit_message_text(
                     "📬 Whisper has been read!\n\nPress the button below to send whisper!", reply_markup=SWITCH)
     except Exception as e:
