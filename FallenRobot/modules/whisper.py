@@ -82,4 +82,14 @@ async def whispes_cb(_, query):
         msg = "🚫 Message not found! Whisper has expired."
     
     await query.answer(msg, show_alert=True)
-                
+
+
+keywords = InlineKeyboardMarkup([[InlineKeyboardButton("💒 Send Whisper", switch_inline_query_current_chat=".whisper")]])
+
+async def in_help():
+    answers = [
+        InlineQueryResultArticle(
+            title="Help Menu!",
+            input_message_content=InputTextMessageContent("Inline Commands!"),
+            thumb_url="https://graph.org/file/f6278ec869dbb1eeb
+          
