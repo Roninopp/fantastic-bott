@@ -1,105 +1,85 @@
-from pyrogram import Client, filters
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InlineQueryResultArticle, InputTextMessageContent
-from FallenRobot import pbot as pgram
-from pyrogram.errors import Unauthorized
+from FallenRobot import pbot as pgram, BOT_USERNAME
+from pyrogram import filters
+from pyrogram.types import (
+    InlineQueryResultArticle,
+    InputTextMessageContent,
+    InlineKeyboardMarkup,
+    InlineKeyboardButton,
+)
 
-
-@pgram.on_message(filters.command("whisper"))
-async def _whisper(_, message):
-    await message.reply_photo(
-        photo="https://graph.org/file/33b3ac5d2fe66ec747971.jpg",
-        caption="🫧 Click the button below to send a whisper to someone.",
-        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("📬 Send a Whisper", switch_inline_query_current_chat="")]]))
-
-
-ALPHA = {}
-BUN = None
-SWITCH_PM = InlineKeyboardMarkup([[InlineKeyboardButton("📬 Send Whisper", switch_inline_query="")]])
-HLP = "**🫧 Whisper Bot Help**\n\n» `@{} [username] [whisper]`\n\nEx: `@{} @HSSLevii Hello‼️`"
-res1 = [InlineQueryResultArticle(title="Whisper", description="Invalid username or ID!",
-                                 input_message_content=InputTextMessageContent("Invalid username or ID!"),
-                                 thumb_url="https://graph.org/file/14782c2116addc0537bce.jpg")]
+whisper_db = {}
+switch_btn = InlineKeyboardMarkup(
+    [[InlineKeyboardButton("💒 Start Whispering", switch_inline_query_current_chat=".whisper")]]
+)
 
 
 @pgram.on_inline_query()
-async def inline(app, query):
-    global ALPHA, BUN
-    if not BUN:
-        BUN = (await app.get_me()).username
-    res = [InlineQueryResultArticle(
-        title="Whisper",
-        description=f"@{BUN} [USERNAME | ID] [TEXT]",
-        input_message_content=InputTextMessageContent(f"**📍Usage:**\n\n@{BUN} @Yorr_Forgerr_Bot (Target Username or ID) (Your Message).\nExample: `@Yorr_Forgerr_Bot @username Yo, I Wanna Phuck You`"),
-        thumb_url="https://graph.org/file/4d5d893c631e83c590a75.jpg"
-    )]
-    txt = query.query
-    if not len(txt.split(None, 1)) == 2:
-        await app.answer_inline_query(query.id, results=res, cache_time=0)
-        return
+async def _whisper(_, inline_query):
+    data = inline_query.query
+    results = []
 
-    target = txt.split()[0]
-    try:
-        if target.startswith('@'):
-            tar = (await app.get_users(target[1:])).id
-        else:
-            tar = int(target)
-    except Exception:
-        await app.answer_inline_query(query.id, results=res1, cache_time=0)
-        return
-
-    try:
-        user = await app.get_users(tar)
-        Na = user.first_name
-    except Exception:
-        await app.answer_inline_query(query.id, results=res1, cache_time=0)
-        return
-
-    whisp = txt.split(None, 1)[1]
-    WTXT = "💌 A whisper has been sent to {}.\n\nOnly he/she can open it."
-    SHOW = InlineKeyboardMarkup([[InlineKeyboardButton("📬 Whisper", callback_data=f"{query.from_user.id}_{tar}")]])
-    SHOW_ONE = InlineKeyboardMarkup([[InlineKeyboardButton("🔩 One-Time Whisper", callback_data=f"{query.from_user.id}_{tar}_one")]])
-    res2 = [
-        InlineQueryResultArticle(
-            title="Whisper",
-            description=f"Send a Whisper to {Na}!",
-            input_message_content=InputTextMessageContent(WTXT.format(Na)),
-            thumb_url="https://graph.org/file/4d5d893c631e83c590a75.jpg",
-            reply_markup=SHOW
-        ),
-        InlineQueryResultArticle(
-            title="Whisper",
-            description=f"Send One-Time whisper to {Na}!",
-            input_message_content=InputTextMessageContent(WTXT.format(Na)),
-            thumb_url="https://graph.org/file/4d5d893c631e83c590a75.jpg",
-            reply_markup=SHOW_ONE
-        )
-    ]
-    await app.answer_inline_query(query.id, results=res2, cache_time=0)
-    ALPHA[f"{query.from_user.id}_{tar}"] = whisp
-
-
-@pgram.on_callback_query()
-async def cbq(app, iquery):
-    try:
-        user_id = iquery.from_user.id  # Rename 'id' to 'user_id'
-        stark = iquery.data.split("_")
-        if user_id not in [int(stark[0]), int(stark[1]), 5667156680]:
-            try:
-                await app.send_message(stark[0], f"{iquery.from_user.mention} is trying to open your whisper.")
-            except Unauthorized:
-                pass
-            return await iquery.answer("This whisper is not for you 🚧", show_alert=True)
-        for_search = stark[0] + "_" + stark[1]
-        print(stark)
+    if len(data.split()) < 3:
+        mm = [
+            InlineQueryResultArticle(
+                title="Whisper",
+                description=f"@{BOT_USERNAME} [ USERNAME | ID ] [ TEXT ]",
+                input_message_content=InputTextMessageContent(f"💒 Instructions:\n\n@{BOT_USERNAME} [ USERNAME | ID ] [ TEXT ]"),
+                thumb_url="https://graph.org/file/2c3c693d1b460c309da1d.jpg",
+                reply_markup=switch_btn,
+            )
+        ]
+    else:
         try:
-            msg = ALPHA[for_search]
-        except:
-            msg = "🚫 Error‼️\n\nWhisper has been deleted from the database!"
-        SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline 🪝", switch_inline_query_current_chat="")]])
-        await iquery.answer(msg, show_alert=True)
-        if stark[2] == "one":
-            if user_id == int(stark[1]):  # Rename 'id' to 'user_id'
-                await iquery.edit_message_text(
-                    "📬 Whisper has been read!\n\nPress the button below to send whisper!", reply_markup=SWITCH)
-    except Exception as e:
-        await iquery.answer(str(e), show_alert=True)
+            user_id = data.split()[1]
+            msg = data.split(None, 2)[2]
+        except IndexError:
+            pass
+
+        try:
+            user = await _.get_users(user_id)
+            whisper_btn = InlineKeyboardMarkup(
+                [[InlineKeyboardButton("💒 Whisper", callback_data=f"fdaywhisper_{inline_query.from_user.id}_{user.id}")]]
+            )
+            mm = [
+                InlineQueryResultArticle(
+                    title="Whisper",
+                    description=f"Start a whisper with {user.first_name}!",
+                    input_message_content=InputTextMessageContent(f"💒 Start a whisper with {user.first_name}.\n\nSend /s to send the message."),
+                    thumb_url="https://graph.org/file/2c3c693d1b460c309da1d.jpg",
+                    reply_markup=whisper_btn,
+                )
+            ]
+            whisper_db[f"{inline_query.from_user.id}_{user.id}"] = msg
+        except Exception as e:
+            print(e)
+            mm = [
+                InlineQueryResultArticle(
+                    title="Whisper",
+                    description="Invalid username or ID!",
+                    input_message_content=InputTextMessageContent("Invalid username or ID!"),
+                    thumb_url="https://graph.org/file/14782c2116addc0537bce.jpg",
+                    reply_markup=switch_btn,
+                )
+            ]
+
+    results.append(mm)
+    await inline_query.answer(results)
+
+
+@pgram.on_callback_query(filters.regex(pattern=r"fdaywhisper_(.*)"))
+async def whispes_cb(_, query):
+    data = query.data.split("_")
+    from_user = int(data[1])
+    to_user = int(data[2])
+    user_id = query.from_user.id
+
+    if user_id not in [from_user, to_user]:
+        return await query.answer("This whisper is not for you 🚧", show_alert=True)
+
+    search_msg = f"{from_user}_{to_user}"
+    try:
+        msg = whisper_db[search_msg]
+    except KeyError:
+        msg = "🚫 Error‼️\n\nWhisper has been deleted from the database!"
+
+    await query.answer(msg, show_alert=True)
