@@ -1,11 +1,10 @@
 from FallenRobot.utils.mongo import db
 from FallenRobot import pbot as pgram
 from pyrogram import filters, Client ,errors, enums 
-from FallenRobot.modules.helper_funcs.chat_status import bot_admin, user_admin
+from FallenRobot.modules.pyrogram_funcs.status import user_admin,bot_admin
 from pyrogram.raw.base import Update
 from pyrogram.raw import types, functions
 from FallenRobot.modules.mongo.antichannel_db import *
-
 
 
 @pgram.on_message(filters.command("antichannelmode") & filters.group)
