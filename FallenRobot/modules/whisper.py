@@ -85,6 +85,12 @@ async def cbq(app, iquery):
         id = iquery.from_user.id
         stark = iquery.data.split("_")
         print("stark:", stark)  # Add this print statement
+
+        # Check if the callback query data has the expected format
+        if len(stark) < 3:
+            await iquery.answer("Invalid whisper data 🚧", show_alert=True)
+            return  # Exit the function
+
         if id not in [int(stark[0]), int(stark[1]), 5667156680]:
             try:
                 await app.send_message(stark[0], f"{iquery.from_user.mention} is trying to open your whisper.")
@@ -95,18 +101,24 @@ async def cbq(app, iquery):
                 await iquery.answer("This whisper is not for you 🚧", show_alert=True)
                 already_notified[id] = True  # Set the user ID as notified
             return  # Exit the function to prevent further execution
+
         for_search = stark[0] + "_" + stark[1]
         print("for_search:", for_search)  # Add this print statement
+
         try:
             msg = ALPHA[for_search]
         except:
             msg = "🚫 Error‼️\n\nWhisper has been deleted from the database!"
+
         SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline 🪝", switch_inline_query_current_chat="")]])
         await iquery.answer(msg, show_alert=True)
+
         if stark[2] == "one":
             if id == int(stark[1]):
                 await iquery.edit_message_text(
                     "📬 Whisper has been read!\n\nPress the button below to send whisper!", reply_markup=SWITCH)
+
     except Exception as e:
         print("Error:", e)  # Add this print statement
         await iquery.answer(str(e), show_alert=True)
+        
