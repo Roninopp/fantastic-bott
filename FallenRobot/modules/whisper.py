@@ -3,14 +3,12 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InlineQue
 from FallenRobot import pbot as pgram
 from pyrogram.errors import Unauthorized
 
-
 @pgram.on_message(filters.command("whisper"))
 async def _whisper(_, message):
     await message.reply_photo(
         photo="https://graph.org/file/33b3ac5d2fe66ec747971.jpg",
         caption="🫧 Click the button below to send a whisper to someone.",
         reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("📬 Send a Whisper", switch_inline_query_current_chat="")]]))
-
 
 ALPHA = {}
 BUN = None
@@ -19,7 +17,6 @@ HLP = "**🫧 Whisper Bot Help**\n\n» `@{} [username] [whisper]`\n\nEx: `@{} @H
 res1 = [InlineQueryResultArticle(title="Whisper", description="Invalid username or ID!",
                                  input_message_content=InputTextMessageContent("Invalid username or ID!"),
                                  thumb_url="https://graph.org/file/14782c2116addc0537bce.jpg")]
-
 
 @pgram.on_inline_query()
 async def inline(app, query):
@@ -50,9 +47,9 @@ async def inline(app, query):
         pass
     try:
         WTXT = "💌 A whisper has been sent to {}.\n\nOnly he/she can open it."
-        SHOW = InlineKeyboardMarkup([[InlineKeyboardButton("📬 Whisper", callback_data=f"{query.from_user.id}_{tar}")]])
+        SHOW = InlineKeyboardMarkup([[InlineKeyboardButton("📬 Whisper", callback_data=f"whisper_{query.from_user.id}_{tar}")]])
         SHOW_ONE = InlineKeyboardMarkup([[InlineKeyboardButton("🔩 One-Time Whisper",
-                                                               callback_data=f"{query.from_user.id}_{tar}_one")]])
+                                                               callback_data=f"whisper_{query.from_user.id}_{tar}_one")]])
         res2 = [InlineQueryResultArticle(title="Whisper",
                                          description=f"Send a Whisper to {Na}!",
                                          input_message_content=InputTextMessageContent(WTXT.format(Na)),
@@ -67,27 +64,32 @@ async def inline(app, query):
     except:
         pass
     try:
-        ALPHA.pop(f"{query.from_user.id}_{tar}")
+        ALPHA.pop(f"whisper_{query.from_user.id}_{tar}")
     except:
         pass
     try:
-        ALPHA[f"{query.from_user.id}_{tar}"] = whisp
+        ALPHA[f"whisper_{query.from_user.id}_{tar}"] = whisp
     except:
         pass
 
-
-@pgram.on_callback_query()
-async def cbq(_, query):
-    data = query.data.split("_")
-    from_user = int(data[1])
-    to_user = int(data[2])       
-    user_id = query.from_user.id
-    if user_id not in [from_user, to_user]:
-        return
-    search_msg = f"{from_user}_{to_user}"
+@pgram.on_callback_query(filters.regex(pattern=r"whisper_(\d+)_(\d+)(_one)?"))
+async def cbq(app, iquery):
     try:
-        msg = ALPHA[search_msg]
+        id = iquery.from_user.id
+        match = iquery.matches[0]
+        tar = int(match.group(2))
+        if len(match.group(3)) > 0 and match.group(3) == "_one":
+            if id == tar:
+                await iquery.edit_message_text(
+                    "📬 Whisper has been read!\n\nPress the button below to send a whisper!",
+                    reply_markup=SWITCH_PM)
+        else:
+            for_search = f"whisper_{match.group(1)}_{tar}"
+            try:
+                msg = ALPHA[for_search]
+            except KeyError:
+                msg = "🚫 Error‼️\n\nWhisper has been deleted from the database!"
+            SWITCH = InlineKeyboardMarkup([[InlineKeyboardButton("Go Inline 🪝", switch_inline_query_current_chat="")]])
+            await iquery.answer(msg, show_alert=True)
     except:
-        msg = "🚫 Error‼️\n\nWhisper has been deleted from the database!"
-    await query.answer(msg, show_alert=True)
-    
+        pass
