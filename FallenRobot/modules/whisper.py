@@ -107,7 +107,7 @@ async def whispes_cb(_, query):
 async def bot_inline(_, inline_query):
     string = inline_query.query.lower()
     
-    if string.split()[0] == "@fallenrobot":
+    if string.split()[0] == "@Yorr_Forgerr_Bot":
         answers = await _whisper(_, inline_query)
         await inline_query.answer(answers[-1], cache_time=0)
             
