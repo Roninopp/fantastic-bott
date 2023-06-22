@@ -1,7 +1,9 @@
 from FallenRobot import pbot as pgram, BOT_USERNAME
 from pyrogram import filters
-from pyrogram.types import (InlineQueryResultArticle, InputTextMessageContent,
-                            InlineKeyboardMarkup, InlineKeyboardButton)
+from pyrogram.types import (
+    InlineQueryResultArticle, InputTextMessageContent,
+    InlineKeyboardMarkup, InlineKeyboardButton
+)
 
 whisper_db = {}
 
@@ -43,6 +45,7 @@ async def _whisper(_, inline_query):
         
         try:
             whisper_btn = InlineKeyboardMarkup([[InlineKeyboardButton("💒 Whisper", callback_data=f"fdaywhisper_{inline_query.from_user.id}_{user.id}")]])
+            one_time_whisper_btn = InlineKeyboardMarkup([[InlineKeyboardButton("⏲️ One-Time Whisper", callback_data=f"fdaywhisper_{inline_query.from_user.id}_{user.id}_one")]])
             mm = [
                 InlineQueryResultArticle(
                     title="💒 Whisper",
@@ -50,6 +53,13 @@ async def _whisper(_, inline_query):
                     input_message_content=InputTextMessageContent(f"💒 You are sending a whisper to {user.first_name}.\n\nType your message/sentence."),
                     thumb_url="https://graph.org/file/2c3c693d1b460c309da1d.jpg",
                     reply_markup=whisper_btn
+                ),
+                InlineQueryResultArticle(
+                    title="⏲️ One-Time Whisper",
+                    description=f"Send a one-time whisper to {user.first_name}!",
+                    input_message_content=InputTextMessageContent(f"⏲️ You are sending a one-time whisper to {user.first_name}.\n\nType your message/sentence."),
+                    thumb_url="https://graph.org/file/2c3c693d1b460c309da1d.jpg",
+                    reply_markup=one_time_whisper_btn
                 )
             ]
         except Exception as e:
@@ -80,6 +90,9 @@ async def whispes_cb(_, query):
         msg = whisper_db[search_msg]
     except:
         msg = "🚫 Message not found! Whisper has expired."
+    
+    if len(data) > 3 and data[3] == "one":
+        del whisper_db[search_msg]
     
     await query.answer(msg, show_alert=True)
 
