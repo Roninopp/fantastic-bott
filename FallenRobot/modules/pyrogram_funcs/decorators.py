@@ -70,7 +70,7 @@ def control_user(max_messages: int = 3, interval: float = 1.5):
     return decorator
 
 
-def command(commands: Union[str, List[str]], prefixes: Union[str, case_sensitive: bool = False,
+def command(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = None, case_sensitive: bool = False,
             disable: bool = False):
     command_lister(commands, disable)
     commands = commandsHelper(commands)
