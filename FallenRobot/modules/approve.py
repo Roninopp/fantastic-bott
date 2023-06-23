@@ -1,226 +1,114 @@
-import html
+from pyrogram import filters,enums
+from FallenRobot import pbot as pgram
+from FallenRobot import DRAGONS as SUPREME_USERS
+from FallenRobot.modules.pyrogram_funcs.status import user_admin
+from FallenRobot.modules.pyrogram_funcs.extracting_id import extract_user_id
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup 
+from FallenRobot.modules.mongo.approve_db import *
+from .pyrogram_funcs.decorators import control_user,command
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
-from telegram.error import BadRequest
-from telegram.ext import CallbackContext, CallbackQueryHandler
-from telegram.utils.helpers import mention_html
+SPAM_CHATS = []
 
-import FallenRobot.modules.sql.approve_sql as sql
-from FallenRobot import DRAGONS, dispatcher
-from FallenRobot.modules.disable import DisableAbleCommandHandler
-from FallenRobot.modules.helper_funcs.chat_status import user_admin
-from FallenRobot.modules.helper_funcs.extraction import extract_user
-from FallenRobot.modules.log_channel import loggable
-
-
-@loggable
+@pgram.on_message(command(commands=("approve")))
+@control_user()
 @user_admin
-def approve(update, context):
-    message = update.effective_message
-    chat_title = message.chat.title
-    chat = update.effective_chat
-    args = context.args
-    user = update.effective_user
-    user_id = extract_user(message, args)
+async def _approve(_, message):
+    chat_id = message.chat.id
+    user_id = await extract_user_id(message)
     if not user_id:
-        message.reply_text(
-            "I don't know who you're talking about, you're going to need to specify a user!"
-        )
-        return ""
-    try:
-        member = chat.get_member(user_id)
-    except BadRequest:
-        return ""
-    if member.status == "administrator" or member.status == "creator":
-        message.reply_text(
-            "User is already admin - locks, blocklists, and antiflood already don't apply to them."
-        )
-        return ""
-    if sql.is_approved(message.chat_id, user_id):
-        message.reply_text(
-            f"[{member.user['first_name']}](tg://user?id={member.user['id']}) is already approved in {chat_title}",
-            parse_mode=ParseMode.MARKDOWN,
-        )
-        return ""
-    sql.approve(message.chat_id, user_id)
-    message.reply_text(
-        f"[{member.user['first_name']}](tg://user?id={member.user['id']}) has been approved in {chat_title}! They will now be ignored by automated admin actions like locks, blocklists, and antiflood.",
-        parse_mode=ParseMode.MARKDOWN,
-    )
-    log_message = (
-        f"<b>{html.escape(chat.title)}:</b>\n"
-        f"#APPROVED\n"
-        f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
-        f"<b>User:</b> {mention_html(member.user.id, member.user.first_name)}"
-    )
-
-    return log_message
+        await message.reply_text("**ɪ ᴅᴏɴ'ᴛ ᴋɴᴏᴡ ᴡʜᴏ ʏᴏᴜ'ʀᴇ ᴛᴀʟᴋɪɴɢ ᴀʙᴏᴜᴛ, ʏᴏᴜ'ʀᴇ ɢᴏɪɴɢ ᴛᴏ ɴᴇᴇᴅ ᴛᴏ sᴘᴇᴄɪғʏ ᴀ ᴜsᴇʀ.**")
+    
+    member = await _.get_chat_member(chat_id,user_id)      
+    if member.privileges:
+        return await message.reply_text("**ᴜsᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀᴅᴍɪɴ - ʙʟᴏᴄᴋʟɪsᴛs,ᴀɴᴛɪғʟᴏᴏᴅ,etc ᴀʟʀᴇᴀᴅʏ ᴅᴏɴ'ᴛ ᴀᴘᴘʟʏ ᴛᴏ ᴛʜᴇᴍ.**")       
+    check_user = await isApproved(chat_id,user_id)
+    if check_user:
+        return await message.reply_text(f"{member.user.mention} ɪs ᴀʟʀᴇᴀᴅʏ ᴀᴘᴘʀᴏᴠᴇᴅ ɪɴ ᴛʜɪs ᴄʜᴀᴛ")
+    await approve_user(chat_id, user_id)
+    return await message.reply_text(f"{member.user.mention} ʜᴀs ʙᴇᴇɴ ᴀᴘᴘʀᴏᴠᴇᴅ ɪɴ {message.chat.title}! ᴛʜᴇʏ ᴡɪʟʟ ɴᴏᴡ ʙᴇ ɪɢɴᴏʀᴇᴅ ʙʏ ᴀᴜᴛᴏᴍᴀᴛᴇᴅ ᴀᴅᴍɪɴ ᴀᴄᴛɪᴏɴs ʟɪᴋᴇ ʙʟᴏᴄᴋʟɪsᴛs, ᴀɴᴅ ᴀɴᴛɪғʟᴏᴏᴅ.")              
 
 
-@loggable
+@pgram.on_message(command(commands=("disapprove")))
+@control_user()
 @user_admin
-def disapprove(update, context):
-    message = update.effective_message
-    chat_title = message.chat.title
-    chat = update.effective_chat
-    args = context.args
-    user = update.effective_user
-    user_id = extract_user(message, args)
+async def _approve(_, message):
+    chat_id = message.chat.id
+    user_id = await extract_user_id(message)
     if not user_id:
-        message.reply_text(
-            "I don't know who you're talking about, you're going to need to specify a user!"
-        )
-        return ""
-    try:
-        member = chat.get_member(user_id)
-    except BadRequest:
-        return ""
-    if member.status == "administrator" or member.status == "creator":
-        message.reply_text("This user is an admin, they can't be unapproved.")
-        return ""
-    if not sql.is_approved(message.chat_id, user_id):
-        message.reply_text(f"{member.user['first_name']} isn't approved yet!")
-        return ""
-    sql.disapprove(message.chat_id, user_id)
-    message.reply_text(
-        f"{member.user['first_name']} is no longer approved in {chat_title}."
-    )
-    log_message = (
-        f"<b>{html.escape(chat.title)}:</b>\n"
-        f"#UNAPPROVED\n"
-        f"<b>Admin:</b> {mention_html(user.id, user.first_name)}\n"
-        f"<b>User:</b> {mention_html(member.user.id, member.user.first_name)}"
-    )
+        await message.reply_text("**ɪ ᴅᴏɴ'ᴛ ᴋɴᴏᴡ ᴡʜᴏ ʏᴏᴜ'ʀᴇ ᴛᴀʟᴋɪɴɢ ᴀʙᴏᴜᴛ, ʏᴏᴜ'ʀᴇ ɢᴏɪɴɢ ᴛᴏ ɴᴇᴇᴅ ᴛᴏ sᴘᴇᴄɪғʏ ᴀ ᴜsᴇʀ.**")
+    
+    member = await _.get_chat_member(chat_id,user_id)      
+    if member.privileges:
+        return await message.reply_text("**ᴛʜɪs ᴜsᴇʀ ɪs ᴀɴ ᴀᴅᴍɪɴ, ᴛʜᴇʏ ᴄᴀɴ'ᴛ ʙᴇ ᴜɴᴀᴘᴘʀᴏᴠᴇᴅ**")       
+    check_user = await isApproved(chat_id,user_id)
+    if not check_user:
+        return await message.reply_text(f"{member.user.mention} ɪsɴ'ᴛ ᴀᴘᴘʀᴏᴠᴇᴅ ʏᴇᴛ!")
+    await disapprove_user(chat_id, user_id)
+    await message.reply_text(f"{member.user.mention} ɪs ɴᴏ ʟᴏɴɢᴇʀ ᴀᴘᴘʀᴏᴠᴇᴅ ɪɴ {message.chat.title}")              
 
-    return log_message
-
-
+@pgram.on_message(command(commands=("approved")))
+@control_user()
 @user_admin
-def approved(update, context):
-    message = update.effective_message
-    chat_title = message.chat.title
-    chat = update.effective_chat
-    msg = "The following users are approved.\n"
-    approved_users = sql.list_approved(message.chat_id)
-    for i in approved_users:
-        member = chat.get_member(int(i.user_id))
-        msg += f"- `{i.user_id}`: {member.user['first_name']}\n"
-    if msg.endswith("approved.\n"):
-        message.reply_text(f"No users are approved in {chat_title}.")
-        return ""
-    else:
-        message.reply_text(msg, parse_mode=ParseMode.MARKDOWN)
+async def _approvedlist(_, message):
+    chat_id = message.chat.id
+    list1 = await approved_users(chat_id)
+    if not list:
+        return await message.reply_text("**ᴛʜᴇʀᴇ ᴀʀᴇɴ'ᴛ ᴀɴʏ ᴀᴘᴘʀᴏᴠᴇᴅ ᴜsᴇʀs ɪɴ ᴛʜɪs ᴄʜᴀᴛ.**")
+    text = "❗ʟɪsᴛ ᴏғ ᴀᴘᴘʀᴏᴠᴇᴅ ᴜsᴇʀs ɪɴ ᴛʜɪs ᴄʜᴀᴛ.\n"
+    for i in list1:
+        try:
+            member = await _.get_chat_member(chat_id,int(i))
+            text += f"⦾ {member.user.mention}\n"
+        except:
+            pass
+    await message.reply_text(text)   
 
-
+@pgram.on_message(command(commands=("approval")))
+@control_user()
 @user_admin
-def approval(update, context):
-    message = update.effective_message
-    chat = update.effective_chat
-    args = context.args
-    user_id = extract_user(message, args)
-    member = chat.get_member(int(user_id))
+async def _approval(_, message):
+    chat_id = message.chat.id
+    user_id = await extract_user_id(message)    
     if not user_id:
-        message.reply_text(
-            "I don't know who you're talking about, you're going to need to specify a user!"
-        )
-        return ""
-    if sql.is_approved(message.chat_id, user_id):
-        message.reply_text(
-            f"{member.user['first_name']} is an approved user. Locks, antiflood, and blocklists won't apply to them."
-        )
-    else:
-        message.reply_text(
-            f"{member.user['first_name']} is not an approved user. They are affected by normal commands."
-        )
+        return await message.reply_text("**ɪ ᴅᴏɴ'ᴛ ᴋɴᴏᴡ ᴡʜᴏ ʏᴏᴜ'ʀᴇ ᴛᴀʟᴋɪɴɢ ᴀʙᴏᴜᴛ, ʏᴏᴜ'ʀᴇ ɢᴏɪɴɢ ᴛᴏ ɴᴇᴇᴅ ᴛᴏ sᴘᴇᴄɪғʏ ᴀ ᴜsᴇʀ!**")
+    try :
+        m = await _.get_chat_member(chat_id,user_id)
+    except Exception as e:
+        print(e)
+        return await message.reply_text("**ᴜsᴇʀ ɪsɴ'ᴛ ʜᴇʀᴇ**")
+    check_user = await isApproved(chat_id,user_id)
+    if check_user:
+        return await message.reply_text(f"{m.user.mention} ɪs ᴀɴ ᴀᴘᴘʀᴏᴠᴇᴅ ᴜsᴇʀ. Lᴏᴄᴋs, ᴀɴᴛɪғʟᴏᴏᴅ, ᴀɴᴅ ʙʟᴏᴄᴋʟɪsᴛs ᴡᴏɴ'ᴛ ᴀᴘᴘʟʏ ᴛᴏ ᴛʜᴇᴍ")
+    
+    return await message.reply_text(f"{m.user.mention} ɪs ɴᴏᴛ ᴀɴ ᴀᴘᴘʀᴏᴠᴇᴅ ᴜsᴇʀ. ᴛʜᴇʏ ᴀʀᴇ ᴀғғᴇᴄᴛᴇᴅ ʙʏ ɴᴏʀᴍᴀʟ ᴄᴏᴍᴍᴀɴᴅs") 
 
+@pgram.on_message(filters.command("disapproveall") & filters.group)
+@control_user()                  
+async def _disappall(_, message):
+    user_id = message.from_user.id
+    chat_id = message.chat.id
+    m = await _.get_chat_member(chat_id,user_id)
+    if m.status != enums.ChatMemberStatus.OWNER:
+        return await message.reply_text("**ᴏɴʟʏ ᴏᴡɴᴇʀ ᴏғ ᴛʜɪs ɢʀᴏᴜᴘ ᴄᴀɴ ᴅɪsᴀᴘᴘʀᴏᴠᴇ ᴀʟʟ**")
+    list1 = await approved_users(chat_id)
+    if list1 is None:
+        return await message.reply_text("**ᴛʜᴇʀᴇ ᴀʀᴇɴ'ᴛ ᴀɴʏ ᴀᴘᴘʀᴏᴠᴇᴅ ᴜsᴇʀs ɪɴ ᴛʜɪs ᴄʜᴀᴛ.**")
+    btn = InlineKeyboardMarkup([[InlineKeyboardButton("ᴜɴᴀᴘᴘʀᴏᴠᴇ ᴀʟʟ ᴜsᴇʀs", callback_data="unaproveall")],[InlineKeyboardButton("❌ ᴄʟᴏsᴇ",callback_data="admin_close")]])
+    await message.reply_text("ᴀʀᴇ ʏᴏᴜ sᴜʀᴇ ʏᴏᴜ ᴡᴏᴜʟᴅ ʟɪᴋᴇ ᴛᴏ ᴜɴᴀᴘᴘʀᴏᴠᴇ ᴀʟʟ ᴜsᴇʀs ɪɴ ᴛʜɪs ᴄʜᴀᴛ ? ᴛʜɪs ᴀᴄᴛɪᴏɴ ᴄᴀɴɴᴏᴛ ʙᴇ ᴜɴᴅᴏɴᴇ.",reply_markup=btn)
 
-def unapproveall(update: Update, context: CallbackContext):
-    chat = update.effective_chat
-    user = update.effective_user
-    member = chat.get_member(user.id)
-    if member.status != "creator" and user.id not in DRAGONS:
-        update.effective_message.reply_text(
-            "Only the chat owner can unapprove all users at once."
-        )
-    else:
-        buttons = InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton(
-                        text="Unapprove all users", callback_data="unapproveall_user"
-                    )
-                ],
-                [
-                    InlineKeyboardButton(
-                        text="Cancel", callback_data="unapproveall_cancel"
-                    )
-                ],
-            ]
-        )
-        update.effective_message.reply_text(
-            f"Are you sure you would like to unapprove ALL users in {chat.title}? This action cannot be undone.",
-            reply_markup=buttons,
-            parse_mode=ParseMode.MARKDOWN,
-        )
-
-
-def unapproveall_btn(update: Update, context: CallbackContext):
-    query = update.callback_query
-    chat = update.effective_chat
-    message = update.effective_message
-    member = chat.get_member(query.from_user.id)
-    if query.data == "unapproveall_user":
-        if member.status == "creator" or query.from_user.id in DRAGONS:
-            approved_users = sql.list_approved(chat.id)
-            users = [int(i.user_id) for i in approved_users]
-            for user_id in users:
-                sql.disapprove(chat.id, user_id)
-
-        if member.status == "administrator":
-            query.answer("Only owner of the chat can do this.")
-
-        if member.status == "member":
-            query.answer("You need to be admin to do this.")
-    elif query.data == "unapproveall_cancel":
-        if member.status == "creator" or query.from_user.id in DRAGONS:
-            message.edit_text("Removing of all approved users has been cancelled.")
-            return ""
-        if member.status == "administrator":
-            query.answer("Only owner of the chat can do this.")
-        if member.status == "member":
-            query.answer("You need to be admin to do this.")
-
-
-__help__ = """
-Sometimes, you might trust a user not to send unwanted content.
-Maybe not enough to make them admin, but you might be ok with locks, blacklists, and antiflood not applying to them.
-
-That's what approvals are for - approve of trustworthy users to allow them to send 
-
-*Admin commands:*
-❍ /approval*:* Check a user's approval status in this chat.
-❍ /approve*:* Approve of a user. Locks, blacklists, and antiflood won't apply to them anymore.
-❍ /unapprove*:* Unapprove of a user. They will now be subject to locks, blacklists, and antiflood again.
-❍ /approved*:* List all approved users.
-❍ /unapproveall*:* Unapprove *ALL* users in a chat. This cannot be undone.
-"""
-
-APPROVE = DisableAbleCommandHandler("approve", approve, run_async=True)
-DISAPPROVE = DisableAbleCommandHandler("unapprove", disapprove, run_async=True)
-APPROVED = DisableAbleCommandHandler("approved", approved, run_async=True)
-APPROVAL = DisableAbleCommandHandler("approval", approval, run_async=True)
-UNAPPROVEALL = DisableAbleCommandHandler("unapproveall", unapproveall, run_async=True)
-UNAPPROVEALL_BTN = CallbackQueryHandler(
-    unapproveall_btn, pattern=r"unapproveall_.*", run_async=True
-)
-
-dispatcher.add_handler(APPROVE)
-dispatcher.add_handler(DISAPPROVE)
-dispatcher.add_handler(APPROVED)
-dispatcher.add_handler(APPROVAL)
-dispatcher.add_handler(UNAPPROVEALL)
-dispatcher.add_handler(UNAPPROVEALL_BTN)
-
-__mod_name__ = "Aᴘᴘʀᴏᴠᴇ"
-__command_list__ = ["approve", "unapprove", "approved", "approval"]
-__handlers__ = [APPROVE, DISAPPROVE, APPROVED, APPROVAL]
+@pgram.on_callback_query(filters.regex("unaproveall"))
+@control_user()                  
+async def _unappall(_, query):
+    user_id = query.from_user.id
+    chat_id = query.message.chat.id
+    m = await _.get_chat_member(chat_id,user_id)
+    if m.status != enums.ChatMemberStatus.OWNER or user_id not in SUPREME_USERS:
+        return await query.answer("ᴏɴʟʏ ᴏᴡɴᴇʀ ᴏғ ᴛʜɪs ɢʀᴏᴜᴘ ᴄᴀɴ ᴅɪsᴀᴘᴘʀᴏᴠᴇ ᴀʟʟ",show_alert=True)
+    list1 = await approved_users(chat_id)
+    SPAM_CHATS.append(chat_id)
+    return await query.message.edit_text("sᴛᴀʀᴛᴇᴅ ᴅɪsᴀᴘᴘʀᴏᴠɪɴɢ ᴀʟʟ ᴜsᴇʀs ɪɴ ᴛʜɪs ᴄʜᴀᴛ. ᴜsᴇ /cancel ᴛᴏ ᴄᴀɴᴄᴇʟ ᴛʜᴇ ᴘʀᴏᴄᴇss.")
+    for user in list1:
+        if chat_id not in SPAM_CHATS:
+            break 
+        await disapprove_user(chat_id,int(user))
+    return await query.message.edit_text("**ᴅɪsᴀᴘᴘʀᴏᴠᴇᴅ ᴀʟʟ ᴜsᴇʀs**")
