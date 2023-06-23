@@ -105,20 +105,6 @@ async def whispes_cb(_, query):
             await query.edit_message_text("📬 Whisper has been read!\n\nPress the button below to send a whisper!", reply_markup=SWITCH)
 
 
-keywords = InlineKeyboardMarkup([[InlineKeyboardButton("💒 Send Whisper", switch_inline_query_current_chat="w")]])
-
-async def in_help():
-    answers = [
-        InlineQueryResultArticle(
-            title="Help Menu!",
-            input_message_content=InputTextMessageContent("Inline Commands!"),
-            thumb_url="https://graph.org/file/33b3ac5d2fe66ec747971.jpg",
-            reply_markup=keywords
-        )
-    ]
-    return answers
-
-
 @pgram.on_inline_query()
 async def bot_inline(_, inline_query):
     string = inline_query.query.lower()
