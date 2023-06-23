@@ -100,7 +100,7 @@ async def whispes_cb(_, query):
     
     await query.answer(msg, show_alert=True)
     
-    if data[3] == "one":
+    if len(data) > 3 and data[3] == "one":
         if user_id == to_user:
             await query.edit_message_text("📬 Whisper has been read!\n\nPress the button below to send a whisper!", reply_markup=SWITCH)
 
