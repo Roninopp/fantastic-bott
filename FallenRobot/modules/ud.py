@@ -15,7 +15,8 @@ async def urban(_, m):
     mm = api["list"]
     if 0 == len(mm):
         reply_txt = "No results found! You can try searching on Google."
-        buttons = InlineKeyboardMarkup([[InlineKeyboardButton("🔎 Google it!", url=f"https://www.google.com/search?q={text}")]])
+        google_search_url = f"https://www.google.com/search?q={text.replace(' ', '+')}"
+        buttons = InlineKeyboardMarkup([[InlineKeyboardButton("🔎 Google it!", url=google_search_url)]])
         return await m.reply_text(text=reply_txt, reply_markup=buttons)
     string = f"🔍 **Word**: {mm[0].get('word')}\n\n📝 **Definition**: {mm[0].get('definition').replace('[', '').replace(']', '')}\n\n✏️ **Example**: {mm[0].get('example').replace('[', '').replace(']', '')}"
     if 1 == len(mm):
