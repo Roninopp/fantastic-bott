@@ -1,5 +1,5 @@
 import requests
-from FallenRobot import pbot as app
+from TeleBot import pgram as app
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
@@ -16,7 +16,7 @@ async def urban(_, m):
     if 0 == len(mm):
         reply_txt = "No results found! You can try searching on Google."
         buttons = InlineKeyboardMarkup([[InlineKeyboardButton("🔎 Google it!", url=f"https://www.google.com/search?q={text}")]])
-        return await m.reply_text(text=reply_txt, reply_markup=buttons, parse_mode="markdown")
+        return await m.reply_text(text=reply_txt, reply_markup=buttons)
     string = f"🔍 **Word**: {mm[0].get('word')}\n\n📝 **Definition**: {mm[0].get('definition').replace('[', '').replace(']', '')}\n\n✏️ **Example**: {mm[0].get('example').replace('[', '').replace(']', '')}"
     if 1 == len(mm):
         return await m.reply_text(text=string)
