@@ -1,5 +1,5 @@
 import requests
-from TeleBot import pgram as app
+from FallenRobot import pbot as app
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
