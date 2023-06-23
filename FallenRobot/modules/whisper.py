@@ -108,9 +108,10 @@ async def whispes_cb(_, query):
 async def in_help():
     answers = [
         InlineQueryResultArticle(
-            title="Help Menu!",
-            input_message_content=InputTextMessageContent("Inline Commands!"),
-            thumb_url="https://graph.org/file/33b3ac5d2fe66ec747971.jpg",
+            title="💒 Whisper",
+            description=f"@{BOT_USERNAME} [ USERNAME | ID ] [ TEXT ]",
+            input_message_content=InputTextMessageContent(f"💒 Usage:\n\n@{BOT_USERNAME} [ USERNAME | ID ] [ TEXT ]"),
+            thumb_url="https://graph.org/file/2c3c693d1b460c309da1d.jpg",
             reply_markup=switch_btn
         )
     ]
