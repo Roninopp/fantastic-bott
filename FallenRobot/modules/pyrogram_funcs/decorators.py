@@ -120,7 +120,7 @@ def command(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = N
     )
 
 
-async def get_user_id(update) -> tuple[int,int,bool]:
+async def get_user_id(update):
     if isinstance(update, types.Message):
         alert = False
         chat_id = update.chat.id
@@ -136,7 +136,7 @@ async def get_user_id(update) -> tuple[int,int,bool]:
         alert = None
         user_id = None
         chat_id = None
-    return chat_id,user_id, alert
+    return chat_id, user_id, alert
 
 
 
