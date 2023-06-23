@@ -7,7 +7,7 @@ from pyrogram.types import (
 
 whisper_db = {}
 
-switch_btn = InlineKeyboardMarkup([[InlineKeyboardButton("💒 Start Whisper", switch_inline_query_current_chat="")]])
+switch_btn = InlineKeyboardMarkup([[InlineKeyboardButton("💒 Start Whisper", switch_inline_query_current_chat="w")]])
 
 async def _whisper(_, inline_query):
     data = inline_query.query
@@ -123,8 +123,8 @@ async def in_help():
 async def bot_inline(_, inline_query):
     string = inline_query.query.lower()
     
-    if string.split()[0] == "":
-        answers = await _whisper(_, inline_query)
+    if string.strip() == "":
+        answers = await in_help()
         await inline_query.answer(answers)
     elif string.split()[0] == "w":
         answers = await _whisper(_, inline_query)
