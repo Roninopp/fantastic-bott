@@ -1,9 +1,10 @@
 from pyrogram import filters,enums
 from FallenRobot import pbot as pgram
 from FallenRobot import DRAGONS as SUPREME_USERS
+from pyrogram.enums import ChatMemberStatus as CMS
 from FallenRobot.modules.pyrogram_funcs.status import user_admin
 from FallenRobot.modules.pyrogram_funcs.extracting_id import extract_user_id
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup 
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from FallenRobot.modules.mongo.approve_db import *
 from .pyrogram_funcs.decorators import control_user,command
 
@@ -82,33 +83,49 @@ async def _approval(_, message):
     
     return await message.reply_text(f"{m.user.mention} ɪs ɴᴏᴛ ᴀɴ ᴀᴘᴘʀᴏᴠᴇᴅ ᴜsᴇʀ. ᴛʜᴇʏ ᴀʀᴇ ᴀғғᴇᴄᴛᴇᴅ ʙʏ ɴᴏʀᴍᴀʟ ᴄᴏᴍᴍᴀɴᴅs") 
 
-@pgram.on_message(filters.command("disapproveall") & filters.group)
+@pgram.on_message(filters.command("unapproveall") & filters.group)
 @control_user()
-async def _disappall(_, message):
-    user_id = message.from_user.id
-    chat_id = message.chat.id
-    m = await _.get_chat_member(chat_id, user_id)
-    if m.status != enums.ChatMemberStatus.OWNER:
-        return await message.reply_text("**ONLY CURRENT OWNER OF THIS GROUP CAN DISAPPROVE ALL**")
-    list1 = await approved_users(chat_id)
-    if list1 is None:
-        return await message.reply_text("**THERE ARE NO APPROVED USERS IN THIS CHAT.**")
-    btn = InlineKeyboardMarkup([[InlineKeyboardButton("UNAPPROVE ALL USERS", callback_data="unaproveall")],[InlineKeyboardButton("❌ CLOSE",callback_data="admin_close")]])
-    await message.reply_text("ARE YOU SURE YOU WOULD LIKE TO UNAPPROVE ALL USERS IN THIS CHAT? THIS ACTION CANNOT BE UNDONE.",reply_markup=btn)
+async def unapproveall_users(_, m: Message):
+    chat_id = m.chat.id
 
-@pgram.on_callback_query(filters.regex("unaproveall"))
-@control_user()                  
-async def _unappall(_, query):
-    user_id = query.from_user.id
-    chat_id = query.message.chat.id
-    m = await _.get_chat_member(chat_id, user_id)
-    if m.status != enums.ChatMemberStatus.OWNER:
-        return await query.answer("ONLY CURRENT OWNER OF THIS GROUP CAN DISAPPROVE ALL",show_alert=True)
-    list1 = await approved_users(chat_id)
-    SPAM_CHATS.append(chat_id)
-    return await query.message.edit_text("STARTED DISAPPROVING ALL USERS IN THIS CHAT. USE /cancel TO CANCEL THE PROCESS.")
-    for user in list1:
-        if chat_id not in SPAM_CHATS:
-            break 
-        await disapprove_user(chat_id,int(user))
-    return await query.message.edit_text("**DISAPPROVED ALL USERS**")
+    all_approved = await approved_users(chat_id)
+    if not all_approved:
+        await m.reply_text("No one is approved in this chat.")
+        return
+
+    await m.reply_text(
+        "Are you sure you want to remove everyone who is approved in this chat?",
+        reply_markup=ikb(
+            [[("⚠️ Confirm", "unapprove_all"), ("❌ Cancel", "close_admin")]],
+        ),
+    )
+    return
+
+@pgram.on_callback_query(filters.regex("^unapprove_all$"))
+@control_user()
+async def unapproveall_callback(_, q: CallbackQuery):
+    user_id = q.from_user.id
+    chat_id = q.message.chat.id
+    approved_people = await approved_users(chat_id)
+    user_status = (await q.message.chat.get_member(user_id)).status
+    if user_status not in {CMS.OWNER, CMS.ADMINISTRATOR}:
+        await q.answer(
+            "You're not even an admin, don't try this explosive shit!",
+            show_alert=True,
+        )
+        return
+    if user_status != "creator":
+        await q.answer(
+            "You're just an admin, not the owner\nStay within your limits!",
+            show_alert=True,
+        )
+        return
+    await approvedb.delete_one({"chat_id": chat_id})
+    for user_id in approved_people:
+        await q.message.chat.restrict_member(
+            user_id=user_id,
+            permissions=q.message.chat.permissions,
+        )
+    await q.message.delete()
+    await q.answer("Disapproved all users!", show_alert=True)
+    return
