@@ -19,7 +19,7 @@ from FallenRobot.modules.helper_funcs.chat_status import (
     user_not_admin,
 )
 from FallenRobot.modules.log_channel import loggable
-from FallenRobot.modules.sql.approve_sql import is_approved
+from FallenRobot.modules.mongo.approve_db import is_approved
 
 
 def al_detect(unistr):
