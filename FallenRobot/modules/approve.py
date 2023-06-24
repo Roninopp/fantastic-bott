@@ -66,7 +66,6 @@ async def _approvedlist(_, message):
     await message.reply_text(text)   
 
 @pgram.on_message(filters.command("approval"))
-@control_user()
 @user_admin
 async def _approval(_, message):
     chat_id = message.chat.id
@@ -104,7 +103,6 @@ async def unapproveall_users(_, m: Message):
     return
 
 @pgram.on_callback_query(filters.regex("^unapprove_all$"))
-@control_user()
 async def unapproveall_callback(_, q: CallbackQuery):
     user_id = q.from_user.id
     chat_id = q.message.chat.id
