@@ -7,9 +7,11 @@ from FallenRobot.modules.pyrogram_funcs.status import (
     bot_can_ban )
 from pyrogram.enums import ChatMemberStatus
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup , CallbackQuery ,ChatPermissions
-from pyrogram.errors import BadRequest
+from pyrogram.errors import BadRequest 
+from FallenRobot.modules.mongo.approve_db import approved_users
 from FallenRobot.modules.mongo.fsub_db import *
- 
+
+forsesub_watcher = 6
 
 @pgram.on_message(filters.command("fsub") & filters.group)
 @user_admin
@@ -54,16 +56,17 @@ async def _force_stat(_, message):
         return await message.reply_text(f"ғᴏʀᴄᴇsᴜʙ ɪs ᴇɴᴀʙʟᴇᴅ ᴀᴍ ᴄᴜʀʀᴇɴᴛʟʏ ᴍᴜᴛɪɴɢ ᴜsᴇʀs ᴡʜᴏ ʜᴀᴠᴇɴ'ᴛ ɪᴏɪɴᴇᴅ [ᴛʜɪs ᴄʜᴀɴɴᴇʟ](t.me/{channel.username})")
     return await message.reply_text("ғᴏʀᴄᴇ sᴜʙ ɪs ᴄᴜʀʀᴇɴᴛʟʏ ᴅɪsᴀʙʟᴇᴅ ɪɴ ᴛʜɪs ᴄʜᴀᴛ")
 
-@pgram.on_message(group=101)
+@pgram.on_message(group=forsesub_watcher)
 async def _mute(_, message):
     chat_id = message.chat.id
     if not await fsub_stat(chat_id):
         return
     if not message.from_user:
-        return   
+        return
+    SUPREME = await approved_users(chat_id) + CHAD    
     async for m in _.get_chat_members(chat_id, filter=enums.ChatMembersFilter.ADMINISTRATORS):
-        CHAD.append(m.user.id)
-    if message.from_user.id in CHAD:
+        SUPREME.append(m.user.id)
+    if message.from_user.id in SUPREME:
         return 
     ch = await get_channel(chat_id)
     channel = await _.get_chat(ch)
