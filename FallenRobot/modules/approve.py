@@ -9,7 +9,7 @@ from .pyrogram_funcs.decorators import control_user,command
 
 SPAM_CHATS = []
 
-@pgram.on_message(command(commands=("approve")))
+@pgram.on_message(filters.command("approve")))
 @control_user()
 @user_admin
 async def _approve(_, message):
@@ -28,7 +28,7 @@ async def _approve(_, message):
     return await message.reply_text(f"{member.user.mention} ʜᴀs ʙᴇᴇɴ ᴀᴘᴘʀᴏᴠᴇᴅ ɪɴ {message.chat.title}! ᴛʜᴇʏ ᴡɪʟʟ ɴᴏᴡ ʙᴇ ɪɢɴᴏʀᴇᴅ ʙʏ ᴀᴜᴛᴏᴍᴀᴛᴇᴅ ᴀᴅᴍɪɴ ᴀᴄᴛɪᴏɴs ʟɪᴋᴇ ʙʟᴏᴄᴋʟɪsᴛs, ᴀɴᴅ ᴀɴᴛɪғʟᴏᴏᴅ.")              
 
 
-@pgram.on_message(command(commands=("disapprove")))
+@pgram.on_message(filters.command("disapprove")))
 @control_user()
 @user_admin
 async def _approve(_, message):
@@ -46,7 +46,7 @@ async def _approve(_, message):
     await disapprove_user(chat_id, user_id)
     await message.reply_text(f"{member.user.mention} ɪs ɴᴏ ʟᴏɴɢᴇʀ ᴀᴘᴘʀᴏᴠᴇᴅ ɪɴ {message.chat.title}")              
 
-@pgram.on_message(command(commands=("approved")))
+@pgram.on_message(filters.command("approved")))
 @control_user()
 @user_admin
 async def _approvedlist(_, message):
@@ -63,7 +63,7 @@ async def _approvedlist(_, message):
             pass
     await message.reply_text(text)   
 
-@pgram.on_message(command(commands=("approval")))
+@pgram.on_message(filters.command("approval")))
 @control_user()
 @user_admin
 async def _approval(_, message):
