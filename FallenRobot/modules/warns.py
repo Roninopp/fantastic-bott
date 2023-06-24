@@ -43,7 +43,7 @@ from FallenRobot.modules.helper_funcs.misc import split_message
 from FallenRobot.modules.helper_funcs.string_handling import split_quotes
 from FallenRobot.modules.log_channel import loggable
 from FallenRobot.modules.sql import warns_sql as sql
-from FallenRobot.modules.sql.approve_sql import is_approved
+from FallenRobot.modules.mongo.approve_db import is_approved
 
 WARN_HANDLER_GROUP = 9
 CURRENT_WARNING_FILTER_STRING = "<b>Current warning filters in this chat:</b>\n"
