@@ -24,7 +24,7 @@ from FallenRobot.modules.helper_funcs.chat_status import (
 from FallenRobot.modules.helper_funcs.string_handling import extract_time
 from FallenRobot.modules.log_channel import loggable
 from FallenRobot.modules.sql import antiflood_sql as sql
-from FallenRobot.modules.sql.approve_sql import is_approved
+from FallenRobot.modules.mongo.approve_db import is_approved
 
 FLOOD_GROUP = 3
 
