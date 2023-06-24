@@ -96,9 +96,10 @@ async def unapproveall_users(_, m: Message):
 
     await m.reply_text(
         "Are you sure you want to remove everyone who is approved in this chat?",
-        btn = InlineKeyboardMarkup([[InlineKeyboardButton("UNAPPROVE ALL USERS", callback_data="unapprove_all")],[InlineKeyboardButton("❌ CLOSE",callback_data="admin_close")]])
-        await message.reply_text("ARE YOU SURE YOU WOULD LIKE TO UNAPPROVE ALL USERS IN THIS CHAT? THIS ACTION CANNOT BE UNDONE.",reply_markup=btn)
-        ),
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("UNAPPROVE ALL USERS", callback_data="unapprove_all")],
+            [InlineKeyboardButton("❌ CLOSE", callback_data="admin_close")]
+        ])
     )
     return
 
