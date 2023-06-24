@@ -2,7 +2,7 @@ from pyrogram import filters,enums
 from pyrogram.types import Message, CallbackQuery
 from FallenRobot import pbot as pgram
 from FallenRobot import DRAGONS as SUPREME_USERS
-from pyrogram.enums import ChatMemberStatus as CMS
+from pyrogram.enums import ChatMemberStatus
 from FallenRobot.modules.pyrogram_funcs.status import user_admin
 from FallenRobot.modules.pyrogram_funcs.extracting_id import extract_user_id
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
@@ -110,7 +110,7 @@ async def unapproveall_callback(_, q: CallbackQuery):
     chat_id = q.message.chat.id
     approved_people = await approved_users(chat_id)
     user_status = (await q.message.chat.get_member(user_id)).status
-    if user_status not in {CMS.OWNER, CMS.ADMINISTRATOR}:
+    if user_status not in {ChatMemberStatus.ADMINISTRATOR}:
         await q.answer(
             "You're not even an admin, don't try this explosive shit!",
             show_alert=True,
@@ -131,3 +131,4 @@ async def unapproveall_callback(_, q: CallbackQuery):
     await q.message.delete()
     await q.answer("Disapproved all users!", show_alert=True)
     return
+    
