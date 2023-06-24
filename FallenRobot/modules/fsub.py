@@ -1,101 +1,160 @@
-from FallenRobot import pbot as pgram,BOT_ID
-from FallenRobot import DRAGONS as CHAD
-from pyrogram import filters, enums 
-from FallenRobot.modules.pyrogram_funcs.status import (
-    user_admin,
-    bot_admin,
-    bot_can_ban )
-from pyrogram.enums import ChatMemberStatus
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup , CallbackQuery ,ChatPermissions
-from pyrogram.errors import BadRequest 
-from FallenRobot.modules.mongo.approve_db import approved_users
-from FallenRobot.modules.mongo.fsub_db import *
+from telethon import Button, events, types
+from telethon.errors import ChatAdminRequiredError
+from telethon.errors.rpcerrorlist import UserNotParticipantError
+from telethon.tl.functions.channels import GetParticipantRequest
 
-forsesub_watcher = 6
+from FallenRobot import BOT_ID
+from FallenRobot import DRAGONS as DEVS
+from FallenRobot import OWNER_ID
+from FallenRobot import telethn as Rani
+from FallenRobot.events import Yorinline as Asuinline
+from FallenRobot.events import register as Asubot
+from FallenRobot.modules.mongo import fsub_db as db
 
-@pgram.on_message(filters.command("fsub") & filters.group)
-@user_admin
-@bot_admin
-@bot_can_ban
-async def _force_sub(_, message):
-    chat_id = message.chat.id
-    user_id = message.from_user.id
-    args = message.text.split()
-    user = await _.get_chat_member(chat_id,user_id)
-    if not user.status == ChatMemberStatus.OWNER :
-        return await message.reply_text("ɢʀᴏᴜᴘ ᴄʀᴇᴀᴛᴏʀ ʀᴇǫᴜɪʀᴇᴅ \nʏᴏᴜ ʜᴀᴠᴇ ᴛᴏ ʙᴇ ᴛʜᴇ ɢʀᴏᴜᴘ ᴄʀᴇᴀᴛᴏʀ ᴛᴏ ᴅᴏ ᴛʜᴀᴛ.")           
-    if "OFF".lower() in args:
-         await fsub_off(chat_id)
-         return await message.reply_text("**❌ ғᴏʀᴄᴇ sᴜʙsᴄʀɪʙᴇ ɪs ᴅɪsᴀʙʟᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ**")
-    elif len(args) < 2:
-        return await message.reply_text("ɢɪᴠᴇ ᴍᴇ ᴀ ᴄʜᴀɴɴᴇʟ ɪᴅ ᴏʀ ᴜsᴇʀɴᴀᴍᴇ ᴛᴏ ᴇɴᴀʙʟᴇ ғᴏʀᴄᴇ sᴜʙ")
-    ch = args[1]
+
+async def is_admin(chat_id, user_id):
     try:
-        channel = await _.get_chat(ch)
+        p = await Rani(GetParticipantRequest(chat_id, user_id))
+    except UserNotParticipantError:
+        return False
+    if isinstance(p.participant, types.ChannelParticipantAdmin) or isinstance(
+        p.participant, types.ChannelParticipantCreator
+    ):
+        return True
+    else:
+        return False
+
+
+async def participant_check(channel, user_id):
+    try:
+        await Rani(GetParticipantRequest(channel, int(user_id)))
+        return True
+    except UserNotParticipantError:
+        return False
     except:
-        return await message.reply_text("ɪɴᴠᴀʟɪᴅ ᴄʜᴀɴɴᴇʟ ᴜsᴇʀɴᴀᴍᴇ ᴘʀᴏᴠɪᴅᴇᴅ")
-    try:
-        await _.get_chat_member(channel.id,BOT_ID)
-    except BadRequest :
-        return await message.reply_text("ɪ ᴀᴍ ɴᴏᴛ ᴀᴅᴍɪɴ ɪɴ ᴛʜᴀᴛ ᴄʜᴀɴɴᴇʟ. ᴘʟᴇᴀsᴇ ᴍᴀᴋᴇ sᴜʀᴇ ᴀᴍ ᴀᴅᴍɪɴ ᴛʜᴇʀᴇ.")
-    member = await _.get_chat_member(channel.id,BOT_ID)
-    if member.status != ChatMemberStatus.ADMINISTRATOR:
-        return await message.reply_text(
-                f"❗**ɴᴏᴛ ᴀɴ ᴀᴅᴍɪɴ ɪɴ ᴛʜᴇ ᴄʜᴀɴɴᴇʟ**\nI ᴀᴍ ɴᴏᴛ ᴀɴ ᴀᴅᴍɪɴ ɪɴ ᴛʜᴇ [ᴄʜᴀɴɴᴇʟ](https://t.me/{ch}). ᴀᴅᴅ ᴍᴇ ᴀs ᴀ ᴀᴅᴍɪɴ ɪɴ ᴏʀᴅᴇʀ ᴛᴏ ᴇɴᴀʙʟᴇ ғᴏʀᴄᴇsᴜʙsᴄʀɪʙᴇ.")
+        return False
 
-    await fsub_on(chat_id,channel.id)
-    await message.reply_text(f"✅ **ғᴏʀᴄᴇ sᴜʙsᴄʀɪʙᴇ ɪs ᴇɴᴀʙʟᴇᴅ** to @{channel.username}.")
 
-@pgram.on_message(filters.command("fsub_stats") & filters.group)
-@user_admin
-async def _force_stat(_, message):
-    chat_id = message.chat.id
-    status = await fsub_stat(chat_id)
-    if status is True:
-        channel = await _.get_chat(await get_channel(chat_id)) 
-        return await message.reply_text(f"ғᴏʀᴄᴇsᴜʙ ɪs ᴇɴᴀʙʟᴇᴅ ᴀᴍ ᴄᴜʀʀᴇɴᴛʟʏ ᴍᴜᴛɪɴɢ ᴜsᴇʀs ᴡʜᴏ ʜᴀᴠᴇɴ'ᴛ ɪᴏɪɴᴇᴅ [ᴛʜɪs ᴄʜᴀɴɴᴇʟ](t.me/{channel.username})")
-    return await message.reply_text("ғᴏʀᴄᴇ sᴜʙ ɪs ᴄᴜʀʀᴇɴᴛʟʏ ᴅɪsᴀʙʟᴇᴅ ɪɴ ᴛʜɪs ᴄʜᴀᴛ")
-
-@pgram.on_message(group=forsesub_watcher)
-async def _mute(_, message):
-    chat_id = message.chat.id
-    if not await fsub_stat(chat_id):
+@Asubot(pattern="^/(fsub|Fsub|forcesubscribe|Forcesub|forcesub|Forcesubscribe) ?(.*)")
+async def fsub(event):
+    if event.is_private:
         return
-    if not message.from_user:
-        return
-    SUPREME = await approved_users(chat_id) + CHAD    
-    async for m in _.get_chat_members(chat_id, filter=enums.ChatMembersFilter.ADMINISTRATORS):
-        SUPREME.append(m.user.id)
-    if message.from_user.id in SUPREME:
-        return 
-    ch = await get_channel(chat_id)
-    channel = await _.get_chat(ch)
-    buttons = InlineKeyboardMarkup([[InlineKeyboardButton("ᴊᴏɪɴ ᴄʜᴀɴɴᴇʟ",url=f"t.me/{channel.username}"), InlineKeyboardButton("🤐 ᴜɴᴍᴜᴛᴇ ᴍᴇ", callback_data=f"fsubuser_{message.from_user.id}")]])
-    msg = f"{message.from_user.mention}, ʏᴏᴜ ʜᴀᴠᴇ ɴᴏᴛ sᴜʙsᴄʀɪʙᴇᴅ ᴛᴏ ᴏᴜʀ [ᴄʜᴀɴɴᴇʟ](t.me/{channel.username}) ʏᴇᴛ❗ᴘʟᴇᴀsᴇ ᴊᴏɪɴ ᴀɴᴅ ᴘʀᴇss ᴛʜᴇ ʙᴜᴛᴛᴏɴ ʙᴇʟᴏᴡ ᴛᴏ ᴜɴᴍᴜᴛᴇ ʏᴏᴜʀsᴇʟғ"
-    await message.reply_text(msg,reply_markup=buttons)
+    if event.is_group:
+        perm = await event.client.get_permissions(event.chat_id, event.sender_id)
+        if not perm.is_admin:
+            return await event.reply("ʏᴏᴜ ɴᴇᴇᴅ ᴛᴏ ʙᴇ ᴀɴ ᴀᴅᴍɪɴ ᴛᴏ ᴅᴏ ᴛʜɪs.")
+        if not perm.is_creator:
+            return await event.reply(
+                "❗ <b>ɢʀᴏᴜᴘ ᴄʀᴇᴀᴛᴏʀ ʀᴇǫᴜɪʀᴇᴅ</b> \n<i>ʏᴏᴜ ʜᴀᴠᴇ ᴛᴏ ʙᴇ ᴛʜᴇ ɢʀᴏᴜᴘ ᴄʀᴇᴀᴛᴏʀ ᴛᴏ ᴅᴏ ᴛʜᴀᴛ.</i>",
+                parse_mode="html",
+            )
     try:
-        await _.restrict_chat_member(chat_id, message.from_user.id, ChatPermissions(can_send_messages=False))
-    except Exception as e:
-        await message.reply_text(e)
-  
-@pgram.on_callback_query(filters.regex(pattern=r"fsubuser_(.*)"))
-async def ok(_, query : CallbackQuery):
-    muted_user = int(query.data.split("_")[1])
-    chat_id = query.message.chat.id
-    ch = await get_channel(chat_id)
-    members = []
-    async for member in _.get_chat_members(ch):
-        members.append(member.user.id)
-    user_id = query.from_user.id
-    if user_id != muted_user:
-        await _.answer_callback_query(query.id,text="❌ ᴛʜɪs ɪs ɴᴏᴛ ғᴏʀ ʏᴏᴜ.",show_alert=True)
-        return   
-              
-    if not muted_user in members:
-        return await _.answer_callback_query(query.id,text="ʏᴏᴜ ʜᴀᴠᴇ ᴛᴏ ᴊᴏɪɴ ᴛʜᴇ ᴄʜᴀɴɴᴇʟ ғɪʀsᴛ, ᴛᴏ ɢᴇᴛ ᴜɴᴍᴜᴛᴇᴅ!",show_alert=True)
-    
-    try :
-        await _.unban_chat_member(chat_id,muted_user)
-    except Exception as er:
-        print(er)
-    await query.message.delete()
+        channel = event.text.split(None, 1)[1]
+    except IndexError:
+        channel = None
+    if not channel:
+        chat_db = db.fs_settings(event.chat_id)
+        if not chat_db:
+            await event.reply(
+                "<b>❌ ғᴏʀᴄᴇ sᴜʙsᴄʀɪʙᴇ ɪs ᴅɪsᴀʙʟᴇᴅ ɪɴ ᴛʜɪs ᴄʜᴀᴛ.</b>", parse_mode="HTML"
+            )
+        else:
+            await event.reply(
+                f"ғᴏʀᴄᴇsᴜʙsᴄʀɪʙᴇ ɪs ᴄᴜʀʀᴇɴᴛʟʏ <b>ᴇɴᴀʙʟᴇᴅ</b>. ᴜsᴇʀs ᴀʀᴇ ғᴏʀᴄᴇᴅ ᴛᴏ ᴊᴏɪɴ <b>@{chat_db.channel}</b> ᴛᴏ sᴘᴇᴀᴋ ʜᴇʀᴇ.",
+                parse_mode="html",
+            )
+    elif channel in ["on", "yes", "y"]:
+        await event.reply("❗ᴘʟᴇᴀsᴇ sᴘᴇᴄɪғʏ ᴛʜᴇ ᴄʜᴀɴɴᴇʟ ᴜsᴇʀɴᴀᴍᴇ.")
+    elif channel in ["off", "no", "n"]:
+        await event.reply("**❌ ғᴏʀᴄᴇ sᴜʙsᴄʀɪʙᴇ ɪs ᴅɪsᴀʙʟᴇᴅ sᴜᴄᴄᴇssғᴜʟʟʏ.**")
+        db.disapprove(event.chat_id)
+    else:
+        try:
+            channel_entity = await event.client.get_entity(channel)
+        except:
+            return await event.reply(
+                "❗<b>ɪɴᴠᴀʟɪᴅ ᴄʜᴀɴɴᴇʟ ᴜsᴇʀɴᴀᴍᴇ ᴘʀᴏᴠɪᴅᴇᴅ.</b>", parse_mode="html"
+            )
+        channel = channel_entity.username
+        try:
+            if not channel_entity.broadcast:
+                return await event.reply("ᴛʜᴀᴛ's ɴᴏᴛ ᴀ ᴠᴀʟɪᴅ ᴄʜᴀɴɴᴇʟ.")
+        except:
+            return await event.reply("ᴛʜᴀᴛ's ɴᴏᴛ ᴀ ᴠᴀʟɪᴅ ᴄʜᴀɴɴᴇʟ.")
+        if not await participant_check(channel, BOT_ID):
+            return await event.reply(
+                f"❗**ɴᴏᴛ ᴀɴ ᴀᴅᴍɪɴ ɪɴ ᴛʜᴇ ᴄʜᴀɴɴᴇʟ**\nI ᴀᴍ ɴᴏᴛ ᴀɴ ᴀᴅᴍɪɴ ɪɴ ᴛʜᴇ [ᴄʜᴀɴɴᴇʟ](https://t.me/{channel}). ᴀᴅᴅ ᴍᴇ ᴀs ᴀ ᴀᴅᴍɪɴ ɪɴ ᴏʀᴅᴇʀ ᴛᴏ ᴇɴᴀʙʟᴇ ғᴏʀᴄᴇsᴜʙsᴄʀɪʙᴇ.",
+                link_preview=False,
+            )
+        db.add_channel(event.chat_id, str(channel))
+        await event.reply(f"✅ **ғᴏʀᴄᴇ sᴜʙsᴄʀɪʙᴇ ɪs ᴇɴᴀʙʟᴇᴅ** to @{channel}.")
+
+
+@Rani.on(events.NewMessage())
+async def fsub_n(e):
+    if not db.fs_settings(e.chat_id):
+        return
+    if e.is_private:
+        return
+    if e.chat.admin_rights:
+        if not e.chat.admin_rights.ban_users:
+            return
+    else:
+        return
+    if not e.from_id:
+        return
+    if (
+        await is_admin(e.chat_id, e.sender_id)
+        or e.sender_id in DEVS
+        or e.sender_id == OWNER_ID
+    ):
+        return
+    channel = (db.fs_settings(e.chat_id)).get("channel")
+    try:
+        check = await participant_check(channel, e.sender_id)
+    except ChatAdminRequiredError:
+        return
+    if not check:
+        buttons = [Button.url("ᴊᴏɪɴ ᴄʜᴀɴɴᴇʟ", f"t.me/{channel}")], [
+            Button.inline("ᴜɴᴍᴜᴛᴇ ᴍᴇ", data="fs_{}".format(str(e.sender_id)))
+        ]
+        txt = f'<b><a href="tg://user?id={e.sender_id}">{e.sender.first_name}</a></b>, ʏᴏᴜ ʜᴀᴠᴇ <b>ɴᴏᴛ sᴜʙsᴄʀɪʙᴇᴅ</b> ᴛᴏ ᴏᴜʀ <b><a href="t.me/{channel}">ᴄʜᴀɴɴᴇʟ</a></b> ʏᴇᴛ❗.ᴘʟᴇᴀsᴇ <b><a href="t.me/{channel}">ᴊᴏɪɴ</a></b> ᴀɴᴅ <b>ᴘʀᴇss ᴛʜᴇ ʙᴜᴛᴛᴏɴ ʙᴇʟᴏᴡ</b> ᴛᴏ ᴜɴᴍᴜᴛᴇ ʏᴏᴜʀsᴇʟғ.'
+        await e.reply(txt, buttons=buttons, parse_mode="html", link_preview=False)
+        await e.client.edit_permissions(e.chat_id, e.sender_id, send_messages=False)
+
+
+@Asuinline(pattern=r"fs(\_(.*))")
+async def unmute_fsub(event):
+    user_id = int(((event.pattern_match.group(1)).decode()).split("_", 1)[1])
+    if not event.sender_id == user_id:
+        return await event.answer("ᴛʜɪs ɪs ɴᴏᴛ ᴍᴇᴀɴᴛ ғᴏʀ ʏᴏᴜ.", alert=True)
+    channel = (db.fs_settings(event.chat_id)).get("channel")
+    try:
+        check = await participant_check(channel, user_id)
+    except ChatAdminRequiredError:
+        check = False
+        return
+    if not check:
+        return await event.answer(
+            "ʏᴏᴜ ʜᴀᴠᴇ ᴛᴏ ᴊᴏɪɴ ᴛʜᴇ ᴄʜᴀɴɴᴇʟ ғɪʀsᴛ, ᴛᴏ ɢᴇᴛ ᴜɴᴍᴜᴛᴇᴅ!", alert=True
+        )
+    try:
+        await event.client.edit_permissions(event.chat_id, user_id, send_messages=True)
+    except ChatAdminRequiredError:
+        pass
+    await event.delete()
+
+
+__mod_name__ = "𝐅-sᴜʙ"
+
+# ғᴏʀ ʜᴇʟᴘ ᴍᴇɴᴜ
+
+# """
+from Exon.modules.language import gs
+
+
+def get_help(chat):
+    return gs(chat, "fsub_help")
+
+
+# """
