@@ -21,7 +21,7 @@ async def _approve(_, message):
     member = await _.get_chat_member(chat_id,user_id)      
     if member.privileges:
         return await message.reply_text("**ᴜsᴇʀ ɪs ᴀʟʀᴇᴀᴅʏ ᴀᴅᴍɪɴ - ʙʟᴏᴄᴋʟɪsᴛs,ᴀɴᴛɪғʟᴏᴏᴅ,etc ᴀʟʀᴇᴀᴅʏ ᴅᴏɴ'ᴛ ᴀᴘᴘʟʏ ᴛᴏ ᴛʜᴇᴍ.**")       
-    check_user = await isApproved(chat_id,user_id)
+    check_user = await is_approved(chat_id,user_id)
     if check_user:
         return await message.reply_text(f"{member.user.mention} ɪs ᴀʟʀᴇᴀᴅʏ ᴀᴘᴘʀᴏᴠᴇᴅ ɪɴ ᴛʜɪs ᴄʜᴀᴛ")
     await approve_user(chat_id, user_id)
@@ -40,7 +40,7 @@ async def _approve(_, message):
     member = await _.get_chat_member(chat_id,user_id)      
     if member.privileges:
         return await message.reply_text("**ᴛʜɪs ᴜsᴇʀ ɪs ᴀɴ ᴀᴅᴍɪɴ, ᴛʜᴇʏ ᴄᴀɴ'ᴛ ʙᴇ ᴜɴᴀᴘᴘʀᴏᴠᴇᴅ**")       
-    check_user = await isApproved(chat_id,user_id)
+    check_user = await is_approved(chat_id,user_id)
     if not check_user:
         return await message.reply_text(f"{member.user.mention} ɪsɴ'ᴛ ᴀᴘᴘʀᴏᴠᴇᴅ ʏᴇᴛ!")
     await disapprove_user(chat_id, user_id)
@@ -76,7 +76,7 @@ async def _approval(_, message):
     except Exception as e:
         print(e)
         return await message.reply_text("**ᴜsᴇʀ ɪsɴ'ᴛ ʜᴇʀᴇ**")
-    check_user = await isApproved(chat_id,user_id)
+    check_user = await is_approved(chat_id,user_id)
     if check_user:
         return await message.reply_text(f"{m.user.mention} ɪs ᴀɴ ᴀᴘᴘʀᴏᴠᴇᴅ ᴜsᴇʀ. Lᴏᴄᴋs, ᴀɴᴛɪғʟᴏᴏᴅ, ᴀɴᴅ ʙʟᴏᴄᴋʟɪsᴛs ᴡᴏɴ'ᴛ ᴀᴘᴘʟʏ ᴛᴏ ᴛʜᴇᴍ")
     
