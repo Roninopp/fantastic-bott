@@ -87,36 +87,28 @@ async def _approval(_, message):
 async def _disappall(_, message):
     user_id = message.from_user.id
     chat_id = message.chat.id
-    owner = await _.get_chat_member(chat_id, user_id)  # Retrieve group owner info
-    if owner.status != enums.ChatMemberStatus.CREATOR:  # Check if the status is CREATOR
-        return await message.reply_text("**ᴏɴʟʏ ᴏᴡɴᴇʀ ᴏғ ᴛʜɪs ɢʀᴏᴜᴘ ᴄᴀɴ ᴅɪsᴀᴘᴘʀᴏᴠᴇ ᴀʟʟ**")
+    m = await _.get_chat_member(chat_id, user_id)
+    if m.status != enums.ChatMemberStatus.OWNER:
+        return await message.reply_text("**ONLY CURRENT OWNER OF THIS GROUP CAN DISAPPROVE ALL**")
     list1 = await approved_users(chat_id)
     if list1 is None:
-        return await message.reply_text("**ᴛʜᴇʀᴇ ᴀʀᴇɴ'ᴛ ᴀɴʏ ᴀᴘᴘʀᴏᴠᴇᴅ ᴜsᴇʀs ɪɴ ᴛʜɪs ᴄʜᴀᴛ.**")
-    btn = InlineKeyboardMarkup(
-        [[InlineKeyboardButton("ᴜɴᴀᴘᴘʀᴏᴠᴇ ᴀʟʟ ᴜsᴇʀs", callback_data="unaproveall")],
-         [InlineKeyboardButton("❌ ᴄʟᴏsᴇ", callback_data="admin_close")]]
-    )
-    await message.reply_text(
-        "ᴀʀᴇ ʏᴏᴜ sᴜʀᴇ ʏᴏᴜ ᴡᴏᴜʟᴅ ʟɪᴋᴇ ᴛᴏ ᴜɴᴀᴘᴘʀᴏᴠᴇ ᴀʟʟ ᴜsᴇʀs ɪɴ ᴛʜɪs ᴄʜᴀᴛ ? "
-        "ᴛʜɪs ᴀᴄᴛɪᴏɴ ᴄᴀɴɴᴏᴛ ʙᴇ ᴜɴᴅᴏɴᴇ.", reply_markup=btn
-    )
+        return await message.reply_text("**THERE ARE NO APPROVED USERS IN THIS CHAT.**")
+    btn = InlineKeyboardMarkup([[InlineKeyboardButton("UNAPPROVE ALL USERS", callback_data="unaproveall")],[InlineKeyboardButton("❌ CLOSE",callback_data="admin_close")]])
+    await message.reply_text("ARE YOU SURE YOU WOULD LIKE TO UNAPPROVE ALL USERS IN THIS CHAT? THIS ACTION CANNOT BE UNDONE.",reply_markup=btn)
 
 @pgram.on_callback_query(filters.regex("unaproveall"))
-@control_user()
+@control_user()                  
 async def _unappall(_, query):
     user_id = query.from_user.id
     chat_id = query.message.chat.id
-    owner = await _.get_chat_member(chat_id, user_id)  # Retrieve group owner info
-    if owner.status != enums.ChatMemberStatus.CREATOR or user_id not in SUPREME_USERS:
-        return await query.answer("ᴏɴʟʏ ᴏᴡɴᴇʀ ᴏғ ᴛʜɪs ɢʀᴏᴜᴘ ᴄᴀɴ ᴅɪsᴀᴘᴘʀᴏᴠᴇ ᴀʟʟ", show_alert=True)
+    m = await _.get_chat_member(chat_id, user_id)
+    if m.status != enums.ChatMemberStatus.OWNER:
+        return await query.answer("ONLY CURRENT OWNER OF THIS GROUP CAN DISAPPROVE ALL",show_alert=True)
     list1 = await approved_users(chat_id)
     SPAM_CHATS.append(chat_id)
-    await query.message.edit_text(
-        "sᴛᴀʀᴛᴇᴅ ᴅɪsᴀᴘᴘʀᴏᴠɪɴɢ ᴀʟʟ ᴜsᴇʀs ɪɴ ᴛʜɪs ᴄʜᴀᴛ. ᴜsᴇ /cancel ᴛᴏ ᴄᴀɴᴄᴇʟ ᴛʜᴇ ᴘʀᴏᴄᴇss."
-    )
+    return await query.message.edit_text("STARTED DISAPPROVING ALL USERS IN THIS CHAT. USE /cancel TO CANCEL THE PROCESS.")
     for user in list1:
         if chat_id not in SPAM_CHATS:
-            break
-        await disapprove_user(chat_id, int(user))
-    await query.message.edit_text("**ᴅɪsᴀᴘᴘʀᴏᴠᴇᴅ ᴀʟʟ ᴜsᴇʀs**")
+            break 
+        await disapprove_user(chat_id,int(user))
+    return await query.message.edit_text("**DISAPPROVED ALL USERS**")
