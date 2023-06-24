@@ -146,15 +146,3 @@ async def unmute_fsub(event):
 
 
 __mod_name__ = "𝐅-sᴜʙ"
-
-# ғᴏʀ ʜᴇʟᴘ ᴍᴇɴᴜ
-
-# """
-from Exon.modules.language import gs
-
-
-def get_help(chat):
-    return gs(chat, "fsub_help")
-
-
-# """
