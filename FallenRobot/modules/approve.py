@@ -1,4 +1,5 @@
 from pyrogram import filters,enums
+from pyrogram.types import Message
 from FallenRobot import pbot as pgram
 from FallenRobot import DRAGONS as SUPREME_USERS
 from pyrogram.enums import ChatMemberStatus as CMS
