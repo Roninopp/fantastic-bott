@@ -88,13 +88,14 @@ async def _disappall(_, message):
     user_id = message.from_user.id
     chat_id = message.chat.id
     m = await _.get_chat_member(chat_id,user_id)
-    if m.status != enums.ChatMemberStatus.OWNER:
+    if m.status == enums.ChatMemberStatus.OWNER:
+        list1 = await approved_users(chat_id)
+        if list1 is None:
+            return await message.reply_text("**ᴛʜᴇʀᴇ ᴀʀᴇɴ'ᴛ ᴀɴʏ ᴀᴘᴘʀᴏᴠᴇᴅ ᴜsᴇʀs ɪɴ ᴛʜɪs ᴄʜᴀᴛ.**")
+        btn = InlineKeyboardMarkup([[InlineKeyboardButton("ᴜɴᴀᴘᴘʀᴏᴠᴇ ᴀʟʟ ᴜsᴇʀs", callback_data="unaproveall")],[InlineKeyboardButton("❌ ᴄʟᴏsᴇ",callback_data="admin_close")]])
+        await message.reply_text("ᴀʀᴇ ʏᴏᴜ sᴜʀᴇ ʏᴏᴜ ᴡᴏᴜʟᴅ ʟɪᴋᴇ ᴛᴏ ᴜɴᴀᴘᴘʀᴏᴠᴇ ᴀʟʟ ᴜsᴇʀs ɪɴ ᴛʜɪs ᴄʜᴀᴛ ? ᴛʜɪs ᴀᴄᴛɪᴏɴ ᴄᴀɴɴᴏᴛ ʙᴇ ᴜɴᴅᴏɴᴇ.",reply_markup=btn)
+    else:
         return await message.reply_text("**ᴏɴʟʏ ᴏᴡɴᴇʀ ᴏғ ᴛʜɪs ɢʀᴏᴜᴘ ᴄᴀɴ ᴅɪsᴀᴘᴘʀᴏᴠᴇ ᴀʟʟ**")
-    list1 = await approved_users(chat_id)
-    if list1 is None:
-        return await message.reply_text("**ᴛʜᴇʀᴇ ᴀʀᴇɴ'ᴛ ᴀɴʏ ᴀᴘᴘʀᴏᴠᴇᴅ ᴜsᴇʀs ɪɴ ᴛʜɪs ᴄʜᴀᴛ.**")
-    btn = InlineKeyboardMarkup([[InlineKeyboardButton("ᴜɴᴀᴘᴘʀᴏᴠᴇ ᴀʟʟ ᴜsᴇʀs", callback_data="unaproveall")],[InlineKeyboardButton("❌ ᴄʟᴏsᴇ",callback_data="admin_close")]])
-    await message.reply_text("ᴀʀᴇ ʏᴏᴜ sᴜʀᴇ ʏᴏᴜ ᴡᴏᴜʟᴅ ʟɪᴋᴇ ᴛᴏ ᴜɴᴀᴘᴘʀᴏᴠᴇ ᴀʟʟ ᴜsᴇʀs ɪɴ ᴛʜɪs ᴄʜᴀᴛ ? ᴛʜɪs ᴀᴄᴛɪᴏɴ ᴄᴀɴɴᴏᴛ ʙᴇ ᴜɴᴅᴏɴᴇ.",reply_markup=btn)
 
 @pgram.on_callback_query(filters.regex("unaproveall"))
 @control_user()                  
