@@ -110,15 +110,9 @@ async def unapproveall_callback(_, q: CallbackQuery):
     chat_id = q.message.chat.id
     approved_people = await approved_users(chat_id)
     user_status = (await q.message.chat.get_member(user_id)).status
-    if user_status not in {ChatMemberStatus.ADMINISTRATOR}:
+    if user_status != ChatMemberStatus.OWNER:
         await q.answer(
-            "You're not even an admin, don't try this explosive shit!",
-            show_alert=True,
-        )
-        return
-    if user_status != "creator":
-        await q.answer(
-            "You're just an admin, not the owner\nStay within your limits!",
+            "You're not even the group owner, don't try this explosive shit!",
             show_alert=True,
         )
         return
@@ -131,4 +125,3 @@ async def unapproveall_callback(_, q: CallbackQuery):
     await q.message.delete()
     await q.answer("Disapproved all users!", show_alert=True)
     return
-    
