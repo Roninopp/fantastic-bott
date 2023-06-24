@@ -16,7 +16,7 @@ from FallenRobot.modules.helper_funcs.extraction import extract_text
 from FallenRobot.modules.helper_funcs.misc import split_message
 from FallenRobot.modules.helper_funcs.string_handling import extract_time
 from FallenRobot.modules.log_channel import loggable
-from FallenRobot.modules.sql.approve_sql import is_approved
+from FallenRobot.modules.mongo.approve_db import is_approved
 from FallenRobot.modules.warns import warn
 
 BLACKLIST_GROUP = 11
