@@ -9,14 +9,29 @@ async def cek_userdata(user_id: int) -> bool:
     return bool(user)
 
 
-async def get_userdata(user_id: int) -> bool:
+async def get_userdata(user_id: int) -> tuple:
     user = await matadb.find_one({"user_id": user_id})
-    return user["username"], user["first_name"], user["last_name"]
+    if user:
+        username = user["username"]
+        first_name = user["first_name"]
+        last_name = user["last_name"]
+    else:
+        username = None
+        first_name = None
+        last_name = None
+
+    return username, first_name, last_name
 
 
 async def add_userdata(user_id: int, username, first_name, last_name):
-    await matadb.update_one({"user_id": user_id}, {"$set": {"username": username, "first_name": first_name, "last_name": last_name}}, upsert=True)
-    await history_db.insert_one({"user_id": user_id, "username": username, "first_name": first_name, "last_name": last_name})
+    await matadb.update_one(
+        {"user_id": user_id},
+        {"$set": {"username": username, "first_name": first_name, "last_name": last_name}},
+        upsert=True,
+    )
+    await history_db.insert_one(
+        {"user_id": user_id, "username": username, "first_name": first_name, "last_name": last_name}
+    )
 
 
 # Enable Mata MissKaty in Selected Chat
