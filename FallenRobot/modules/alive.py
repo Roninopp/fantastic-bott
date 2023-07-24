@@ -11,11 +11,11 @@ from FallenRobot.events import register
 
 edit_time = 5
 """ =======================Neko====================== """
-file1 = "https://telegra.ph/file/da817befa131f7a5f533e.jpg"
-file2 = "https://telegra.ph/file/a048c4fa0bdb2738fff69.jpg"
-file3 = "https://telegra.ph/file/a62029574186f318c6529.jpg"
-file4 = "https://telegra.ph/file/1368985b1a20870949673.jpg"
-file5 = "https://telegra.ph/file/7dcde6edba760c620e91f.jpg"
+file1 = "https://telegra.ph/file/24a2d99321df051ca0e27.jpg"
+file2 = "https://telegra.ph/file/24a2d99321df051ca0e27.jpg"
+file3 = "https://telegra.ph/file/24a2d99321df051ca0e27.jpg"
+file4 = "https://telegra.ph/file/24a2d99321df051ca0e27.jpg"
+file5 = "https://telegra.ph/file/24a2d99321df051ca0e27.jpg"
 """ =======================Neko====================== """
 
 START_TIME = datetime.utcnow()
@@ -54,4 +54,4 @@ async def hmm(yes):
             Button.url("🚑Support", f"https://t.me/{SUPPORT_CHAT}"),
         ]
     ]
-    await neko.send_file(yes.chat_id, file="https://graph.org/file/304a79291fcb8d9ca9cdf.mp4",caption=NekoX, buttons=BUTTON)
+    await neko.send_file(yes.chat_id, file="https://telegra.ph/file/24a2d99321df051ca0e27.jpg",caption=NekoX, buttons=BUTTON)
