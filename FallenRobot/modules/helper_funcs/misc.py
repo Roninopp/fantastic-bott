@@ -1,10 +1,19 @@
 from math import ceil
 from typing import Dict, List
+from uuid import uuid4
 
-from FallenRobot import NO_LOAD
-from telegram import MAX_MESSAGE_LENGTH, Bot, InlineKeyboardButton, ParseMode
+from telegram import (
+    MAX_MESSAGE_LENGTH,
+    Bot,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    InlineQueryResultArticle,
+    InputTextMessageContent,
+    ParseMode,
+)
 from telegram.error import TelegramError
 
+from FallenRobot import NO_LOAD 
 
 class EqInlineKeyboardButton(InlineKeyboardButton):
     def __eq__(self, other):
