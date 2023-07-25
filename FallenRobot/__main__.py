@@ -99,7 +99,7 @@ buttons = [
 ]
 
 HELP_STRINGS = f"""
-[❃](https://telegra.ph/file/c12aededffbc29dd4080a.jpg)* {BOT_NAME} ᴇxᴄʟᴜsɪᴠᴇ ꜰᴇᴀᴛᴜʀᴇs*
+[❃](https://telegra.ph/file/c12aededffbc29dd4080a.jpg) {BOT_NAME}
 
  /help: PM's you this message.
  • /help <module name>: PM's you info about that module.
