@@ -99,7 +99,7 @@ buttons = [
 ]
 
 HELP_STRINGS = f"""
-[Hey](https://telegra.ph/file/c12aededffbc29dd4080a.jpg)
+[❃](https://telegra.ph/file/1392cac1817c44e181aa6.jpg)* {BOT_NAME} ᴇxᴄʟᴜsɪᴠᴇ ꜰᴇᴀᴛᴜʀᴇs*
 
  /help: PM's you this message.
  • /help <module name>: PM's you info about that module.
@@ -109,7 +109,6 @@ HELP_STRINGS = f"""
  • in a group: will redirect you to pm, with all that chat's settings.
 All commands can either be used with / or !.
 And the following:"""
-
 IMPORTED = {}
 MIGRATEABLE = []
 HELPABLE = {}
