@@ -80,8 +80,7 @@ management bot with extra helpful features
 Myself MAKISE KURISU! 
 ★━━━━━━━━━━━━━━━━━━━━★
 ➛ Try The Help Buttons Below To Know My Abilities ××
-[๏](https://telegra.ph/file/a45d2ff56694ee70e2f7d.jpg) *ᴄʟɪᴄᴋ ᴏɴ ᴛʜᴇ ʜᴇʟᴩ ʙᴜᴛᴛᴏɴ ᴛᴏ ɢᴇᴛ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ᴀʙᴏᴜᴛ ᴍʏ ᴍᴏᴅᴜʟᴇs ᴀɴᴅ ᴄᴏᴍᴍᴀɴᴅs.*
-"""
+[๏](https://telegra.ph/file/a45d2ff56694ee70e2f7d.jpg)
 
 buttons = [
     [
@@ -91,7 +90,7 @@ buttons = [
         ),
     ],
     [
-        InlineKeyboardButton(text="Help. & Commands", callback_data="help_back"),
+        InlineKeyboardButton(text="Help & Commands", callback_data="help_back"),
     ],
     [
         InlineKeyboardButton(text="SUPPORT", url=f"https://t.me/{SUPPORT_CHAT}"),
@@ -100,7 +99,7 @@ buttons = [
 ]
 
 HELP_STRINGS = f"""
-[❃](https://telegra.ph/file/1392cac1817c44e181aa6.jpg)* {BOT_NAME} ᴇxᴄʟᴜsɪᴠᴇ ꜰᴇᴀᴛᴜʀᴇs*
+[❃](https://telegra.ph/file/c12aededffbc29dd4080a.jpg)* {BOT_NAME} ᴇxᴄʟᴜsɪᴠᴇ ꜰᴇᴀᴛᴜʀᴇs*
 
  /help: PM's you this message.
  • /help <module name>: PM's you info about that module.
@@ -714,7 +713,7 @@ def main():
                 chat_id=f"@{SUPPORT_CHAT}",
                 photo=START_IMG,
                 caption=f"""
-ㅤ🥀 {BOT_NAME} ɪs ᴀʟɪᴠᴇ ʙᴀʙʏ...
+ㅤ {BOT_NAME} ɪs ᴀʟɪᴠᴇ ʙᴀʙʏ...
 
 ┏•❅────✧❅✦❅✧────❅•┓
 ㅤ★ **ᴘʏᴛʜᴏɴ :** `{y()}`
