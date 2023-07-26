@@ -81,7 +81,7 @@ Myself MAKISE KURISU!
 ★━━━━━━━━━━━━━━━━━━━━★
 ➛ Try The Help Buttons Below To Know My Abilities ××
 [๏](https://telegra.ph/file/a45d2ff56694ee70e2f7d.jpg)
-
+"""
 buttons = [
     [
         InlineKeyboardButton(
@@ -109,6 +109,7 @@ HELP_STRINGS = f"""
  • in a group: will redirect you to pm, with all that chat's settings.
 All commands can either be used with / or !.
 And the following:"""
+
 IMPORTED = {}
 MIGRATEABLE = []
 HELPABLE = {}
