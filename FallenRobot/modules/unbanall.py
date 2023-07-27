@@ -14,9 +14,9 @@ from telethon.tl.types import (
     ChatBannedRights,
 )
 
-from GabiBraunRobot import *
-from GabiBraunRobot import LOGGER
-from GabiBraunRobot.events import register
+from FallenRobot import *
+from FallenRobot import LOGGER
+from FallenRobot.events import register
 
 BOT_ID = 2100096282
 CMD_HELP = "/ !"
