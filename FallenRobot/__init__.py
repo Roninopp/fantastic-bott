@@ -15,7 +15,6 @@ from Python_ARQ import ARQ
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
 
 StartTime = time.time()
-quotly = Quotly()
 
 # enable logging
 logging.basicConfig(
