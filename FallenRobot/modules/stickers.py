@@ -18,12 +18,12 @@ from telegram import (
 from telegram.ext import CallbackContext
 from telegram.utils.helpers import mention_html
 
-from TGN import dispatcher
+from FallenRobot import dispatcher
 # from NekoRobot import tbot as bot
-from TGN import telethn as bot
+from FallenRobot import telethn as bot
 # from NekoRobot.events import register as Cutiepii
-from TGN.events import register as Cutiepii
-from TGN.modules.disable import DisableAbleCommandHandler
+from FallenRobot.events import register as Cutiepii
+from FallenRobot.modules.disable import DisableAbleCommandHandler
 
 combot_stickers_url = "https://combot.org/telegram/stickers?q="
 
