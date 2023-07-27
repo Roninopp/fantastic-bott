@@ -281,7 +281,7 @@ TIGERS = list(TIGERS)
 ELEVATED_USERS_FILE = os.path.join(os.getcwd(), "GabiBraunRobot/elevated_users.json")
 
 # Load at end to ensure all prev variables have been set
-from GabiBraunRobot.modules.helper_funcs.handlers import (
+from FallenRobot.modules.helper_funcs.handlers import (
     CustomCommandHandler,
     CustomMessageHandler,
     CustomRegexHandler,
