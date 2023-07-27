@@ -52,3 +52,4 @@ redis
 python-arq==6.0.3
 ujson
 cachetools
+pyfiglet
