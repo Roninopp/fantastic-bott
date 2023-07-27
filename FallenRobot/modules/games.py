@@ -1,4 +1,4 @@
-from GabiBraunRobot.utils.mongo import db
+from FallenRobot.utils.mongo import db
 import datetime
 from pyrogram.types import *
 import time
@@ -9,10 +9,10 @@ import datetime
 import pymongo
 
 import random
-from GabiBraunRobot import pbot as app
-from GabiBraunRobot import BOT_ID
+from FallenRobot import pbot as app
+from FallenRobot import BOT_ID
 SUPREME_USERS = [1793699293, 1109460378]
-# from GabiBraunRobot.mongo.games_db import *
+# from FallenRobot.mongo.games_db import *
 
 
 # ------ db codes -------
