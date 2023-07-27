@@ -6,13 +6,13 @@ import dateparser
 from pyrogram import filters
 from pyrogram.types import ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup
 
-from GabiBraunRobot import MONGO_DB_URI, pbot
+from FallenRobot import MONGO_DB_URI, pbot
 
 # client = MongoClient(MONGO_DB_URI)
 # dbd = client["shasarobot"]
 # db = dbd
 
-from GabiBraunRobot.utils.mongo import dbd
+from FallenRobot.utils.mongo import dbd
 
 db = dbd
 approved_users = db.approve
