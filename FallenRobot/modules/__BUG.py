@@ -9,7 +9,7 @@ from pyrogram.types import (
 )
 
 from FallenRobot import pbot as Client
-from FallenRobotimport (
+from FallenRobot import (
     OWNER_ID as owner_id,
     OWNER_USERNAME as owner_usn,
     SUPPORT_CHAT as log,
