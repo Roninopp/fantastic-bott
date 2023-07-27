@@ -1,15 +1,15 @@
 # This file is part of YuiGBot (Telegram Bot) 
 # I give credit for this module to YuiGBot.
 
-from GabiBraunRobot.events import register
-from GabiBraunRobot import telethn as tbot
+from FallenRobot.events import register
+from FallenRobot import telethn as tbot
 TMP_DOWNLOAD_DIRECTORY = "tg-File/"
 from telethon import events
 import os
 from PIL import Image
 from datetime import datetime
 from telegraph import Telegraph, upload_file, exceptions
-babe = "GabiBraunRobot"
+babe = "FallenRobot"
 telegraph = Telegraph()
 r = telegraph.create_account(short_name=babe)
 auth_url = r["auth_url"]
