@@ -1,4 +1,4 @@
-from FallenRobot.utils.mongo import db
+from FallenRobot.mongo import db
 import datetime
 from pyrogram.types import *
 import time
