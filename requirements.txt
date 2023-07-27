@@ -53,3 +53,5 @@ python-arq==6.0.3
 ujson
 cachetools
 pyfiglet
+nekos.py==1.1.0
+openai
