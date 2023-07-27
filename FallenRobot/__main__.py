@@ -53,27 +53,27 @@ def get_readable_time(seconds: int) -> str:
 
 
 PM_START_TEXT = """
-â”€â”€â”€â”€ã€Œ [{}](https://te.legra.ph/file/9012a958e07362727ae19.jpg) ã€â”€â”€â”€â”€
-Êœá´‡Ê! {}
-ð™¸ ð™°ðš– êœ°á´€É´á´›á´€êœ±á´›Éªá´„ á´€ êœ±Êœá´€á´…á´á´¡ êœ°ÉªÉ¢Êœá´› á´›Êœá´‡á´á´‡ á´€á´…á´ á´€É´á´„á´‡á´… É¢Ê€á´á´œá´˜ á´á´€É´á´€É¢á´‡á´á´‡É´á´› Ê™á´á´› á´¡Éªá´›Êœ á´€ ÊŸá´á´›êœ± á´êœ° êœ±á´˜á´‡á´„Éªá´€ÊŸÉªá´›Ê.
-âž–âž–âž–âž–âž–âž–âž–âž–âž–âž–âž–âž–âž–
+Fantastic Robot[{}](https://te.legra.ph/file/9012a958e07362727ae19.jpg) ã€â”€â”€â”€â”€
+Hey! {}
+𝙸 𝙰𝚖 ꜰᴀɴᴛᴀꜱᴛɪᴄ ᴀ ꜱʜᴀᴅᴏᴡ ꜰɪɢʜᴛ ᴛʜᴇᴍᴇ ᴀᴅᴠᴀɴᴄᴇᴅ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ ʙᴏᴛ ᴡɪᴛʜ ᴀ ʟᴏᴛꜱ ᴏꜰ ꜱᴘᴇᴄɪᴀʟɪᴛʏ.
+➖➖➖➖➖➖➖➖➖➖➖➖➖
 I have lots of handy features such as:
-â€£ `ã€ŒWarning systemã€`
-â€£ `ã€ŒArtificial intelligenceã€`
-â€£ `ã€ŒFlood control systemã€`
-â€£ `ã€ŒNote keeping systemã€`
-â€£ `ã€ŒFilters keeping systemã€`
-â€£ `ã€Œwithout lag music+videoã€`
-â€£ `ã€ŒApprovals and much moreã€`
-âž–âž–âž–âž–âž–âž–âž–âž–âž–âž–âž–âž–âž–
-âž›**á´›Ê€Ê á´›Êœá´‡ Êœá´‡ÊŸá´˜ Ê™á´œá´›á´›á´É´s Ê™á´‡ÊŸá´á´¡ á´›á´ á´‹É´á´á´¡ á´Ê á´€Ê™ÉªÊŸÉªá´›Éªá´‡s** Ã—Ã—Ã— 
+‣ 「Warning system」
+‣ 「Artificial intelligence」
+‣ 「Flood control system」
+‣ 「Note keeping system」
+‣ 「Filters keeping system」
+‣ 「without lag music+video」
+‣ 「Approvals and much more」
+➖➖➖➖➖➖➖➖➖➖➖➖➖
+➛ᴛʀʏ ᴛʜᴇ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴs ʙᴇʟᴏᴡ ᴛᴏ ᴋɴᴏᴡ ᴍʏ ᴀʙɪʟɪᴛɪᴇs ×××
 """
 
 
 buttons = [
     [
         InlineKeyboardButton(
-            text="âž• ADD FANTASTIC TO YOUR GROUP âž•", url="https://t.me/FANTASTICFIGHTERBOT?startgroup=new"),
+            text="• ADD FANTASTIC TO YOUR GROUP •", url="https://t.me/FANTASTICFIGHTERBOT?startgroup=new"),
     ],
     [                  
                        InlineKeyboardButton(
@@ -89,7 +89,7 @@ InlineKeyboardButton(
                              url=f"https://t.me/serenity_log"),
 
         InlineKeyboardButton(
-              text="ðŸ”“Commands",
+              text="Commands",
               callback_data="help_back"),
         InlineKeyboardButton(
               text="About me",
@@ -107,12 +107,12 @@ InlineKeyboardButton(
 HELP_STRINGS = """
 Hey there! My name is *{}*.
 *Main* commands available:
- â€¢ /help: PM's you this message.
- â€¢ /help <module name>: PM's you info about that module.
- â€¢ /donate: information on how to donate!
- â€¢ /settings:
- â€¢ in PM: will send you your settings for all supported modules.
- â€¢ in a group: will redirect you to pm, with all that chat's settings.
+  /help: PM's you this message.
+  /help <module name>: PM's you info about that module.
+  /donate: information on how to donate!
+  /settings:
+  in PM: will send you your settings for all supported modules.
+  in a group: will redirect you to pm, with all that chat's settings.
 {}
 And the following:
 """.format(
