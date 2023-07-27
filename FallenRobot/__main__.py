@@ -53,18 +53,18 @@ def get_readable_time(seconds: int) -> str:
 
 
 PM_START_TEXT = """
-Fantastic Robot[{}](https://te.legra.ph/file/9012a958e07362727ae19.jpg) ã€â”€â”€â”€â”€
+────「[{Fantastic Robot}](https://te.legra.ph/file/9012a958e07362727ae19.jpg)」────
 Hey! {}
 𝙸 𝙰𝚖 ꜰᴀɴᴛᴀꜱᴛɪᴄ ᴀ ꜱʜᴀᴅᴏᴡ ꜰɪɢʜᴛ ᴛʜᴇᴍᴇ ᴀᴅᴠᴀɴᴄᴇᴅ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ ʙᴏᴛ ᴡɪᴛʜ ᴀ ʟᴏᴛꜱ ᴏꜰ ꜱᴘᴇᴄɪᴀʟɪᴛʏ.
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
 I have lots of handy features such as:
-‣ 「Warning system」
-‣ 「Artificial intelligence」
-‣ 「Flood control system」
-‣ 「Note keeping system」
-‣ 「Filters keeping system」
-‣ 「without lag music+video」
-‣ 「Approvals and much more」
+‣ 「`Warning system`」
+‣ 「`Artificial intelligence`」
+‣ 「`Flood control system`」
+‣ 「`Note keeping system`」
+‣ 「`Filters keeping system`」
+‣ 「`Currency Games System`」
+‣ 「`Approvals and much more`」
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
 ➛ᴛʀʏ ᴛʜᴇ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴs ʙᴇʟᴏᴡ ᴛᴏ ᴋɴᴏᴡ ᴍʏ ᴀʙɪʟɪᴛɪᴇs ×××
 """
