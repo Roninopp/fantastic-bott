@@ -38,6 +38,7 @@ if ENV:
     CASH_API_KEY = os.environ.get("CASH_API_KEY", None)
     DB_URI = os.environ.get("DATABASE_URL")
     DONATION_LINK = os.environ.get("DONATION_LINK")
+    PORT = int(os.environ.get("PORT", 5000))
     DEL_CMDS = bool(os.environ.get("DEL_CMDS", False))
     EVENT_LOGS = os.environ.get("EVENT_LOGS", None)
     INFOPIC = bool(os.environ.get("INFOPIC", "True"))
@@ -94,6 +95,8 @@ else:
     ALLOW_EXCL = Config.ALLOW_EXCL
     CASH_API_KEY = Config.CASH_API_KEY
     DB_URI = Config.DATABASE_URL
+    DONATION_LINK = os.environ.get("DONATION_LINK")
+    PORT = int(os.environ.get("PORT", 5000))
     DEL_CMDS = Config.DEL_CMDS
     EVENT_LOGS = Config.EVENT_LOGS
     INFOPIC = Config.INFOPIC
