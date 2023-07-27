@@ -122,7 +122,7 @@ if ENV:
         raise Exception("Your REMINDER_LIMIT env variable is not a valid integer.")
 
 else:
-    from GabiBraunRobot.config import Development as Config
+    from FallenRobot.config import Development as Config
 
     TOKEN = Config.TOKEN
 
@@ -278,7 +278,7 @@ DEV_USERS = list(DEV_USERS)
 WOLVES = list(WOLVES)
 DEMONS = list(DEMONS)
 TIGERS = list(TIGERS)
-ELEVATED_USERS_FILE = os.path.join(os.getcwd(), "GabiBraunRobot/elevated_users.json")
+ELEVATED_USERS_FILE = os.path.join(os.getcwd(), "FallenRobot/elevated_users.json")
 
 # Load at end to ensure all prev variables have been set
 from FallenRobot.modules.helper_funcs.handlers import (
