@@ -1,6 +1,6 @@
 import nekos
 import requests
-from GabiBraunRobot import dispatcher
+from FallenRobot import dispatcher
 from telegram.ext import CommandHandler
 
 url_sfw = "https://api.waifu.pics/sfw/" 
@@ -445,8 +445,5 @@ __help__ = """
    ➢ `/poke`
    ➢ `/dance`
    ➢ `/cringe`
-   SOME EXTRA FUN COMMAND 𖣁
-   ➢ /bounty or /wanted try yourself
-
 """
 
