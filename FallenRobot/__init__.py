@@ -4,7 +4,7 @@ import sys
 import time
 import httpx
 
-import spamwatch
+
 import telegram.ext as tg
 from redis import StrictRedis
 from pyrogram.types import Message
