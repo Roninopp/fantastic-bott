@@ -1,4 +1,4 @@
-from GabiBraunRobot import pbot as pgram, BOT_USERNAME
+from FallenRobot import pbot as pgram, BOT_USERNAME
 from pyrogram import filters
 from pyrogram.types import (
     InlineQueryResultArticle, InputTextMessageContent,
