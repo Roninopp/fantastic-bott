@@ -5,26 +5,26 @@ import time
 from contextlib import suppress
 from functools import partial
 
-import GabiBraunRobot
-import GabiBraunRobot.modules.sql.welcome_sql as sql
-import GabiBraunRobot.modules.sql.global_bans_sql as gban_sql
-from GabiBraunRobot import (
+import FallenRobot
+import FallenRobot.modules.sql.welcome_sql as sql
+import FallenRobot.modules.sql.global_bans_sql as gban_sql
+from FallenRobot import (
     DEMONS, DEV_USERS, DRAGONS, JOIN_LOGGER, LOGGER, OWNER_IMG, DRAGON_IMG, WOLVE_IMG,
     OWNER_ID, TIGERS, WOLVES, dispatcher, sw, DEV_IMG, TIGER_IMG, DEMON_IMG,
 )
-from GabiBraunRobot.modules.helper_funcs.chat_status import (
+from FallenRobot.modules.helper_funcs.chat_status import (
     is_user_ban_protected, user_admin, connection_status,
 )
-from GabiBraunRobot.modules.helper_funcs.misc import (
+from FallenRobot.modules.helper_funcs.misc import (
     build_keyboard,
     revert_buttons,
 )
-from GabiBraunRobot.modules.helper_funcs.msg_types import get_welcome_type
-from GabiBraunRobot.modules.helper_funcs.string_handling import (
+from FallenRobot.modules.helper_funcs.msg_types import get_welcome_type
+from FallenRobot.modules.helper_funcs.string_handling import (
     escape_invalid_curly_brackets, markdown_parser,
 )
-from GabiBraunRobot.modules.log_channel import loggable
-from GabiBraunRobot.modules.sql.global_bans_sql import is_user_gbanned
+from FallenRobot.modules.log_channel import loggable
+from FallenRobot.modules.sql.global_bans_sql import is_user_gbanned
 from telegram import (
     ChatPermissions, InlineKeyboardButton,
     InlineKeyboardMarkup, ParseMode, Update,
