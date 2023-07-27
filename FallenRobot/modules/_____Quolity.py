@@ -12,7 +12,7 @@ from telethon.tl.custom import Message
 from telethon.tl.types import MessageService
 from telethon.utils import get_display_name, get_peer_id
 
-from GabiBraunRobot.events import register
+from FallenRobot.events import register
 
 ##api
 
