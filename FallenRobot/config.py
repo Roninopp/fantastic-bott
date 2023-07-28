@@ -2,38 +2,38 @@ class Config(object):
     LOGGER = True
 
   # Get this value from my.telegram.org/apps
-    API_ID = 14980683
-    API_HASH = "5bc2e9cd58092119e741c1f2b545c1bf"
+    API_ID = ""
+    API_HASH = ""
 
-    CASH_API_KEY = "VQ45LFKYPMJ2LKIU"  # Get this value for currency converter from https://www.alphavantage.co/support/#api-key
+    CASH_API_KEY = ""  # Get this value for currency converter from https://www.alphavantage.co/support/#api-key
 
-    DATABASE_URL = "postgres://wiixblya:65U0HyJfeh7pGCMr9grtxOlOlWaTxx6h@lucky.db.elephantsql.com/wiixblya"  # A sql database url from elephantsql.com
+    DATABASE_URL = ""  # A sql database url from elephantsql.com
 
-    EVENT_LOGS = (-1001739283144)  # Event logs channel to note down important bot level events
+    EVENT_LOGS = ()  # Event logs channel to note down important bot level events
     
-    MONGO_DB = "Shikimori"
+    MONGO_DB = ""
 
-    ERROR_LOGS = -1001164614215
+    ERROR_LOGS = ()
 
-    AI_API_KEY = "SOME1HING_privet_990022"
+    AI_API_KEY = ""
 
-    MONGO_DB_URI = "mongodb+srv://eren:eren@cluster0.yxuwg4r.mongodb.net/?retryWrites=true&w=majority"  # Get ths value from cloud.mongodb.com
+    MONGO_DB_URI = ""  # Get ths value from cloud.mongodb.com
 
   # Telegraph link of the image which will be shown at start command.
-    START_IMG = "https://graph.org/file/aa18cfd060aa74f1b7634.jpg"
+    START_IMG = ""
 
-    SUPPORT_CHAT = "WoFBotsSupport"  # Your Telegram support group chat username where your users will go and bother you
+    SUPPORT_CHAT = ""  # Your Telegram support group chat username where your users will go and bother you
 
-    TOKEN = "5714818526:AAF0Jdauk9Mrb44bEypi0LzQiNIza-ojb68"  # Get bot token from @BotFather on Telegram
+    TOKEN = ""  # Get bot token from @BotFather on Telegram
 
-    TIME_API_KEY = "65G8ZKE6050P"  # Get this value from https://timezonedb.com/api
+    TIME_API_KEY = ""  # Get this value from https://timezonedb.com/api
 
-    OWNER_ID = 5667156680  # User id of your telegram account (Must be integer)
+    OWNER_ID = 1793699293  # User id of your telegram account (Must be integer)
 
   # Optional fields
     BL_CHATS = []  # List of groups that you want blacklisted.
     DRAGONS = []  # User id of sudo users
-    DEV_USERS = []  # User id of dev users
+    DEV_USERS = [6171176459]  # User id of dev users
     DEMONS = []  # User id of support users
     TIGERS = []  # User id of tiger users
     WOLVES = []  # User id of whitelist users
