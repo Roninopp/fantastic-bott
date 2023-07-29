@@ -12,9 +12,9 @@ from telegram.utils.helpers import mention_html
 from pyrogram import filters
 from bs4 import BeautifulSoup
 
-from GabiBraunRobot.modules.helper_funcs.alternate import typing_action
-from GabiBraunRobot.modules.disable import DisableAbleCommandHandler
-from GabiBraunRobot import OWNER_ID, REDIS, dispatcher, pbot
+from FallenRobot.modules.helper_funcs.alternate import typing_action
+from FallenRobot.modules.disable import DisableAbleCommandHandler
+from FallenRobot import OWNER_ID, REDIS, dispatcher, pbot
 
 
 kaizoku_btn = "Kaizoku ☠️"
