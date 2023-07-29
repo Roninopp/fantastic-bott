@@ -6,7 +6,7 @@ from jikanpy.exceptions import APIException
 from telegram import Message, Chat, User, ParseMode, Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import CallbackContext, CommandHandler, Filters
 
-from GabiBraunRobot import dispatcher
+from FallenRobot import dispatcher
 
 jikan = Jikan()
 
