@@ -12,7 +12,7 @@ from pyrogram.types import (
 )
 
 # REPO => Your Bots File Name
-from GabiBraunRobot import pbot
+from FallenRobot import pbot
 
 # Function to retrieve Pokemon information from the API
 def get_pokemon_info(name_or_id):
