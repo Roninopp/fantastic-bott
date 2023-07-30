@@ -422,7 +422,7 @@ async def replied_user(draw, tot, text, maxlength, title):
             space += textfont.getsize(letter)[0]
 
 
-@tbot.on(events.NewMessage(pattern="^[!/]q$"))
+@pbot.on(events.NewMessage(pattern="^[!/]q$"))
 async def q(event):
     if event.fwd_from:
         return
