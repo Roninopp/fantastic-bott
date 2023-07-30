@@ -10,7 +10,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 from telethon import events
 from telethon.tl import functions, types
 
-from NekoRobot import tbot
+from FallenRobot import pbot
 
 COLORS = [
     "#F07975",
@@ -444,7 +444,7 @@ async def q(event):
     os.remove("sticker.webp")
 
 
-__mod_name__ = "Quotly"
+__mod_name__ = "Qᴜᴏʟᴛʏ"
 
 __help__ = """
 • /q *:* To quote a message.
