@@ -7,8 +7,8 @@ import time
 import uuid
 from io import BytesIO
 
-import GabiBraunRobot.modules.sql.feds_sql as sql
-from GabiBraunRobot import (
+import FallenRobot.modules.sql.feds_sql as sql
+from FallenRobot import (
     EVENT_LOGS,
     LOGGER,
     SUPPORT_CHAT,
@@ -18,15 +18,15 @@ from GabiBraunRobot import (
     WOLVES,
     dispatcher,
 )
-from GabiBraunRobot.modules.disable import DisableAbleCommandHandler
-from GabiBraunRobot.modules.helper_funcs.alternate import send_message
-from GabiBraunRobot.modules.helper_funcs.chat_status import is_user_admin
-from GabiBraunRobot.modules.helper_funcs.extraction import (
+from FallenRobot.modules.disable import DisableAbleCommandHandler
+from FallenRobot.modules.helper_funcs.alternate import send_message
+from FallenRobot.modules.helper_funcs.chat_status import is_user_admin
+from FallenRobot.modules.helper_funcs.extraction import (
     extract_unt_fedban,
     extract_user,
     extract_user_fban,
 )
-from GabiBraunRobot.modules.helper_funcs.string_handling import markdown_parser
+from FallenRobot.modules.helper_funcs.string_handling import markdown_parser
 from telegram import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
