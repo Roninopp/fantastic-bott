@@ -1,8 +1,8 @@
 import ast
 import threading
 
-from GabiBraunRobot import dispatcher
-from GabiBraunRobot.modules.sql import BASE, SESSION
+from FallenRobot import dispatcher
+from FallenRobot.modules.sql import BASE, SESSION
 from sqlalchemy import Boolean, Column, Integer, String, UnicodeText
 from telegram.error import BadRequest, Unauthorized
 from sqlalchemy.sql.sqltypes import BigInteger
