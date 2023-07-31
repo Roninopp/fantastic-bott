@@ -27,8 +27,8 @@ from FallenRobot.modules.helper_funcs.extraction import (
     extract_user,
     extract_user_and_text,
 )
-from GabiBraunRobot.modules.log_channel import loggable
-from GabiBraunRobot.modules.helper_funcs.alternate import send_message
+from FallenRobot.modules.log_channel import loggable
+from FallenRobot.modules.helper_funcs.alternate import send_message
 
 
 @connection_status
