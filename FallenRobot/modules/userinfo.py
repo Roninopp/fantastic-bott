@@ -254,19 +254,27 @@ def info(update: Update, context: CallbackContext):
         userhp = hpmanager(user)
         text += f"\n\n<b>ʜᴇᴀʟᴛʜ:</b> <code>{userhp['earnedhp']}/{userhp['totalhp']}</code>\n[<i>{make_bar(int(userhp['percentage']))} </i>{userhp['percentage']}%]"
 
-    if user.id == OWNER_ID:
-        text += "\n\nᴛʜᴇ ᴅɪsᴀsᴛᴇʀ ʟᴇᴠᴇʟ ᴏғ ᴛʜɪs ᴜsᴇʀ ɪs <b>𝐅𝐚𝐧𝐭𝐚𝐬𝐭𝐢𝐜 𝐊𝐢𝐧𝐠⚡</b>.\n"
-    elif user.id in DEV_USERS:
-        text += "\n\nᴛʜɪs ᴜsᴇʀ ɪs ᴀ ᴍᴇᴍʙᴇʀ ᴏғ <b>𝐅𝐚𝐧𝐭𝐚𝐬𝐭𝐢𝐜 𝐃𝐞𝐯💨</b>.\n"
-    elif user.id in DRAGONS:
-        text += "\n\nᴛʜᴇ ᴅɪsᴀsᴛᴇʀ ʟᴇᴠᴇʟ ᴏғ ᴛʜɪs ᴜsᴇʀ ɪs <b>𝐅𝐚𝐧𝐭𝐚𝐬𝐭𝐢𝐜 𝐗 𝐃𝐫𝐚𝐠𝐨𝐧</b>.\n"
-    elif user.id in DEMONS:
-        text += "\n\nᴛʜᴇ ᴅɪsᴀsᴛᴇʀ ʟᴇᴠᴇʟ ᴏғ ᴛʜɪs ᴜsᴇʀ ɪs <b>𝐅𝐚𝐧𝐭𝐚𝐬𝐭𝐢𝐜 𝐗 𝐃𝐞𝐦𝐨𝐧 🧜‍♂️</b>.\n"
-    elif user.id in TIGERS:
-        text += "\n\nᴛʜᴇ ᴅɪsᴀsᴛᴇʀ ʟᴇᴠᴇʟ ᴏғ ᴛʜɪs ᴜsᴇʀ ɪs <b>ᴛɪɢᴇ</b>.\n"
-    elif user.id in WOLVES:
-        text += "\n\nᴛʜᴇ ᴅɪsᴀsᴛᴇʀ ʟᴇᴠᴇʟ ᴏғ ᴛʜɪs ᴜsᴇʀ ɪs <b>𝙁𝘼𝙉𝙏𝘼𝙎𝙏𝙄𝘾 𝙓 𝙒𝙊𝙇𝙁</b>.\n"
+    disaster_level_present = False
 
+    if user.id == OWNER_ID:
+        text += f"\n\nThis person is the <b>`𝐊𝐈𝐍𝐆⚔`</b> here."
+        disaster_level_present = True
+    elif user.id in DEV_USERS:
+        text += f"\n\nThis user is a <b>[𝙵𝙰𝙽𝚃𝙰𝚂𝚃𝙸𝙲×𝙵𝙰𝙽]</b>, Member of Samurai Network."
+        disaster_level_present = True
+    elif user.id in DRAGONS:
+        text += f"\n\nThe Disaster level of this person is <b>Fantastic X Dragon</b>."
+        disaster_level_present = True
+    elif user.id in DEMONS:
+        text += f"\n\nThe Disaster level of this person is <b>𝘍𝘢𝘯𝘵𝘢𝘴𝘵𝘪𝘤 𝘟 𝘋𝘦𝘮𝘰𝘯</b>."
+        disaster_level_present = True
+    elif user.id in TIGERS:
+        text += f"\n\nThe Disaster level of this person is <b>𝘍𝘢𝘯𝘵𝘢𝘴𝘵𝘪𝘤 𝘟 𝘞𝘰𝘭𝘷𝘦𝘴</b>."
+        disaster_level_present = True
+    elif user.id in WOLVES:
+        text += f"\n\nThe Disaster level of this person is <b>𝘍𝘳𝘪𝘦𝘯𝘥</b>."
+        disaster_level_present = True
+        
     if disaster_level_present:
         text += ' [<a href="https://t.me/Samurai_Bot_Updates/24">DISASTERS</a>]'.format(
             bot.username,
