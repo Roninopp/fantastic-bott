@@ -6,11 +6,11 @@ from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler, 
     Filters, run_async, MessageHandler
 from telegram.utils.helpers import mention_html
 
-from GabiBraunRobot import DRAGONS, dispatcher, TOKEN, LOGGER
-from GabiBraunRobot.modules.disable import DisableAbleCommandHandler
-from GabiBraunRobot.modules.sql import pin_sql
-from GabiBraunRobot.pyrogramee.pluginshelper import member_permissions
-from GabiBraunRobot.modules.helper_funcs.chat_status import (
+from FallenRobot import DRAGONS, dispatcher, TOKEN, LOGGER
+from FallenRobot.modules.disable import DisableAbleCommandHandler
+from FallenRobot.modules.sql import pin_sql
+from FallenRobot.pyrogramee.pluginshelper import member_permissions
+from FallenRobot.modules.helper_funcs.chat_status import (
     bot_admin,
     can_pin,
     can_promote,
@@ -22,8 +22,8 @@ from GabiBraunRobot.modules.helper_funcs.chat_status import (
     bot_can_change_info,
     user_can_change_info,
 )
-from GabiBraunRobot.modules.helper_funcs.admin_perms import can_manage_voice_chats
-from GabiBraunRobot.modules.helper_funcs.extraction import (
+from FallenRobot.modules.helper_funcs.admin_perms import can_manage_voice_chats
+from FallenRobot.modules.helper_funcs.extraction import (
     extract_user,
     extract_user_and_text,
 )
