@@ -57,7 +57,7 @@ class Config(object):
     STRICT_GBAN = True
     TEMP_DOWNLOAD_DIRECTORY = "./"
     WORKERS = (8)
-    BAN_STICKER = 
+    BAN_STICKER = "fee"
 
 class Production(Config):
     LOGGER = True
