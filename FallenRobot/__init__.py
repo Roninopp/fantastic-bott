@@ -199,6 +199,7 @@ else:
 
 DRAGONS.add(OWNER_ID)
 DEV_USERS.add(OWNER_ID)
+BOT_USERNAME = "FANTASTICFIGHTERBOT"
 
 REDIS = StrictRedis.from_url(REDIS_URL,decode_responses=True)
 
