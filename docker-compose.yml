@@ -1,0 +1,14 @@
+version: "3.9"
+
+service:
+  fantastic:
+    build: .
+    image: fantastic:${TAG} 
+    container_name: fantastic
+    network_mode: host
+    pull_policy: never
+
+networks:
+  default: 
+    external: true
+    name: host
