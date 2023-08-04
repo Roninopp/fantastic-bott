@@ -12,7 +12,7 @@ class Config(object):
     EVENT_LOGS = (-1001709251588)  # Event logs channel to note down important bot level events
     JOIN_LOGGER = (-1001709251588)
     OPENWEATHERMAP_ID = 1212
-    MONGO_DB = "mongodb+srv://emilia:qaz000@cluster0.6i3dazk.mongodb.net/?retryWrites=true&w=majority"
+    MONGO_DB = "mongodb+srv://gabimaru:gabi123@cluster0.p8qlfbe.mongodb.net/?retryWrites=true&w=majority"
     REDIS_URL = "redis://:dplEdSkGkGs0WCs7J2XdGRSLgQL0HHGT@redis-10625.c99.us-east-1-4.ec2.cloud.redislabs.com:10625"
     DONATION_LINK = "ewfewfe"
     ERROR_LOGS = (-1001709251588)
@@ -21,7 +21,7 @@ class Config(object):
     ARQ_API_KEY = ""
     ARQ_API_URL = "gay"
 
-    MONGO_DB_URI = "mongodb+srv://emilia:qaz000@cluster0.6i3dazk.mongodb.net/?retryWrites=true&w=majority"  # Get ths value from cloud.mongodb.com
+    MONGO_DB_URI = "mongodb+srv://gabimaru:gabi123@cluster0.p8qlfbe.mongodb.net/?retryWrites=true&w=majority"  # Get ths value from cloud.mongodb.com
 
   # Telegraph link of the image which will be shown at start command.
     START_IMG = "https://telegra.ph/file/9cb02986d9999d2fecf82.jpg"
