@@ -154,7 +154,13 @@ else:
         TIGERS = set(int(x) for x in Config.TIGERS or [])
     except ValueError:
         raise Exception("Your tiger users list does not contain valid integers.")
-
+        
+    OWNER_IMG = os.environ.get("OWNER_IMG", None)
+    DEV_IMG = os.environ.get("DEV_IMG", None)
+    DRAGON_IMG = os.environ.get("DRAGON_IMG", None)
+    DEMON_IMG = os.environ.get("DEMON_IMG", None)
+    TIGER_IMG = os.environ.get("TIGER_IMG", None)
+    WOLVE_IMG = os.environ.get("WOLVE_IMG", None) 
     EVENT_LOGS = Config.EVENT_LOGS
     WEBHOOK = Config.WEBHOOK
     URL = Config.URL
