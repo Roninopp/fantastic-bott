@@ -28,7 +28,7 @@ class Config(object):
 
     SUPPORT_CHAT = "samurai_botsupport"  # Your Telegram support group chat username where your users will go and bother you
 
-    TOKEN = "2100096282:AAF02uGaMkBtBS9vGMm0E0ltKNsdpYi7des2100096282:AAF02uGaMkBtBS9vGMm0E0ltKNsdpYi7des"  # Get bot token from @BotFather on Telegram
+    TOKEN = "2100096282:AAF02uGaMkBtBS9vGMm0E0ltKNsdpYi7des"  # Get bot token from @BotFather on Telegram
 
     TIME_API_KEY = ""  # Get this value from https://timezonedb.com/api
     SPAMWATCH_SUPPORT_CHAT = "effr"
