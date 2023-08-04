@@ -18,6 +18,7 @@ class Config(object):
     ERROR_LOGS = (-1001709251588)
   
     AI_API_KEY = ""
+    ARQ_API_KEY = ""
     ARQ_API_URL = "gay"
 
     MONGO_DB_URI = "mongodb+srv://gabimaru:gabi123@cluster0.p8qlfbe.mongodb.net/?retryWrites=true&w=majority"  # Get ths value from cloud.mongodb.com
