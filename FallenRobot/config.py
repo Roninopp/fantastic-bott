@@ -4,20 +4,21 @@ class Config(object):
   # Get this value from my.telegram.org/apps
     API_ID = "7217645"
     API_HASH = "78ba6352dd5cdc166fdef5aa84ba7c67"
-
+    VIRUS_API_KEY = "rffr"
     CASH_API_KEY = ""  # Get this value for currency converter from https://www.alphavantage.co/support/#api-key
-
+    BOT_ID = 2291
     DATABASE_URL = "postgres://ncttyari:DvjEut7QzjPAaTC59QkgBGyO8361YmiU@trumpet.db.elephantsql.com/ncttyari"  # A sql database url from elephantsql.com
-
+    SQLALCHEMY_DATABASE_URI = "postgres://ncttyari:DvjEut7QzjPAaTC59QkgBGyO8361YmiU@trumpet.db.elephantsql.com/ncttyari"
     EVENT_LOGS = (-1001709251588)  # Event logs channel to note down important bot level events
     JOIN_LOGGER = (-1001709251588)
-    
+    OPENWEATHERMAP_ID = 1212
     MONGO_DB = "mongodb+srv://gabimaru:gabi123@cluster0.p8qlfbe.mongodb.net/?retryWrites=true&w=majority"
     REDIS_URL = "redis://:dplEdSkGkGs0WCs7J2XdGRSLgQL0HHGT@redis-10625.c99.us-east-1-4.ec2.cloud.redislabs.com:10625"
-
+    DONATION_LINK = "ewfewfe"
     ERROR_LOGS = (-1001709251588)
-
+  
     AI_API_KEY = ""
+    ARQ_API_URL = "gay"
 
     MONGO_DB_URI = "mongodb+srv://gabimaru:gabi123@cluster0.p8qlfbe.mongodb.net/?retryWrites=true&w=majority"  # Get ths value from cloud.mongodb.com
 
@@ -29,10 +30,14 @@ class Config(object):
     TOKEN = "2100096282:AAF02uGaMkBtBS9vGMm0E0ltKNsdpYi7des2100096282:AAF02uGaMkBtBS9vGMm0E0ltKNsdpYi7des"  # Get bot token from @BotFather on Telegram
 
     TIME_API_KEY = ""  # Get this value from https://timezonedb.com/api
-
+    SPAMWATCH_SUPPORT_CHAT = "effr"
+    SPAMWATCH_API = "wdwd"
     OWNER_ID = 1793699293  # User id of your telegram account (Must be integer)
     OWNER_USERNAME = "DUSHMANxRONIN"
-
+    WEBHOOK = False
+    URL = "api.telegram.org"
+    PORT = 5000
+    WALL_API = "qrew"
     
   # Optional fields
     BL_CHATS = []  # List of groups that you want blacklisted.
@@ -46,11 +51,13 @@ class Config(object):
     ALLOW_EXCL = True
     DEL_CMDS = True
     INFOPIC = True
+    CERT_PATH = "sasa"
     LOAD = []
     NO_LOAD = []
     STRICT_GBAN = True
     TEMP_DOWNLOAD_DIRECTORY = "./"
     WORKERS = (8)
+    BAN_STICKER = 
 
 class Production(Config):
     LOGGER = True
