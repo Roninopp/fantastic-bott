@@ -3,7 +3,7 @@ import sys
 from motor import motor_asyncio
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
-from FallenRobot import MONGO_DB_URI
+from FallenRobot import MONGO_DB_URI, LOGGER
 from FallenRobot.conf import get_int_key, get_str_key
 
 
@@ -22,4 +22,4 @@ motor_db = x["FallenRobot"]
 try:
     asyncio.get_event_loop().run_until_complete(motor.server_info())
 except ServerSelectionTimeoutError:
-    sys.exit(log.critical("Can't connect to mongodb! Exiting..."))
+    sys.exit(LOGGER.critical("Can't connect to mongodb! Exiting..."))
