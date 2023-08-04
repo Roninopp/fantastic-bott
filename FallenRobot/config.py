@@ -2,29 +2,29 @@ class Config(object):
     LOGGER = True
 
   # Get this value from my.telegram.org/apps
-    API_ID = ""
-    API_HASH = ""
+    API_ID = "7217645"
+    API_HASH = "78ba6352dd5cdc166fdef5aa84ba7c67"
 
     CASH_API_KEY = ""  # Get this value for currency converter from https://www.alphavantage.co/support/#api-key
 
-    DATABASE_URL = ""  # A sql database url from elephantsql.com
+    DATABASE_URL = "postgres://ncttyari:DvjEut7QzjPAaTC59QkgBGyO8361YmiU@trumpet.db.elephantsql.com/ncttyari"  # A sql database url from elephantsql.com
 
-    EVENT_LOGS = ()  # Event logs channel to note down important bot level events
+    EVENT_LOGS = (-1001709251588)  # Event logs channel to note down important bot level events
     
-    MONGO_DB = ""
+    MONGO_DB = "mongodb+srv://gabimaru:gabi123@cluster0.p8qlfbe.mongodb.net/?retryWrites=true&w=majority"
 
-    ERROR_LOGS = ()
+    ERROR_LOGS = (-1001709251588)
 
     AI_API_KEY = ""
 
-    MONGO_DB_URI = ""  # Get ths value from cloud.mongodb.com
+    MONGO_DB_URI = "mongodb+srv://gabimaru:gabi123@cluster0.p8qlfbe.mongodb.net/?retryWrites=true&w=majority"  # Get ths value from cloud.mongodb.com
 
   # Telegraph link of the image which will be shown at start command.
-    START_IMG = ""
+    START_IMG = "https://telegra.ph/file/9cb02986d9999d2fecf82.jpg"
 
-    SUPPORT_CHAT = ""  # Your Telegram support group chat username where your users will go and bother you
+    SUPPORT_CHAT = "samurai_botsupport"  # Your Telegram support group chat username where your users will go and bother you
 
-    TOKEN = ""  # Get bot token from @BotFather on Telegram
+    TOKEN = "2100096282:AAF02uGaMkBtBS9vGMm0E0ltKNsdpYi7des2100096282:AAF02uGaMkBtBS9vGMm0E0ltKNsdpYi7des"  # Get bot token from @BotFather on Telegram
 
     TIME_API_KEY = ""  # Get this value from https://timezonedb.com/api
 
