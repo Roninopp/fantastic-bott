@@ -12,6 +12,7 @@ class Config(object):
     EVENT_LOGS = (-1001709251588)  # Event logs channel to note down important bot level events
     
     MONGO_DB = "mongodb+srv://gabimaru:gabi123@cluster0.p8qlfbe.mongodb.net/?retryWrites=true&w=majority"
+    REDIS_URL = "redis://:dplEdSkGkGs0WCs7J2XdGRSLgQL0HHGT@redis-10625.c99.us-east-1-4.ec2.cloud.redislabs.com:10625"
 
     ERROR_LOGS = (-1001709251588)
 
