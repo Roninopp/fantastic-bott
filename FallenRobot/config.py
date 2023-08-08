@@ -14,6 +14,7 @@ class Config(object):
     OPENWEATHERMAP_ID = 1212
     MONGO_DB = "mongodb+srv://gabimaru:gabi123@cluster0.p8qlfbe.mongodb.net/?retryWrites=true&w=majority"
     REDIS_URL = "redis://:dplEdSkGkGs0WCs7J2XdGRSLgQL0HHGT@redis-10625.c99.us-east-1-4.ec2.cloud.redislabs.com:10625"
+    OPENAI_API_KEY = "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"
     DONATION_LINK = "ewfewfe"
     ERROR_LOGS = (-1001709251588)
   
