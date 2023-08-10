@@ -1,6 +1,6 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
-from FallenRobot import app
+from FallenRobot import pbot as app
 import json
 import time
 import random
