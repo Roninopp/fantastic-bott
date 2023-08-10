@@ -57,5 +57,3 @@ pyfiglet
 nekos.py==1.1.0
 openai
 fontTools
-time
-random
