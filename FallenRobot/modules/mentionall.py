@@ -11,7 +11,7 @@ from FallenRobot import telethn as Client
 
 spam_chats = []
 
-@Client.on(events.NewMessage(pattern="^/all ?(.*)"))
+@Client.on(events.NewMessage(pattern="^/utag ?(.*)"))
 async def mentionall(event):
   chat_id = event.chat_id
   if event.is_private:
