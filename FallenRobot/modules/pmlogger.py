@@ -5,6 +5,6 @@ from FallenRobot import pbot as app
 @app.on_message(filters.command(["start","help"]) & filters.private)
 async def shity_af_stuff(client : Client,message : Message) :
     try : 
-        await client.send_message(-1001709251588,f"{message.from_user.mention} #FANTASTIC_BOT New User Just Started The Bot In Pm")
+        await client.send_message(-1001966188512,f"{message.from_user.mention} #FANTASTIC_BOT New User Just Started The Bot In Pm")
     except Exception :
         pass
