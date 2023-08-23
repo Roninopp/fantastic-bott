@@ -9,8 +9,8 @@ class Config(object):
     BOT_ID = 2291
     DATABASE_URL = "postgres://ncttyari:DvjEut7QzjPAaTC59QkgBGyO8361YmiU@trumpet.db.elephantsql.com/ncttyari"  # A sql database url from elephantsql.com
     SQLALCHEMY_DATABASE_URI = "postgres://ncttyari:DvjEut7QzjPAaTC59QkgBGyO8361YmiU@trumpet.db.elephantsql.com/ncttyari"
-    EVENT_LOGS = (-1001709251588)  # Event logs channel to note down important bot level events
-    JOIN_LOGGER = (-1001709251588)
+    EVENT_LOGS = (-1001966188512)  # Event logs channel to note down important bot level events
+    JOIN_LOGGER = (-1001966188512)
     OPENWEATHERMAP_ID = 1212
     MONGO_DB = "mongodb+srv://gabimaru:gabi123@cluster0.p8qlfbe.mongodb.net/?retryWrites=true&w=majority"
     REDIS_URL = "redis://:dplEdSkGkGs0WCs7J2XdGRSLgQL0HHGT@redis-10625.c99.us-east-1-4.ec2.cloud.redislabs.com:10625"
