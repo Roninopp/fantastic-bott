@@ -85,7 +85,7 @@ buttons = [
     [
 InlineKeyboardButton(
                              text="BOT-LOGS",
-                             url=f"https://t.me/serenity_log"),
+                             url=f"https://t.me/Samurai_logss"),
 
         InlineKeyboardButton(
               text="Commands",
