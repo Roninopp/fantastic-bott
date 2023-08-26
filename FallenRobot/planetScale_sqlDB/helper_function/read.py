@@ -1,6 +1,6 @@
 import threading
-from Powers import con
-from Powers.planetScale_sqlDB.playerDB import check_user
+from FallenRobot import con
+from FallenRobot.planetScale_sqlDB.playerDB import check_user
 import json
 
 
