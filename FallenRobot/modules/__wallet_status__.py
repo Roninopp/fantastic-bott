@@ -1,4 +1,4 @@
-from FallenRobot.bot_class import Gojo as app
+from FallenRobot import pbot as app
 from FallenRobot.planetScale_sqlDB.helper_functions.read import read
 from pyrogram import Client, filters
 from pyrogram.types import Message
