@@ -1,5 +1,5 @@
 # Written by github.com/krrish557
-from FallenRobot.bot_class import Gojo as app
+from FallenRobot import pbot as app
 from pyrogram import filters
 from pyrogram.types import Message
 from FallenRobot.planetScale_sqlDB.playerDB import check_user
