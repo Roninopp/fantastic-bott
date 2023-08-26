@@ -1,5 +1,5 @@
 import threading
-from Powers.planetScale_sqlDB import con
+from FallenRobot.planetScale_sqlDB import con
 
 
 class playerDataBase:
