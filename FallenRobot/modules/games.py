@@ -1,12 +1,12 @@
 # Written by github.com/krrish557
-from Powers.bot_class import Gojo as app
+from FallenRobot.bot_class import Gojo as app
 from pyrogram import filters
 from pyrogram.types import Message
-from Powers.planetScale_sqlDB.playerDB import check_user
-from Powers.planetScale_sqlDB.helper_functions.create import create
-from Powers.planetScale_sqlDB.helper_functions.read import read
-from Powers.planetScale_sqlDB.helper_functions.update import update
-from Powers.utils.custom_filters import command
+from FallenRobot.planetScale_sqlDB.playerDB import check_user
+from FallenRobot.planetScale_sqlDB.helper_functions.create import create
+from FallenRobot.planetScale_sqlDB.helper_functions.read import read
+from FallenRobot.planetScale_sqlDB.helper_functions.update import update
+from FallenRobot.utils.custom_filters import command
 import datetime
 import re
 import random
