@@ -10,7 +10,7 @@ from FallenRobot import (API_HASH, API_ID, BOT_TOKEN, LOG_DATETIME, LOGFILE, LOG
                     MESSAGE_DUMP, NO_LOAD, OWNER_ID, UPTIME, WORKERS,
                     load_cmds)
 from FallenRobot.database import MongoDB
-from FallenRobot.plugins import all_plugins
+from FallenRobot.modules import all_modules
 from FallenRobot.vars import Config
 
 INITIAL_LOCK = RLock()
@@ -24,15 +24,15 @@ if MESSAGE_DUMP == -100 or not str(MESSAGE_DUMP).startswith("-100"):
 
 
 class Gojo(Client):
-    """Starts the Pyrogram Client on the Bot Token when we do 'python3 -m Powers'"""
+    """Starts the Pyrogram Client on the Bot Token when we do 'python3 -m FallenRobot'"""
 
     def __init__(self):
-        # name = Powers
+        # name = FallenRobot
 
         super().__init__(
             "Gojo_Satoru",
             bot_token=BOT_TOKEN,
-            plugins=dict(root="Powers.plugins", exclude=NO_LOAD),
+            plugins=dict(root="FallenRobot.modules", exclude=NO_LOAD),
             api_id=API_ID,
             api_hash=API_HASH,
             workers=WORKERS,
