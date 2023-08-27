@@ -10,7 +10,7 @@ import json
 reader = read()
 
 
-@app.on_message(filters.command("wallet")
+@app.on_message(filters.command("wallet")) 
 async def my_inventory(c: Client, m: Message):
     user_id = m.from_user.id
     rubies = reader.ruby(user_id)
