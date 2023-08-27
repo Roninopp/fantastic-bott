@@ -7,6 +7,8 @@ import httpx
 
 import telegram.ext as tg
 from redis import StrictRedis
+import pymongo
+import pymysql
 from pyrogram.types import Message
 from pyrogram import Client, errors
 from telethon import TelegramClient
