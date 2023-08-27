@@ -299,3 +299,18 @@ from FallenRobot.modules.helper_funcs.handlers import (
 tg.RegexHandler = CustomRegexHandler
 tg.CommandHandler = CustomCommandHandler
 tg.MessageHandler = CustomMessageHandler
+confi = configClass()
+con = pymysql.connect(
+    host=confi.host,
+    user=confi.user,
+    password=confi.password,
+    database=confi.database,
+    autocommit=True,
+    ssl={
+        "ca": confi.ssl_ca
+    }
+)
+LOGGER.info("Connected to PlanetScale")
+
+mongo = MongoClient(confi.mongoURL)
+db = mongo.Powers
