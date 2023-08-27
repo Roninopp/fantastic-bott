@@ -75,7 +75,7 @@ async def can_play(tame, tru):
     return x
 
 
-@app.on_message(filters.command("dart")
+@app.on_message(filters.command("dart")) 
 async def dart(client, message):
     try:
         bet = int(message.text.split()[1])
@@ -147,7 +147,7 @@ async def slot(client: app, message: Message):
         await message.reply_text("Try Again! \nYou were not found in our records but now I have recorded your info!")
 
 
-@app.on_message(filters.command("bowl")
+@app.on_message(filters.command("bowl")) 
 async def bowl(client, message: Message):
     try:
         bet = int(message.text.split()[1])
@@ -197,7 +197,7 @@ async def bowl(client, message: Message):
         return
 
 
-@app.on_message(filters.command("basket")
+@app.on_message(filters.command("basket")) 
 async def basket(client, message):
     try:
         bet = int(message.text.split()[1])
@@ -240,7 +240,7 @@ async def basket(client, message):
         await message.reply_text("Try Again! \nYou were not found in our records but now I have recorded your info!")
 
 
-@app.on_message(filters.command("goal")
+@app.on_message(filters.command("goal")) 
 async def GOAL(client, message):
     try:
         bet = int(message.text.split()[1])
@@ -282,7 +282,7 @@ async def GOAL(client, message):
         await message.reply_text("Try Again! \nYou were not found in our records but now I have recorded your info!")
 
 
-@app.on_message(filters.command("dice")
+@app.on_message(filters.command("dice")) 
 async def DICE(client, message):
     try:
         bet = int(message.text.split()[1])
@@ -329,7 +329,7 @@ async def DICE(client, message):
         await message.reply_text("Try Again! \nYou were not found in our records but now I have recorded your info!")
 
 
-@app.on_message(filters.command("bet")
+@app.on_message(filters.command("bet")) 
 async def _bet(client, message):
     chat_id = message.chat.id
     user = message.from_user
