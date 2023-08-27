@@ -316,3 +316,8 @@ LOGGER.info("Connected to PlanetScale")
 
 mongo = MongoClient(confi.mongoURL)
 db = mongo.Powers
+
+
+
+
+#below is code by github.com/krrish557
