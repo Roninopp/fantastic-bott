@@ -117,7 +117,7 @@ async def dart(client, message):
         await message.reply_text("Try Again! \nYou were not found in our records but now I have recorded your info!")
 
 
-@app.on_message(filters.command("slot")
+@app.on_message(filters.command("slot")) 
 async def slot(client: app, message: Message):
     try:
         bet = int(message.text.split()[1])
