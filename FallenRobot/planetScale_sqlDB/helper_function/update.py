@@ -26,12 +26,12 @@ class update:
         with self.PLAYER_LOCK:
             try:
                 if check_user(user_id):
-                cur = con.cursor()
-                cur.execute('''
-                UPDATE playerDB
-                SET xp = %s
-                WHERE user_id = %s
-            ''', (amount, user_id))
-                con.commit()
+                  cur = con.cursor()
+                  cur.execute('''
+                  UPDATE playerDB
+                  SET xp = %s
+                  WHERE user_id = %s
+              ''', (amount, user_id))
+                  con.commit()
             finally:
                 cur.close()
