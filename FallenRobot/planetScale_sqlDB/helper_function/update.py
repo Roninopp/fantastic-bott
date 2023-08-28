@@ -10,9 +10,10 @@ class update:
     
     def add_money(self, user_id, amount):
         with self.PLAYER_LOCK:
+        cur = con.cursor()
+
             try:
               if check_user(user_id):
-                  cur = con.cursor()
                   cur.execute('''
                     UPDATE playerDB
                     SET ruby = %s
