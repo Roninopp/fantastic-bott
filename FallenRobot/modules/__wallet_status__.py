@@ -1,9 +1,7 @@
 from FallenRobot import pbot as app
-from FallenRobot.planetScale_sqlDB.helper_functions.read import read
+from FallenRobot.planetScale_sqlDB.helper_function.read import read
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from FallenRobot.planetScale_sqlDB.helper_functions.read import read
-from FallenRobot.utils.custom_filters import command
 import json
 
 
