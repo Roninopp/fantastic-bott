@@ -22,16 +22,16 @@ class update:
                   con.commit()
             finally:
               cur.close()
-	def add_xp(self, user_id, amount):
+    def add_xp(self, user_id, amount):
         with self.PLAYER_LOCK:
             try:
-              if check_user(user_id):
-                  cur = con.cursor()
-                  cur.execute('''
-                    UPDATE playerDB
-                    SET xp = %s
-                    WHERE user_id = %s
-                ''', (amount, user_id))
-                  con.commit()
+                if check_user(user_id):
+                cur = con.cursor()
+                cur.execute('''
+                UPDATE playerDB
+                SET xp = %s
+                WHERE user_id = %s
+            ''', (amount, user_id))
+                con.commit()
             finally:
-              cur.close()
+                cur.close()
