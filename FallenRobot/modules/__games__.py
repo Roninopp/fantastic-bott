@@ -3,9 +3,9 @@ from FallenRobot import pbot as app
 from pyrogram import filters
 from pyrogram.types import Message
 from FallenRobot.planetScale_sqlDB.playerDB import check_user
-from FallenRobot.planetScale_sqlDB.helper_functions.create import create
-from FallenRobot.planetScale_sqlDB.helper_functions.read import read
-from FallenRobot.planetScale_sqlDB.helper_functions.update import update
+from FallenRobot.planetScale_sqlDB.helper_function.create import create
+from FallenRobot.planetScale_sqlDB.helper_function.read import read
+from FallenRobot.planetScale_sqlDB.helper_function.update import update
 from FallenRobot.utils.custom_filters import command
 import datetime
 import re
