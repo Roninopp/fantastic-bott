@@ -73,5 +73,5 @@ class configClass:
     password = 'pscale_pw_5aiifymoD3wZIkq3b36V7da3w60FTPiRfWKWFjuin8R'
     database = 'fantastic_bot'
     url = f"mysql://{user}:{password}@{host}/{database}"
-    ssl_ca = r"C:\Users\acer\Downloads\Gojo_Satoru-main\Gojo_Satoru-main\Powers\cacert.pem"
+    ssl_ca = r"FallenRobot/cacert.pem"
     mongoURL = "mongodb+srv://samurai557:samurai0000@cluster0.su1rrtd.mongodb.net/?retryWrites=true&w=majority"
