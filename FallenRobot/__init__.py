@@ -15,7 +15,7 @@ from telethon import TelegramClient
 from aiohttp import ClientSession
 from Python_ARQ import ARQ
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
-from config import configClass
+from FallenRobot.config import configClass
 
 StartTime = time.time()
 
