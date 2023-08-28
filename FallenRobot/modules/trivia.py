@@ -1,9 +1,14 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
+from planetScale_sqlDB.helper_functions.read import read
+from planetScale_sqlDB.helper_functions.update import update
 from FallenRobot import pbot as app
 import json
 import time
 import random
+
+reader = read()
+updater = update()
 
 with open('trivia.json') as f:
     data = json.load(f)
@@ -13,7 +18,6 @@ active_trivia = {}
 @app.on_message(filters.group & filters.command('trivia'), group=84)
 async def trivia(_, message):
     user_id = message.from_user.id
-
     if user_id in active_trivia:
         await message.reply_text("You already have an active trivia session.")
         return
@@ -44,6 +48,8 @@ async def trivia(_, message):
 async def handle_callback_query(client, query: CallbackQuery):
     selected_option = query.data.split('_')[1]
     user_id = query.from_user.id
+    rubies = reader.ruby(user_id)
+    xp = reader.xp(user_id)
 
     active_session = active_trivia.get(user_id)
     
@@ -56,8 +62,16 @@ async def handle_callback_query(client, query: CallbackQuery):
         await query.message.edit_text("Trivia session has expired.")
         active_trivia.pop(user_id, None)
         return
+    
 
-    response_text = "Correct! 🎉" if selected_option == correct_option else "Incorrect. Try again! ❌"
+    if (selected_option == correct_option):
+        response_text = "Correct! 🎉" 
+        rubies += 5000
+        xp += 5
+        updater.add_money(user_id, rubies)
+        updater.add_xp(user_id, xp)
+    else:
+        response_text = "Incorrect. Try again! ❌"
     await query.message.edit_text(query.message.text + f"\n\n{response_text}")
 
     active_trivia.pop(user_id, None)
