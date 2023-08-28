@@ -7,7 +7,7 @@ import httpx
 
 import telegram.ext as tg
 from redis import StrictRedis
-import pymongo
+from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
 import pymysql
 from pyrogram.types import Message
 from pyrogram import Client, errors
@@ -315,8 +315,8 @@ con = pymysql.connect(
 )
 LOGGER.info("Connected to PlanetScale")
 
-mongo = MongoClient(confi.mongoURL)
-db = mongo.FallenRobot
+mongo: MongoClient = MongoClient(confi.mongoURL)
+db = mongo.Powers
 
 
 
