@@ -22,8 +22,8 @@ class read:
                 return 0
             else:
                 return pd[0]
-	def xp(self, user_id):
-    	with self.PLAYER_LOCK:
+    def xp(self, user_id):
+        with self.PLAYER_LOCK:
             cur = con.cursor()
             cur.execute(f'''
                             SELECT xp 
