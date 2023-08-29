@@ -22,7 +22,7 @@ class update:
                     WHERE user_id = %s
                 ''',
                                 (amount, user_id))
-                    print 'added money'
+                    print('added money')
                     con.commit()
             finally:
                 cur.close()
