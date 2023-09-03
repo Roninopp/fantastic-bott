@@ -314,7 +314,7 @@ def info(update: Update, context: CallbackContext):
                     [
                         [
                             InlineKeyboardButton(
-                                "SUMMON+ME", url="https://t.me/Samurai-bot_updates"
+                                "SUMMON+ME", url="https://t.me/GANYUXBot?startgroup=new"
                             ),
                             InlineKeyboardButton(
                                 "DISASTERS ?", url="https://t.me/Samurai_Bot_Updates/24"
