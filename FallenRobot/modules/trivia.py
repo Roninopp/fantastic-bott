@@ -1,7 +1,5 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
-from FallenRobot.planetScale_sqlDB.helper_function.read import read
-from FallenRobot.planetScale_sqlDB.helper_function.update import update
 from FallenRobot import pbot as app
 import json
 import time
