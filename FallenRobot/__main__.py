@@ -55,7 +55,7 @@ def get_readable_time(seconds: int) -> str:
 PM_START_TEXT = """
 ────「 [{}](https://te.legra.ph/file/9012a958e07362727ae19.jpg) 」────
 ʜᴇʏ! {}
-𝙸 𝙰𝚖 ꜰᴀɴᴛᴀꜱᴛɪᴄ ᴀ ꜱʜᴀᴅᴏᴡ ꜰɪɢʜᴛ ᴛʜᴇᴍᴇ ᴀᴅᴠᴀɴᴄᴇᴅ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ ʙᴏᴛ ᴡɪᴛʜ ᴀ ʟᴏᴛꜱ ᴏꜰ ꜱᴘᴇᴄɪᴀʟɪᴛʏ.
+𝙸 𝙰𝚖 ɢᴀɴʏᴜ ᴀ ɢᴇɴꜱʜɪɴ ɪᴍᴘᴀᴄᴛ ᴛʜᴇᴍᴇ ᴀᴅᴠᴀɴᴄᴇᴅ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ ʙᴏᴛ ᴡɪᴛʜ ᴀ ʟᴏᴛꜱ ᴏꜰ ꜱᴘᴇᴄɪᴀʟɪᴛʏ.
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
 I have lots of handy features such as:
 ‣ `「Warning system」`
@@ -72,7 +72,7 @@ I have lots of handy features such as:
 buttons = [
     [
         InlineKeyboardButton(
-            text="➕ ADD FANTASTIC TO YOUR GROUP ➕", url="https://t.me/FANTASTICFIGHTERBOT?startgroup=new"),
+            text="➕ ADD GANYU TO YOUR GROUP ➕", url="https://t.me/GANYUXBot?startgroup=new"),
     ],
     [                  
                        InlineKeyboardButton(
@@ -387,7 +387,7 @@ def shukurenai_about_callback(update, context):
             "\nâ€¢ I have a note keeping system, blacklists, and even predetermined replies on certain keywords."
             "\nâ€¢ I check for admins' permissions before executing any command and more stuffs"
             "\n\n_ ï½†ï½ï½Žï½”ï½ï½“ï½”ï½‰ï½ƒ licensed under the GNU General Public License v3.0_"
-            "\n\n Click on button bellow to get basic help for Fantastic.",
+            "\n\n Click on button bellow to get basic help for Ganyu.",
             parse_mode=ParseMode.MARKDOWN,
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup(
@@ -474,7 +474,7 @@ def shukurenai_about_callback(update, context):
 
     elif query.data == "shukurenai_credit":
         query.message.edit_text(
-            text=f"à¹ Credis for fantasticBot\n"
+            text=f"à¹ Credis for GanyuXBot\n"
             "\nHere Developers Making And Give Inspiration For Made The Fantastic",
             parse_mode=ParseMode.MARKDOWN,
             reply_markup=InlineKeyboardMarkup(
