@@ -53,7 +53,7 @@ def get_readable_time(seconds: int) -> str:
 
 
 PM_START_TEXT = """
-────「 [{}](https://te.legra.ph/file/9012a958e07362727ae19.jpg) 」────
+────「 [{}](https://telegra.ph/file/065b18d37a25206190fab.jpg) 」────
 ʜᴇʏ! {}
 𝙸 𝙰𝚖 ɢᴀɴʏᴜ ᴀ ɢᴇɴꜱʜɪɴ ɪᴍᴘᴀᴄᴛ ᴛʜᴇᴍᴇ ᴀᴅᴠᴀɴᴄᴇᴅ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ ʙᴏᴛ ᴡɪᴛʜ ᴀ ʟᴏᴛꜱ ᴏꜰ ꜱᴘᴇᴄɪᴀʟɪᴛʏ.
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
