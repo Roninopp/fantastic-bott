@@ -1,130 +1,104 @@
-from FallenRobot import pbot as app
-from FallenRobot import TOKEN as bot_token
-from pyrogram import filters
-import requests
-from urllib.parse import quote_plus
-from bs4 import BeautifulSoup
-from unidecode import unidecode
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup 
+# Author: https://github.com/SastaDev
+# Created on: Sun, Sep 3, 2023.
+# © Kangers Network ~ https://t.me/KangersNetwork
 
-from gpytranslate import SyncTranslator
-trans = SyncTranslator()
+from typing import BinaryIO, Dict, List
+import time
+import os
+from uuid import uuid4
 
-# Credit @the_only_god/@Yeah_Am_Kakashi
-# -- Requirements --
-# pyrogram
-# Unidecode~=1.3.6
-# requests
-# beautifulsoup4
-# @reverse_test_bot - demo bot
+import httpx
 
-def isEnglish(s):
-  return s.isascii()
+from pyrogram.enums import MessageMediaType
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from pyrogram import Client, filters
 
-async def Sauce(bot_token,file_id):
-    r = requests.post(f'https://api.telegram.org/bot{bot_token}/getFile?file_id={file_id}').json()
-    file_path = r['result']['file_path']
-    headers = {'User-agent': 'Mozilla/5.0 (Linux; Android 6.0.1; SM-G920V Build/MMB29K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36'}
-    to_parse = f"https://images.google.com/searchbyimage?safe=off&sbisrc=tg&image_url=https://api.telegram.org/file/bot{bot_token}/{file_path}"
-    r = requests.get(to_parse,headers=headers)
-    soup = BeautifulSoup(r.text, 'html.parser')
-    result = {                            
-             "similar": '',
-             'output': ''
-         }
-    for similar_image in soup.find_all('input', {'class': 'gLFyf'}):
-         url = f"https://www.google.com/search?tbm=isch&q={quote_plus(similar_image.get('value'))}"
-         result['similar'] = url
-    for best in soup.find_all('div', {'class': 'r5a77d'}):
-        output = best.get_text()
-        decoded_text =  unidecode(output)
-        result["output"] = decoded_text
-        
-    return result
+# Replace `YourRobot` with your robot and import pyrogram client from it.
+from FallenRobot import pbot
 
-async def get_file_id_from_message(message):
-    file_id = None
-    message = message.reply_to_message
-    if not message:
-        return None
-    if message.document:
-        if int(message.document.file_size) > 3145728:
-            return
-        mime_type = message.document.mime_type
-        if mime_type not in ("image/png", "image/jpeg"):
-            return
-        file_id = message.document.file_id
+API_URL: str = "https://sasta-api.vercel.app/google_reverse"
 
-    if message.sticker:
-        if message.sticker.is_animated:
-            if not message.sticker.thumbs:
-                return
-            file_id = message.sticker.thumbs[0].file_id
-        else:
-            file_id = message.sticker.file_id
+COMMANDS: List[str] = [
+    "reverse",
+    "grs",
+    "pp"
+    ]
 
-    if message.photo:
-        file_id = message.photo.file_id
+async_client: httpx.AsyncClient = httpx.AsyncClient(timeout=120)
 
-    if message.animation:
-        if not message.animation.thumbs:
-            return
-        file_id = message.animation.thumbs[0].file_id
-
-    if message.video:
-        if not message.video.thumbs:
-            return
-        file_id = message.video.thumbs[0].file_id
-    return file_id
+class STRINGS:
+    REPLY_TO_MEDIA: str = "ℹ️ Please reply to a message that contains one of the supported media types, such as a photo, sticker, or image file."
+    UNSUPPORTED_MEDIA_TYPE: str = "⚠️ <b>Unsupported media type!</b>\nℹ️ Please reply with a supported media type: image, sticker, or image file."
     
+    DOWNLOADING_MEDIA: str = "⏳ Downloading media..."
+    UPLOADING_TO_API_SERVER: str = "📡 Uploading media to <b>API Server</b>... 📶"
+    PARSING_RESULT: str = "💻 Parsing result..."
+    
+    EXCEPTION_OCCURRED: str = "❌ <b>Exception occurred!</b>\n\n<b>Exception:</b> {}"
+    
+    RESULT: str = """
+🔤 <b>Query:</b> <code>{query}</code>
+🔗 <b>Page Link:</b> <a href="{page_url}">Link</a>
 
+⌛️ <b>Time Taken:</b> <code>{time_taken}</code> seconds.
+🧑‍💻 <b>Chat Group:</b> @Hiddenleafvillagee
+    """
+    OPEN_PAGE: str = "↗️ Open Page"
 
-@app.on_message(filters.command(["pp","grs","reverse","p","s"]))
-async def _reverse(_,msg):
-    text = await msg.reply("Downloading Media To My Locals...")
-    file_id = await get_file_id_from_message(msg)
-    if not file_id:
-        return await text.edit("Reply to a Photo or sticker")
-    await text.edit("Searching...")    
-    result = await Sauce(bot_token,file_id)
-    if not result["output"]:
-        return await text.edit("Couldn't find anything")
-    await text.edit("Gathering Sauce...")
+@pbot.on_message(filters.command(COMMANDS))
+async def on_reverse(client: Client, message: Message) -> None:
+    if not message.reply_to_message:
+        await message.reply(STRINGS.REPLY_TO_MEDIA)
+        return
+    elif message.reply_to_message.media not in (MessageMediaType.PHOTO, MessageMediaType.STICKER, MessageMediaType.DOCUMENT):
+        await message.reply(STRINGS.UNSUPPORTED_MEDIA_TYPE)
+        return
+    
+    start_time: float = time.time()
+    status_msg: Message = await message.reply(STRINGS.DOWNLOADING_MEDIA)
+    file_path: str = f"temp_download/{uuid4()}"
     try:
-        k = result['output']
-        n = k.split(" ")
-        n.remove("Results")
-        n.remove("for")
-        l = " ".join(n)
-    except Exception:
-        l = result['output']
-    resultsss = f'Sauce: <code>{l}</code>'
-    await text.edit(f'Sauce: <code>{l}</code>',reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Link",url=result["similar"])]]))
-   
-    # source = str(trans.detect(str(result["output"])))
+        await message.reply_to_message.download(file_path)
+    except Exception as exc:
+        text: str = STRINGS.EXCEPTION_OCCURRED.format(exc)
+        await message.reply(text)
+        try:
+            os.remove(file_path)
+        except FileNotFoundError:
+            pass
+        return
     
-    if not isEnglish(l):
-        source = trans.detect(l)
-        await text.edit(f"{resultsss}\nAnother Language Detected Translating...")
-        dest = "en"
-        translation = trans(l, sourcelang=source, targetlang=dest)
-        # print(translation.text)
-        # print(mesg)
-        # print(str(source))
-        await text.edit(f"{resultsss}\n\nWait Heres The Translation for You!\nTranslation : <code>{translation.text}</code>")
-
-    else :
-        pass
-    # if source != "en":
-    #     await m.edit(f"{text}\nAnother Language Detected Translating...")
-    #     dest = "en"
-    #     translation = trans(text1, sourcelang=source, targetlang=dest)
-    #     # print(translation.text)
-    #     # print(mesg)
-    #     # print(str(source))
-    #     await m.edit(f"{text}\nTranslation : <code>{translation.text}</code>")
-
-    # else :
-    #     pass
-                      
- 
+    await status_msg.edit(STRINGS.UPLOADING_TO_API_SERVER)
+    files: Dict[str, BinaryIO] = {"file": open(file_path, "rb")}
+    response: httpx.Response = await async_client.post(API_URL, files=files)
+    os.remove(file_path)
+    
+    if response.status_code == 404:
+        text: str = STRINGS.EXCEPTION_OCCURRED.format(response.json()["error"])
+        await message.reply(text)
+        await status_msg.delete()
+        return
+    elif response.status_code != 200:
+        text: str = STRINGS.EXCEPTION_OCCURRED.format(response.text)
+        await message.reply(text)
+        await status_msg.delete()
+        return
+    
+    await status_msg.edit(STRINGS.PARSING_RESULT)
+    response_json: Dict[str, str] = response.json()
+    query: str = response_json["query"]
+    page_url: str = response_json["url"]
+    
+    end_time: float = time.time() - start_time
+    time_taken: str = "{:.2f}".format(end_time)
+    
+    text: str = STRINGS.RESULT.format(
+        query=query,
+        page_url=page_url,
+        time_taken=time_taken
+        )
+    buttons: List[List[InlineKeyboardButton]] = [
+        [InlineKeyboardButton(STRINGS.OPEN_PAGE, url=page_url)]
+        ]
+    await message.reply(text, disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup(buttons))
+    await status_msg.delete()
