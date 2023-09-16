@@ -7,8 +7,8 @@ class Config(object):
     VIRUS_API_KEY = "rffr"
     CASH_API_KEY = ""  # Get this value for currency converter from https://www.alphavantage.co/support/#api-key
     BOT_ID = 2291
-    DATABASE_URL = "postgres://ncttyari:DvjEut7QzjPAaTC59QkgBGyO8361YmiU@trumpet.db.elephantsql.com/ncttyari"  # A sql database url from elephantsql.com
-    SQLALCHEMY_DATABASE_URI = "postgres://ncttyari:DvjEut7QzjPAaTC59QkgBGyO8361YmiU@trumpet.db.elephantsql.com/ncttyari"
+    DATABASE_URL = "postgres://lpyunoye:i2KTjedXfKuJNHKUC6gqILvVVWamgcI1@ziggy.db.elephantsql.com/lpyunoye"  # A sql database url from elephantsql.com
+    SQLALCHEMY_DATABASE_URI = "postgres://lpyunoye:i2KTjedXfKuJNHKUC6gqILvVVWamgcI1@ziggy.db.elephantsql.com/lpyunoye"
     EVENT_LOGS = (-1001966188512)  # Event logs channel to note down important bot level events
     JOIN_LOGGER = (-1001966188512)
     OPENWEATHERMAP_ID = 1212
