@@ -96,8 +96,8 @@ InlineKeyboardButton(
     ],
     [
         InlineKeyboardButton(
-            text="OUR NETWORK", 
-            url=f"https://t.me/TEAMSAMURAIi"),
+            text="EARN🔥MONEY", 
+            url=f"https://t.me/earnn_daily/346"),
     ],
 
 ]
