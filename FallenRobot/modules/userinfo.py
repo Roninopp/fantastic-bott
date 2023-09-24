@@ -257,19 +257,19 @@ def info(update: Update, context: CallbackContext):
     disaster_level_present = False
 
     if user.id == OWNER_ID:
-        text += f"\n\nThis person is the <b>`𝐊𝐈𝐍𝐆⚔`</b> here."
+        text += f"\n\nThis person is the <b>`OWNER`</b> here."
         disaster_level_present = True
     elif user.id in DEV_USERS:
         text += f"\n\nThis user is a <b>[Ginyu×Friend]</b>, Member of Samurai Network."
         disaster_level_present = True
     elif user.id in DRAGONS:
-        text += f"\n\nThe Disaster level of this person is <b>Ginyu X Dragon</b>."
+        text += f"\n\nThe Disaster level of this person is <b>Ganyu X Dragon</b>."
         disaster_level_present = True
     elif user.id in DEMONS:
-        text += f"\n\nThe Disaster level of this person is <b>𝘍𝘢𝘯𝘵𝘢𝘴𝘵𝘪𝘤 𝘟 𝘋𝘦𝘮𝘰𝘯</b>."
+        text += f"\n\nThe Disaster level of this person is <b>Ganyu 𝘟 𝘋𝘦𝘮𝘰𝘯</b>."
         disaster_level_present = True
     elif user.id in TIGERS:
-        text += f"\n\nThe Disaster level of this person is <b>𝘍𝘢𝘯𝘵𝘢𝘴𝘵𝘪𝘤 𝘟 𝘞𝘰𝘭𝘷𝘦𝘴</b>."
+        text += f"\n\nThe Disaster level of this person is <b>Ganyu 𝘟 𝘞𝘰𝘭𝘷𝘦𝘴</b>."
         disaster_level_present = True
     elif user.id in WOLVES:
         text += f"\n\nThe Disaster level of this person is <b>𝘍𝘳𝘪𝘦𝘯𝘥</b>."
