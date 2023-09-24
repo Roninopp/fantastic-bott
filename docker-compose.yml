@@ -3,7 +3,7 @@ version: "3.9"
 services:
   fantastic:
     build: .
-    image: fantastic:${TAG}
+    image: fantastic:latest
     container_name: fantastic
     network_mode: host
     pull_policy: never
