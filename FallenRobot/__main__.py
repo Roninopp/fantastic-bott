@@ -97,7 +97,7 @@ InlineKeyboardButton(
     [
         InlineKeyboardButton(
             text="EARN🔥MONEY", 
-            url=f"https://t.me/earnn_daily/346"),
+            url=f"https://t.me/earnn_daily/355"),
     ],
 
 ]
