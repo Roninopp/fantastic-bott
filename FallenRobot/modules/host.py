@@ -1,5 +1,5 @@
 from telethon import events
-from . import telethn
+from FallenRobot import telethn
 
 @telethn.on(events.NewMessage(pattern=r"^/(alive|about|hosting)"))
 async def about(event):
