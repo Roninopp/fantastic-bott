@@ -77,10 +77,10 @@ buttons = [
     [                  
                        InlineKeyboardButton(
                              text="SUPPORT",
-                             url=f"https://t.me/samurai_botsupport"),
+                             url=f"https://t.me/SpiralTechDivision"),
                        InlineKeyboardButton(
                              text="UPDATES",
-                             url=f"https://t.me/Samurai_bot_updates"),
+                             url=f"https://t.me/SpiralUpdates"),
     ],
     [
 InlineKeyboardButton(
@@ -245,7 +245,7 @@ def start(update: Update, context: CallbackContext):
                     [
                         InlineKeyboardButton(
                             text="Support",
-                            url=f"https://t.me/samurai_botSupport",
+                            url=f"https://t.me/SpiralTechDivision",
                         ),
                     ]
                 ]
