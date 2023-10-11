@@ -96,8 +96,8 @@ InlineKeyboardButton(
     ],
     [
         InlineKeyboardButton(
-            text="EARN🔥MONEY", 
-            url=f"https://t.me/earnn_daily/355"),
+            text="HOMIES", 
+            url=f"https://t.me/hidddenleeafvillage"),
     ],
 
 ]
