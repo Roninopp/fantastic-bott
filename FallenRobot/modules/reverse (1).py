@@ -41,7 +41,7 @@ class STRINGS:
 🔗 <b>Page Link:</b> <a href="{page_url}">Link</a>
 
 ⌛️ <b>Time Taken:</b> <code>{time_taken}</code> seconds.
-🧑‍💻 <b>Chat Group:</b> @Hiddenleafvillagee
+🧑‍💻 <b>Chat Group:</b> @hidddenleeafvillage
     """
     OPEN_PAGE: str = "↗️ Open Page"
 
