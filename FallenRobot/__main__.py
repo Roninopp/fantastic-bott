@@ -97,7 +97,7 @@ InlineKeyboardButton(
     [
         InlineKeyboardButton(
             text="HOMIES", 
-            url=f"https://t.me/hidddenleafvillagee"),
+            url=f"https://t.me/hiddenleafvillagee"),
     ],
 
 ]
@@ -119,7 +119,7 @@ And the following:
     "" if not ALLOW_EXCL else "All commands can either be used with / or !.",
 )
 
-GABIIMGSTART = "https://telegra.ph/file/6aa742648a9435ca46281.jpg"
+GABIIMGSTART = "https://telegra.ph/file/ddb78315aeceae9b1cd1a.jpg"
 
 DONATE_STRING = """Heya, glad to hear you want to donate!
  You can support the project via [Paytm](#) or by contacting @DushmanXRonin
@@ -481,7 +481,7 @@ def shukurenai_about_callback(update, context):
                 [
                  [
                     InlineKeyboardButton(text="ABHINAV", url="https://t.me/Redeye_Ghoul"),
-                    InlineKeyboardButton(text="ï¼²ï¼¯ï¼®ï¼©ï¼®", url="https://t.me/Dushmanxronin"),
+                    InlineKeyboardButton(text="RONIN", url="https://t.me/Yeah_ronin"),
                     InlineKeyboardButton(text="NOTâ€¢CHIRAG", url="https://t.me/Chirag57"), 
                  ],
                  [
