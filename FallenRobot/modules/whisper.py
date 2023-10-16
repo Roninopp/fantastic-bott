@@ -109,8 +109,8 @@ async def in_help():
     answers = [
         InlineQueryResultArticle(
             title="💒 Whisper",
-            description=f"@FantasticFighterbot [USERNAME | ID] [TEXT]",
-            input_message_content=InputTextMessageContent(f"**📍Usage:**\n\n@FantasticFighterbot (Target Username or ID) (Your Message).\n\n**Example:**\n@FantasticFighterbot @usernamame Hellow"),
+            description=f"@GanyuXbot [USERNAME | ID] [TEXT]",
+            input_message_content=InputTextMessageContent(f"**📍Usage:**\n\n@GanyuXbot (Target Username or ID) (Your Message).\n\n**Example:**\n@FantasticFighterbot @usernamame Hellow"),
             thumb_url="https://telegra.ph/file/ff4455f02730649f7a98f.jpg",
             reply_markup=switch_btn
         )
@@ -134,7 +134,7 @@ __mod_name__="ᴡʜɪꜱᴘᴇʀ-ʙᴏx"
 __help__ = """
 *──「 Whisper 」──*
 This is how Inline Whisper feature works:
-➩ `Fantasticfighterbot your message @username OR UserID`
+➩ `@GanyuXbot your message @username OR UserID`
                             OR
-➩ `@FantasticFighterBot @username OR UserID your message`
+➩ `@GanyuXBot @username OR UserID your message`
 """
