@@ -538,7 +538,7 @@ async def _bal(client, message):
 	gamesdb.update_one({'user_id': from_user.id}, {'$set': {'coins': dalcs}})
 	return await message.reply_text(f"Success! Set the Dalcs of user {from_user.mention} to {dalcs}")
 	
-__mod_name__ = "ᴄᴜʀʀᴇɴᴄʏ ɢᴀᴍᴇ"
+__mod_name__ = "ɢᴀᴍᴇ"
 __help__ = """
 
 ➮ /bet {Amount}  Heads Or Tails In Short h Or t
