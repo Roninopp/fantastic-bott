@@ -21,8 +21,7 @@ class Config(object):
     ARQ_API_KEY = ""
     ARQ_API_URL = "gay"
 
-    MONGO_DB_URI = "mongodb+srv://gabimaru:gabi123@cluster0.p8qlfbe.mongodb.net/?retryWrites=true&w=majority"  # Get ths value from cloud.mongodb.com
-
+    MONGO_DB_URI = "mongodb+srv://vivek:vivek@123@cluster0.g2r0owl.mongodb.net/?retryWrites=true&w=majority"
   # Telegraph link of the image which will be shown at start command.
     START_IMG = "https://telegra.ph/file/065b18d37a25206190fab.jpg"
 
