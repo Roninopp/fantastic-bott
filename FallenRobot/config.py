@@ -12,7 +12,7 @@ class Config(object):
     EVENT_LOGS = (-1001966188512)  # Event logs channel to note down important bot level events
     JOIN_LOGGER = (-1001966188512)
     OPENWEATHERMAP_ID = 1212
-    MONGO_DB = "mongodb+srv://gabimaru:gabi123@cluster0.p8qlfbe.mongodb.net/?retryWrites=true&w=majority"
+    MONGO_DB = "mongodb+srv://vivek:vivek@123@cluster0.g2r0owl.mongodb.net/?retryWrites=true&w=majority"
     REDIS_URL = "redis://:dplEdSkGkGs0WCs7J2XdGRSLgQL0HHGT@redis-10625.c99.us-east-1-4.ec2.cloud.redislabs.com:10625"
     DONATION_LINK = "ewfewfe"
     ERROR_LOGS = (-1001709251588)
