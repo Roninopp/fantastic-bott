@@ -72,4 +72,4 @@ class configClass:
     database = 'fantastic_bot'
     url = f"mysql://{user}:{password}@{host}/{database}"
     ssl_ca = r"FallenRobot/cacert.pem"
-    mongoURL = "mongodb+srv://samurai557:samurai0000@cluster0.su1rrtd.mongodb.net/?retryWrites=true&w=majority"
+    mongoURL = "mongodb+srv://emilia:qaz000@cluster0.6i3dazk.mongodb.net/?retryWrites=true&w=majority" # gay asf
