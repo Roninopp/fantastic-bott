@@ -4,7 +4,6 @@ import sys
 import time
 import httpx
 
-
 import telegram.ext as tg
 from redis import StrictRedis
 from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
