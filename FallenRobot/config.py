@@ -27,7 +27,7 @@ class Config(object):
 
     SUPPORT_CHAT = "SpiralTechDivision"  # Your Telegram support group chat username where your users will go and bother you
 
-    TOKEN = "2100096282:AAFYKUba5wJWPvu4zJfAWkMWy6xcI66wFQM"  # Get bot token from @BotFather on Telegram
+    TOKEN = "2100096282:AAGXnUUjhmS2aX4swI8uw5PQ6S8aQRK30j8"  # Get bot token from @BotFather on Telegram
 
     TIME_API_KEY = ""  # Get this value from https://timezonedb.com/api
     SPAMWATCH_SUPPORT_CHAT = "effr"
@@ -41,7 +41,7 @@ class Config(object):
     
   # Optional fields
     BL_CHATS = []  # List of groups that you want blacklisted.
-    DRAGONS = [1737646273,5654523936,5654523936,5410140404,5274479443,1669062342,]  # User id of sudo users
+    DRAGONS = []  # User id of sudo users
     DEV_USERS = [6040984893]  # User id of dev users
     DEMONS = []  # User id of support users
     TIGERS = []  # User id of tiger users
