@@ -16,7 +16,7 @@ class Config(object):
     REDIS_URL = "redis://:dplEdSkGkGs0WCs7J2XdGRSLgQL0HHGT@redis-10625.c99.us-east-1-4.ec2.cloud.redislabs.com:10625"
     DONATION_LINK = "ewfewfe"
     ERROR_LOGS = (-1001709251588)
-    openai.api_key_path = "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"
+    
     AI_API_KEY = ""
     ARQ_API_KEY = ""
     ARQ_API_URL = "gay"
