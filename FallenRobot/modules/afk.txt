@@ -9,7 +9,7 @@ from telegram.ext import Filters, MessageHandler
 from FallenRobot import dispatcher
 from FallenRobot.modules.disable import DisableAbleCommandHandler, DisableAbleMessageHandler
 from FallenRobot.modules.sql.afk_redis import start_afk, end_afk, is_user_afk, afk_reason
-from FallenRobot import REDIS
+from FallenRobot imp
 from FallenRobot.modules.users import get_user_id
 
 from FallenRobot.modules.helper_funcs.alternate import send_message
