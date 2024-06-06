@@ -14,7 +14,7 @@ from bs4 import BeautifulSoup
 
 from FallenRobot.modules.helper_funcs.alternate import typing_action
 from FallenRobot.modules.disable import DisableAbleCommandHandler
-from FallenRobot import OWNER_ID, REDIS, dispatcher, pbot
+from FallenRobot import OWNER_ID, dispatcher, pbot
 
 
 kaizoku_btn = "Kaizoku ☠️"
