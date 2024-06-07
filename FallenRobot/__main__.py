@@ -72,7 +72,7 @@ I have lots of handy features such as:
 buttons = [
     [
         InlineKeyboardButton(
-            text="➕ ADD FANTASTIC TO YOUR GROUP ➕", url="https://t.me/GANYUXBot?startgroup=new"),
+            text="➕ ADD FANTASTIC TO YOUR GROUP ➕", url="https://t.me/Fantasticfighterbot?startgroup=new"),
     ],
     [                  
                        InlineKeyboardButton(
