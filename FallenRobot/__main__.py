@@ -53,7 +53,7 @@ def get_readable_time(seconds: int) -> str:
 
 
 PM_START_TEXT = """
-────「 [{}](https://telegra.ph/file/065b18d37a25206190fab.jpg) 」────
+────「 [{}](https://graph.org/vTelegraphBot-06-06-18) 」────
 ʜᴇʏ! {}
 𝙸 𝙰𝚖 ɢᴀɴʏᴜ ᴀ ɢᴇɴꜱʜɪɴ ɪᴍᴘᴀᴄᴛ ᴛʜᴇᴍᴇ ᴀᴅᴠᴀɴᴄᴇᴅ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ ʙᴏᴛ ᴡɪᴛʜ ᴀ ʟᴏᴛꜱ ᴏꜰ ꜱᴘᴇᴄɪᴀʟɪᴛʏ.
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
@@ -72,20 +72,20 @@ I have lots of handy features such as:
 buttons = [
     [
         InlineKeyboardButton(
-            text="➕ ADD GANYU TO YOUR GROUP ➕", url="https://t.me/GANYUXBot?startgroup=new"),
+            text="➕ ADD FANTASTIC TO YOUR GROUP ➕", url="https://t.me/GANYUXBot?startgroup=new"),
     ],
     [                  
                        InlineKeyboardButton(
                              text="SUPPORT",
-                             url=f"https://t.me/SpiralTechDivision"),
+                             url=f"https://t.me/bot_support_fa"),
                        InlineKeyboardButton(
                              text="UPDATES",
-                             url=f"https://t.me/SpiralUpdates"),
+                             url=f"https://t.me/Sp"),
     ],
     [
 InlineKeyboardButton(
-                             text="BOT-LOGS",
-                             url=f"https://t.me/Samurai_logss"),
+                             text="PLATFORM",
+                             url=f"https://t.me/GOA_GAMES_GODS"),
 
         InlineKeyboardButton(
               text="Commands",
@@ -96,8 +96,8 @@ InlineKeyboardButton(
     ],
     [
         InlineKeyboardButton(
-            text="HOMIES", 
-            url=f"https://t.me/hiddenleafvillagee"),
+            text="Colour GAME", 
+            url=f"https://bdggame.in/#/register?invitationCode=nHLtc512688"),
     ],
 
 ]
@@ -119,7 +119,7 @@ And the following:
     "" if not ALLOW_EXCL else "All commands can either be used with / or !.",
 )
 
-GABIIMGSTART = "https://telegra.ph/file/ddb78315aeceae9b1cd1a.jpg"
+GABIIMGSTART = "https://graph.org/vTelegraphBot-06-06-18"
 
 DONATE_STRING = """Heya, glad to hear you want to donate!
  You can support the project via [Paytm](#) or by contacting @DushmanXRonin
