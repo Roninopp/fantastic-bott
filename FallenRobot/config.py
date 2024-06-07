@@ -32,7 +32,7 @@ class Config(object):
     TIME_API_KEY = ""  # Get this value from https://timezonedb.com/api
     SPAMWATCH_SUPPORT_CHAT = "effr"
     SPAMWATCH_API = "wdwd"
-    OWNER_ID =   # User id of your telegram account (Must be integer)
+    OWNER_ID = 6837532865  # User id of your telegram account (Must be integer)
     OWNER_USERNAME = "DUSHMANxRONIN"
     WEBHOOK = False
     URL = "api.telegram.org"
