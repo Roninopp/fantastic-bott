@@ -53,7 +53,7 @@ def get_readable_time(seconds: int) -> str:
 
 
 PM_START_TEXT = """
-────「 [{}](https://graph.org/vTelegraphBot-06-06-18) 」────
+────「 [{}](https://telegra.ph/file/4287c313c71ab800e29d0.jpg) 」────
 ʜᴇʏ! {}
 𝙸 𝙰𝚖 ɢᴀɴʏᴜ ᴀ ɢᴇɴꜱʜɪɴ ɪᴍᴘᴀᴄᴛ ᴛʜᴇᴍᴇ ᴀᴅᴠᴀɴᴄᴇᴅ ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ ʙᴏᴛ ᴡɪᴛʜ ᴀ ʟᴏᴛꜱ ᴏꜰ ꜱᴘᴇᴄɪᴀʟɪᴛʏ.
 ➖➖➖➖➖➖➖➖➖➖➖➖➖
@@ -119,7 +119,7 @@ And the following:
     "" if not ALLOW_EXCL else "All commands can either be used with / or !.",
 )
 
-GABIIMGSTART = "https://graph.org/vTelegraphBot-06-06-18"
+GABIIMGSTART = "https://telegra.ph/file/4287c313c71ab800e29d0.jpg"
 
 DONATE_STRING = """Heya, glad to hear you want to donate!
  You can support the project via [Paytm](#) or by contacting @DushmanXRonin
