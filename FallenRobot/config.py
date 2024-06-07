@@ -32,7 +32,7 @@ class Config(object):
     TIME_API_KEY = ""  # Get this value from https://timezonedb.com/api
     SPAMWATCH_SUPPORT_CHAT = "effr"
     SPAMWATCH_API = "wdwd"
-    OWNER_ID = 5965096598  # User id of your telegram account (Must be integer)
+    OWNER_ID =   # User id of your telegram account (Must be integer)
     OWNER_USERNAME = "DUSHMANxRONIN"
     WEBHOOK = False
     URL = "api.telegram.org"
@@ -42,7 +42,7 @@ class Config(object):
   # Optional fields
     BL_CHATS = []  # List of groups that you want blacklisted.
     DRAGONS = []  # User id of sudo users
-    DEV_USERS = [6040984893]  # User id of dev users
+    DEV_USERS = []  # User id of dev users
     DEMONS = []  # User id of support users
     TIGERS = []  # User id of tiger users
     WOLVES = []  # User id of whitelist users
