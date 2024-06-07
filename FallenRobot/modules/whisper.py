@@ -19,7 +19,7 @@ async def _whisper(_, inline_query):
                 title="💒 Whisper",
                 description=f"@{BOT_USERNAME} [ USERNAME | ID ] [ TEXT ]",
                 input_message_content=InputTextMessageContent(f"💒 Usage:\n\n@{BOT_USERNAME} [ USERNAME | ID ] [ TEXT ]"),
-                thumb_url="https://telegra.ph/file/065b18d37a25206190fab.jpg",
+                thumb_url="https://telegra.ph/file/4287c313c71ab800e29d0.jpg",
                 reply_markup=switch_btn
             )
         ]
@@ -38,7 +38,7 @@ async def _whisper(_, inline_query):
                     title="💒 Whisper",
                     description="Invalid username or ID!",
                     input_message_content=InputTextMessageContent("Invalid username or ID!"),
-                    thumb_url="https://telegra.ph/file/065b18d37a25206190fab.jpg",
+                    thumb_url="https://telegra.ph/file/4287c313c71ab800e29d0.jpg",
                     reply_markup=switch_btn
                 )
             ]
@@ -51,7 +51,7 @@ async def _whisper(_, inline_query):
                     title="💒 Whisper",
                     description=f"Send a Whisper to {user.first_name}!",
                     input_message_content=InputTextMessageContent(f"💒 You are sending a whisper to {user.first_name}.\n\nType your message/sentence."),
-                    thumb_url="https://telegra.ph/file/065b18d37a25206190fab.jpg",
+                    thumb_url="https://telegra.ph/file/4287c313c71ab800e29d0.jpg",
                     reply_markup=whisper_btn
                 ),
                 InlineQueryResultArticle(
@@ -109,9 +109,9 @@ async def in_help():
     answers = [
         InlineQueryResultArticle(
             title="💒 Whisper",
-            description=f"@GanyuXbot [USERNAME | ID] [TEXT]",
+            description=f"@FantasticFighterBot [USERNAME | ID] [TEXT]",
             input_message_content=InputTextMessageContent(f"**📍Usage:**\n\n@GanyuXbot (Target Username or ID) (Your Message).\n\n**Example:**\n@FantasticFighterbot @usernamame Hellow"),
-            thumb_url="https://telegra.ph/file/ff4455f02730649f7a98f.jpg",
+            thumb_url="https://telegra.ph/file/4287c313c71ab800e29d0.jpg",
             reply_markup=switch_btn
         )
     ]
@@ -134,7 +134,7 @@ __mod_name__="ᴡʜɪꜱᴘᴇʀ-ʙᴏx"
 __help__ = """
 *──「 Whisper 」──*
 This is how Inline Whisper feature works:
-➩ `@GanyuXbot your message @username OR UserID`
+➩ `@FantasticFighterBot your message @username OR UserID`
                             OR
-➩ `@GanyuXBot @username OR UserID your message`
+➩ `@FantasticFighterBot @username OR UserID your message`
 """
