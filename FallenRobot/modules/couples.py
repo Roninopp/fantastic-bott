@@ -8,8 +8,8 @@ from pyrogram.types import *
 from pyrogram.enums import *
 
 #BOT FILE NAME
-from DAXXMUSIC import app as app
-from DAXXMUSIC.mongo.couples_db import _get_image, get_couple
+from FallenRobot import app as app
+from FallenRobot.mongo.couples_db import _get_image, get_couple
 
 def dt():
     now = datetime.now()
