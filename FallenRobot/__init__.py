@@ -1,3 +1,4 @@
+import app
 import logging
 import os
 import sys
