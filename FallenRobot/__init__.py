@@ -1,3 +1,4 @@
+from FallenRobot.core.bot import DAXX
 import logging
 import os
 import sys
