@@ -14,7 +14,7 @@ from aiohttp import ClientSession
 from Python_ARQ import ARQ
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid, ChannelInvalid
 from FallenRobot.config import configClass
-
+app = DAXX()
 StartTime = time.time()
 
 # enable logging
