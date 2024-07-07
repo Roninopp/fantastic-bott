@@ -1,7 +1,6 @@
 emoji==1.6.3
 ffmpeg-python==0.2.0
 unidecode
-daxxhub
 aiofiles==23.1.0
 aiohttp==3.8.4
 httpx
