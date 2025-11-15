@@ -27,7 +27,7 @@ class Config(object):
 
     SUPPORT_CHAT = "SpiralTechDivision"  # Your Telegram support group chat username where your users will go and bother you
 
-    TOKEN = "2100096282:AAGXnUUjhmS2aX4swI8uw5PQ6S8aQRK30j8"  # Get bot token from @BotFather on Telegram
+    TOKEN = "8341511264:AAFjNIOYE5NbABPloFbz-r989l2ySRUs988"  # Get bot token from @BotFather on Telegram
 
     TIME_API_KEY = ""  # Get this value from https://timezonedb.com/api
     SPAMWATCH_SUPPORT_CHAT = "effr"
